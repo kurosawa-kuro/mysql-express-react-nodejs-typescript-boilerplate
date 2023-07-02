@@ -42,7 +42,8 @@ async function main() {
 
   console.log("main.js getTagsOfSpecificPost()");
   const specificPostTags = await getTagsOfSpecificPost(postEntities);
-  console.log("Processed data:", specificPostTags);
+  console.log("main.js getTagsOfSpecificPost() specificPostTags:");
+  console.dir(specificPostTags, { depth: null });
 }
 
 main()
