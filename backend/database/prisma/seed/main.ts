@@ -1,6 +1,6 @@
-//
+// backend\database\prisma\seed\main.ts
 
-import { db } from "./prismaClient";
+import { db } from "../prismaClient";
 import { clearDatabase } from "./clearDatabase";
 import { createAndSaveUsers } from "./createAndSaveUsers";
 import { createAndSavePosts } from "./createAndSavePosts";

@@ -1,4 +1,6 @@
-import { db } from "./prismaClient";
+// backend\database\prisma\seed\getTagsOfAllPosts.ts
+
+import { db } from "../prismaClient";
 
 export async function getTagsOfAllPosts() {
   return await db.tagsOnPosts.findMany({

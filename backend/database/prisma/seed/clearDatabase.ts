@@ -1,6 +1,6 @@
-//
+// backend\database\prisma\seed\clearDatabase.ts
 
-import { db } from "./prismaClient";
+import { db } from "../prismaClient";
 
 export async function clearDatabase() {
   await db.$executeRaw`SET FOREIGN_KEY_CHECKS=0;`;

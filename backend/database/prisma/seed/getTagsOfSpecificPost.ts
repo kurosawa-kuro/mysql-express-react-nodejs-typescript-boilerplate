@@ -1,6 +1,7 @@
-import { User, Post, Tag, Prisma } from "@prisma/client";
-import bcrypt from "bcryptjs";
-import { db } from "./prismaClient";
+// backend\database\prisma\seed\getTagsOfSpecificPost.ts
+
+import { Post, Tag } from "@prisma/client";
+import { db } from "../prismaClient";
 
 export async function getTagsOfSpecificPost(postEntities: Post[]) {
   const tagsOnPosts = await db.tagsOnPosts.findMany({

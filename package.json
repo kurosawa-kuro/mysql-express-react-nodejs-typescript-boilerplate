@@ -16,7 +16,7 @@
     "prisma:migrate": "npx prisma migrate dev --name init --schema=./backend/database/prisma/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=./backend/database/prisma/schema.prisma",
     "test:prisma:migrate": "cross-env DATABASE_URL='mysql://root:@localhost:3306/boilerplate_test'  npx prisma migrate dev --name init --schema=./backend/database/prisma/schema.prisma",
-    "prisma:seed": "ts-node backend/database/prisma/main.ts"
+    "prisma:seed": "ts-node backend/database/prisma/seed/main.ts"
   },
   "author": "Toshifumi Kurosawa",
   "license": "MIT",

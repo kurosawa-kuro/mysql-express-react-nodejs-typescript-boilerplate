@@ -1,5 +1,7 @@
+// backend\database\prisma\seed\createAndSavePostTags.ts
+
 import { Post, Tag, Prisma } from "@prisma/client";
-import { db } from "./prismaClient";
+import { db } from "../prismaClient";
 
 export async function createAndSavePostTags(
   postEntities: Post[],
