@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* マージンとパディングをリセット */
+body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, dl, dt, dd, img, form, fieldset, legend, input, div, textarea, label, select, option, table, td, th, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  margin: 0;
+  padding: 0;
+}
+
+/* ボックスサイジングをborder-boxに統一 */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* リストのスタイルをリセット */
+ol, ul {
+  list-style: none;
+}
+
+/* テーブルのデフォルトのスペースをリセット */
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+/* 画像に余白が出ないようにする */
+img {
+  vertical-align: middle;
+}
+
+/* aタグのアウトラインを削除 */
+a {
+  outline: none;
+}
+
+/* bodyに基本のフォント設定をする */
+body {
+  line-height: 1;
+  color: #333;
+  background: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
