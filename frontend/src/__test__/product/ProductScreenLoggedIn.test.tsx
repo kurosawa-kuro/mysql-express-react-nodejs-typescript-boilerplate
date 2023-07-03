@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { createServer, simulateLogin } from "../testUtils";
-import { HomeScreen } from "../../screens/product/HomeScreen";
+import { HomeScreen } from "../../screens/HomeScreen";
 
 const server = createServer();
 

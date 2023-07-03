@@ -42,7 +42,7 @@ export const readAllUsers = () => performRequest(apiClient.get("/api/users"));
 export const readUserById = (userId: number) =>
   performRequest(apiClient.get(`/api/users/${userId}`));
 
-export const updateUserProfile = (user: UserInfo) =>
+export const updateUserProfile = (user: Prisma.UserUpdateInput) =>
   performRequest(apiClient.put("/api/users/profile", user));
 
 export const updateUser = (user: UserInfo) =>
@@ -54,5 +54,5 @@ export const deleteUser = (id: number) =>
 export const logoutUser = () =>
   performRequest(apiClient.post("/api/users/logout"));
 
-export const uploadProductImage = async (imageData: FormData) =>
-  performRequest(apiClient.post("/api/upload", imageData));
+export const readTopStatusApi = (): Promise<string> =>
+  performRequest(apiClient.get(`/api/`));

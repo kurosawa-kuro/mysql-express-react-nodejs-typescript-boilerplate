@@ -41,7 +41,6 @@ export const ProfileScreen: React.FC = () => {
     setLoading(true);
     try {
       const res = await updateUserProfile({
-        id: userInfo.id,
         name,
         email,
         password,

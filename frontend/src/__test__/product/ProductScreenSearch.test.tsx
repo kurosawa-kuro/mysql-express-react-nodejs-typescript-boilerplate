@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { LoginScreen } from "../../screens/auth/LoginScreen";
 import { createServer, inputField, TEST_USER } from "../testUtils";
-import { HomeScreen } from "../../screens/product/HomeScreen";
+import { HomeScreen } from "../../screens/HomeScreen";
 import { product } from "../mocks";
 
 const server = createServer();

@@ -13,8 +13,8 @@ export async function createUsers() {
       isAdmin: true,
     },
     {
-      name: "User1",
-      email: "user1@email.com",
+      name: "User",
+      email: "user@email.com",
       password: "123456",
       isAdmin: false,
     },
@@ -24,7 +24,6 @@ export async function createUsers() {
       password: "123456",
       isAdmin: false,
     },
-    // ... add more users as needed
   ];
 
   const hashedPasswords = await Promise.all(
