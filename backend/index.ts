@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import path from "path";
+import expressListEndpoints from "express-list-endpoints";
 
 // Internal Imports
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
@@ -50,14 +51,14 @@ if (NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
   );
 } else {
+  // console.log(expressListEndpoints(app));
   app.get("/", (req, res) => {
     res.send("API is running....");
   });
+  app.get("/endpoints", (req, res) => {
+    res.send(expressListEndpoints(app));
+  });
 }
-
-app.get("/", (req, res) => {
-  res.send("API is running....");
-});
 
 // Error Handlers
 app.use(notFound, errorHandler);
