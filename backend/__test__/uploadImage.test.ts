@@ -19,7 +19,6 @@ describe("POST /api/upload", () => {
     });
   });
 
-  // 新たなテストケースを追加します
   it("returns an error when no file is uploaded", async () => {
     const response = await request(app).post("/api/upload");
 
