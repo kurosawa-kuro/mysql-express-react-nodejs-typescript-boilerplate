@@ -10,8 +10,6 @@ import path from "path";
 
 // Internal Imports
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
-import { router as orderRoutes } from "./routes/orderRoutes";
-import { router as productRoutes } from "./routes/productRoutes";
 import { router as uploadRoutes } from "./routes/uploadRoutes";
 import { router as userRoutes } from "./routes/userRoutes";
 
@@ -39,9 +37,7 @@ app.use(
 );
 
 // Express Routes
-app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 
 // File Upload Endpoint
