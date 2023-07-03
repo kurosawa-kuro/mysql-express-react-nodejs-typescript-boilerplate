@@ -1,17 +1,14 @@
 import { Request } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { Post, Tag, TagsOnPosts, User } from "@prisma/client";
+import { Post, Tag, User } from "@prisma/client";
 
 // --------------------------
 // User related interfaces
+export interface UserWithoutPassWord extends Omit<User, "password"> {}
 
-export interface UserInfo extends Partial<User> {
+export interface UserInfo extends Partial<UserWithoutPassWord> {
   confirmPassword?: string;
   token?: string;
-}
-
-export interface UserData extends Pick<User, "name" | "email" | "password"> {
-  id?: number;
 }
 
 export interface UserAuth {

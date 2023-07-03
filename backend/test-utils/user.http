@@ -1,12 +1,9 @@
-### Read Top
-GET  http://localhost:8080/
-
 ### Register a new user
 POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "name": "User 1",
+  "name": "User1",
   "email": "user1@email.com",
   "password": "123456"
 }
@@ -38,7 +35,7 @@ PUT http://localhost:8080/api/users/profile
 Content-Type: application/json
 
 {
-  "name": "Updated User 1",
+  "name": "Updated User1",
   "email": "user1@email.com",
   "password": "123456"
 }

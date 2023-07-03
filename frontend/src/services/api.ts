@@ -3,15 +3,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { getApiClient } from "./apiClient";
-import {
-  UserInfo,
-  UserData,
-  ProductSearch,
-  ErrorMessage,
-  ProductData,
-  OrderData,
-} from "../../../backend/interfaces";
-import { Product } from "@prisma/client";
+import { UserInfo, ErrorMessage } from "../../../backend/interfaces";
+import { Prisma } from "@prisma/client";
 
 const apiClient = getApiClient();
 
@@ -35,7 +28,7 @@ const performRequest = async (request: Promise<AxiosResponse<any>>) => {
 };
 
 // User related APIs
-export const registerUser = (user: UserData) =>
+export const registerUser = (user: Prisma.UserCreateInput) =>
   performRequest(apiClient.post("/api/users/register", user));
 
 export const loginUser = (credentials: UserInfo) =>
@@ -61,45 +54,5 @@ export const deleteUser = (id: number) =>
 export const logoutUser = () =>
   performRequest(apiClient.post("/api/users/logout"));
 
-// Product related APIs
-export const createProduct = (product: ProductData | null) =>
-  performRequest(apiClient.post("/api/products", product));
-
-export const readProducts = ({ keyword, pageNumber }: ProductSearch) =>
-  performRequest(
-    apiClient.get("/api/products", { params: { keyword, pageNumber } })
-  );
-
-export const readProductById = (productId: number): Promise<Product | null> =>
-  performRequest(apiClient.get(`/api/products/${productId}`));
-
-export const updateProduct = (product: ProductData) =>
-  performRequest(apiClient.put(`/api/products/${product.id}`, product));
-
-export const deleteProduct = async (productId: number) =>
-  performRequest(apiClient.delete(`/api/products/${productId}`));
-
-export const getTopProducts = async (): Promise<Product[]> =>
-  performRequest(apiClient.get("/api/products/top"));
-
 export const uploadProductImage = async (imageData: FormData) =>
   performRequest(apiClient.post("/api/upload", imageData));
-
-// Order related APIs
-export const createOrder = (order: OrderData) =>
-  performRequest(apiClient.post("/api/orders", order));
-
-export const readOrderById = (id: number) =>
-  performRequest(apiClient.get(`/api/orders/${id}`));
-
-export const readMyOrders = () =>
-  performRequest(apiClient.get("/api/orders/mine"));
-
-export const readAllOrders = async () =>
-  performRequest(apiClient.get("/api/orders"));
-
-export const updateOrderToPaid = (orderId: number, details: any) =>
-  performRequest(apiClient.put(`/api/orders/${orderId}/pay`, details));
-
-export const updateOrderToDelivered = (orderId: number) =>
-  performRequest(apiClient.put(`/api/orders/${orderId}/deliver`));

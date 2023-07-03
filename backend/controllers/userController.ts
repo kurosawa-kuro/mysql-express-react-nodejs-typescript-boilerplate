@@ -15,7 +15,7 @@ import {
   deleteUserByIdInDB,
   comparePassword,
 } from "../models/userModel";
-import { UserRequest, UserInfo, UserData } from "../interfaces";
+import { UserRequest, UserInfo } from "../interfaces";
 import { Prisma } from "@prisma/client";
 
 const sanitizeUser = (user: any): UserInfo => {
