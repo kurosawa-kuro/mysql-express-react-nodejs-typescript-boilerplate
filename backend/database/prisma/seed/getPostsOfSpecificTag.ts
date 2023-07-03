@@ -39,7 +39,7 @@ export async function getPostsOfSpecificTag(
     posts: specificTagPosts.tagsOnPosts.map((tagOnPost) => {
       return {
         id: tagOnPost.post.id,
-        image: tagOnPost.post.image,
+        image_path: tagOnPost.post.image_path,
         description: tagOnPost.post.description,
         user: {
           id: tagOnPost.post.user.id,
