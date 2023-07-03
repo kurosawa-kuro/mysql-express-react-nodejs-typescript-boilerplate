@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { readTopStatusApi } from "../services/api";
 import { Loader } from "../components/common/Loader";
 import { Message } from "../components/common/Message";
-import { setErrorFromException } from "../utils";
+import { setExceptionError } from "../utils";
 
 export const HomeScreen: React.FC = () => {
   const [topStatus, setTopStatus] = useState("");
@@ -17,7 +17,7 @@ export const HomeScreen: React.FC = () => {
     try {
       setTopStatus(await readTopStatusApi());
     } catch (error: unknown) {
-      setErrorFromException(error, setMessage);
+      setExceptionError(error, setMessage);
     } finally {
       setIsLoading(false);
     }
@@ -34,7 +34,10 @@ export const HomeScreen: React.FC = () => {
       </h1>
       {isLoading && <Loader />}
       {message && <Message variant="danger">{message}</Message>}
-      <p>{topStatus}</p>
+      {topStatus && <Message variant="success">{topStatus}</Message>}
+      {topStatus == "" && (
+        <Message variant="danger">API is not running....</Message>
+      )}
     </>
   );
 };

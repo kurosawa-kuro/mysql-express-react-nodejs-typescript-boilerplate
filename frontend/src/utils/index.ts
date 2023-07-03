@@ -1,4 +1,4 @@
-export const setErrorFromException = (
+export const setExceptionError = (
   error: unknown,
   setError: React.Dispatch<React.SetStateAction<string | null>>
 ) => {
