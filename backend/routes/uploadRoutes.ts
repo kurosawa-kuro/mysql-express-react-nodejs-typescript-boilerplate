@@ -9,10 +9,6 @@ import path from "path";
 import multer from "multer";
 
 export const router: Router = express.Router();
-const { NODE_ENV } = process.env;
-
-const uploadFolder: string =
-  NODE_ENV === "production" ? "var/data/" : "uploads";
 
 const storage = diskStorage({
   destination(req, file, cb) {

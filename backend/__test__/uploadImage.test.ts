@@ -18,4 +18,14 @@ describe("POST /api/upload", () => {
       image: expect.stringContaining("/frontend\\public\\images\\image-"),
     });
   });
+
+  // 新たなテストケースを追加します
+  it("returns an error when no file is uploaded", async () => {
+    const response = await request(app).post("/api/upload");
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      message: "No file uploaded",
+    });
+  });
 });

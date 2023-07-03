@@ -19,13 +19,13 @@ export const clearDatabase = async (): Promise<void> => {
   await db.$executeRaw`SET FOREIGN_KEY_CHECKS=1;`;
 };
 
-export const ensureAdminExists = async (): Promise<User> => {
-  const isAdmin = await db.user.findFirst({ where: { isAdmin: true } });
-  if (isAdmin) {
-    return isAdmin;
-  }
-  return await createUserWithRole("admine@mail.com", "adminpw", true);
-};
+// export const ensureAdminExists = async (): Promise<User> => {
+//   const isAdmin = await db.user.findFirst({ where: { isAdmin: true } });
+//   if (isAdmin) {
+//     return isAdmin;
+//   }
+//   return await createUserWithRole("admine@mail.com", "adminpw", true);
+// };
 
 /**
  * User Operations
@@ -83,23 +83,4 @@ export const loginUserAndGetToken = async (
   }
 
   return match[1];
-};
-
-export const uploadImageAndGetPath = async (
-  agent: SuperAgentTest,
-  filePath: string
-): Promise<string> => {
-  const file = fs.createReadStream(filePath);
-  const fileName = path.basename(filePath);
-  const response = await agent
-    .post("/api/upload")
-    .attach("image", file, fileName);
-
-  expect(response.status).toBe(200);
-  expect(response.body).toEqual({
-    message: "Image uploaded successfully",
-    image: expect.stringContaining("/frontend\\public\\images\\image-"),
-  });
-
-  return response.body.image;
 };
