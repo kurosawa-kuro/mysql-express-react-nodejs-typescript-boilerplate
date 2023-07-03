@@ -52,10 +52,10 @@ if (NODE_ENV === "production") {
   );
 } else {
   // console.log(expressListEndpoints(app));
-  app.get("/", (req, res) => {
+  app.get("/api/", (req, res) => {
     res.send("API is running....");
   });
-  app.get("/endpoints", (req, res) => {
+  app.get("/api/endpoints", (req, res) => {
     res.send(expressListEndpoints(app));
   });
 }

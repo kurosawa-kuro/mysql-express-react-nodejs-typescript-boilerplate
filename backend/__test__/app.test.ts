@@ -5,7 +5,7 @@ import { app } from "../index";
 
 describe("GET /", () => {
   it("responds with a message indicating the API is running", async () => {
-    const response: request.Response = await request(app).get("/");
+    const response: request.Response = await request(app).get("/api/");
     expect(response.status).toBe(200);
     expect(response.text).toEqual("API is running....");
   });
@@ -13,7 +13,7 @@ describe("GET /", () => {
 
 describe("GET /endpoints", () => {
   it("responds with a json array containing endpoint information", async () => {
-    const response: request.Response = await request(app).get("/endpoints");
+    const response: request.Response = await request(app).get("/api/endpoints");
 
     console.log("response.body", response.body);
 
