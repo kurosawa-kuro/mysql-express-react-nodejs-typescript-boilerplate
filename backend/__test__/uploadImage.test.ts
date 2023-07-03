@@ -5,7 +5,7 @@ import { app } from "../index";
 
 describe("POST /api/upload", () => {
   it("uploads an image file", async () => {
-    const filePath = path.join(__dirname, "../test-files/test-image.jpg");
+    const filePath = path.join(__dirname, "./test-files/test-image.jpg");
     const file = fs.createReadStream(filePath);
 
     const response = await request(app)
