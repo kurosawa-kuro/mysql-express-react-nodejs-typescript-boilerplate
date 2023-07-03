@@ -3,20 +3,20 @@
 import { SuperAgentTest } from "supertest";
 import fs from "fs";
 import { db } from "../database/prisma/prismaClient";
-import { User, Product, Order } from "@prisma/client";
+import { User } from "@prisma/client";
 import path from "path";
 import { hashPassword } from "../utils";
-import { OrderData } from "../interfaces";
-import { createOrderInDB } from "../models/orderModel";
 
 /**
  * Database Operations
  */
 export const clearDatabase = async (): Promise<void> => {
-  await db.orderProduct.deleteMany();
-  await db.product.deleteMany();
-  await db.order.deleteMany();
-  await db.user.deleteMany();
+  await db.$executeRaw`SET FOREIGN_KEY_CHECKS=0;`;
+  await db.$executeRaw`TRUNCATE TABLE tags_on_posts;`;
+  await db.$executeRaw`TRUNCATE TABLE post;`;
+  await db.$executeRaw`TRUNCATE TABLE tag;`;
+  await db.$executeRaw`TRUNCATE TABLE user;`;
+  await db.$executeRaw`SET FOREIGN_KEY_CHECKS=1;`;
 };
 
 export const ensureAdminExists = async (): Promise<User> => {
@@ -27,26 +27,6 @@ export const ensureAdminExists = async (): Promise<User> => {
   return await createUserWithRole("admine@mail.com", "adminpw", true);
 };
 
-export const createProduct = async (): Promise<Product> => {
-  try {
-    const admin = await ensureAdminExists();
-    return await db.product.create({
-      data: {
-        userId: admin.id,
-        name: "Test Product",
-        price: 100,
-        image: "sample path",
-        brand: "Test Brand",
-        category: "Test Category",
-        countInStock: 10,
-        numReviews: 0,
-        description: "Test Description",
-      },
-    });
-  } catch (error) {
-    throw new Error(`An error occurred while creating the product: ${error}`);
-  }
-};
 /**
  * User Operations
  */
@@ -123,42 +103,3 @@ export const uploadImageAndGetPath = async (
 
   return response.body.image;
 };
-
-export async function createProductAndOrder(userEmail: string) {
-  const user = await db.user.findFirst({
-    where: {
-      email: userEmail,
-    },
-  });
-
-  const product: Product = await createProduct();
-  if (!user) {
-    throw new Error(`No user found with email`);
-  }
-  const orderRequest: OrderData = {
-    userId: Number(user.id),
-    cart: [
-      {
-        product,
-        qty: 1,
-      },
-    ],
-    shipping: {
-      address: "123 Test St",
-      city: "Test City",
-      postalCode: "12345",
-    },
-    paymentMethod: "Test Payment Method",
-    price: {
-      itemsPrice: product.price,
-      taxPrice: 0.1 * product.price,
-      shippingPrice: 10,
-      totalPrice: 1.1 * product.price + 10,
-    },
-  };
-  const { cart, ...orderData } = orderRequest;
-  if (user) {
-    const createdOrder = await createOrderInDB(orderRequest);
-    return createdOrder;
-  }
-}
