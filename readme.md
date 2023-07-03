@@ -21,6 +21,23 @@
 
 1. 画像のアップロード: POST `/api/upload`
 
+### User Data
+
+```json
+{
+      name: "Admin",
+      email: "admin@email.com",
+      password: "123456",
+      isAdmin: true,
+    },
+    {
+      name: "User1",
+      email: "user1@email.com",
+      password: "123456",
+      isAdmin: false,
+    },
+```
+
 ```:powershell
 C:\Users\kuros\local_dev\full-stack-basic\shopping\sample\mysql-express-react-nodejs-javascript-shopping
 npm run dev

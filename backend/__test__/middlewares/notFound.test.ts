@@ -1,7 +1,7 @@
 // External Imports
 import express from "express";
 import request from "supertest";
-import { notFound, errorHandler } from "../middleware/errorMiddleware";
+import { notFound, errorHandler } from "../../middleware/errorMiddleware";
 
 describe("Error Middlewares", () => {
   let app: express.Application;

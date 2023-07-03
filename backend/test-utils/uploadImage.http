@@ -6,9 +6,9 @@ POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "name": "User 1",
-  "email": "user1@email.com",
-  "password": "123456"
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "testpassword"
 }
 
 ### Login as an existing user
@@ -16,17 +16,17 @@ POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "email": "user1@email.com",
-  "password": "123456"
+  "email": "test@example.com",
+  "password": "testpassword"
 }
 
-### Login as an admin user
+### Login as an Admin user
 POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "email": "admin@email.com",
-  "password": "123456"
+  "email": "test@example.com",
+  "password": "testpassword"
 }
 
 ### Get user profile (requires authentication)
@@ -38,9 +38,9 @@ PUT http://localhost:8080/api/users/profile
 Content-Type: application/json
 
 {
-  "name": "Updated User 1",
-  "email": "user1@email.com",
-  "password": "123456"
+  "name": "Updated User",
+  "email": "updated@example.com",
+  "password": "updatedpassword"
 }
 
 ### Get list of users (requires authentication and admin access)
@@ -48,11 +48,11 @@ GET http://localhost:8080/api/users
 Content-Type: application/application/json
 
 ### Delete user (requires authentication and admin access)
-DELETE http://localhost:8080/api/users/3
+DELETE http://localhost:8080/api/users/{id}
 Content-Type: application/json
 
 ### Get a user by ID (requires authentication and admin access)
-GET http://localhost:8080/api/users/3
+GET http://localhost:8080/api/users/{id}
 Content-Type: application/json
 
 ### Update user (requires authentication and admin access)
@@ -60,8 +60,8 @@ PUT http://localhost:8080/api/users/{id}
 Content-Type: application/json
 
 {
-  "name": "New Admin Name",
-  "email": "new_admin@example.com",
+  "name": "New User Name",
+  "email": "new@example.com",
   "isAdmin": true
 }
 

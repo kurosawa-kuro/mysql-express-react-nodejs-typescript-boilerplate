@@ -16,6 +16,7 @@ import {
   comparePassword,
 } from "../models/userModel";
 import { UserRequest, UserInfo, UserData } from "../interfaces";
+import { Prisma } from "@prisma/client";
 
 const sanitizeUser = (user: any): UserInfo => {
   const { password, ...UserBase } = user;
@@ -39,7 +40,7 @@ const registerUser = asyncHandler(async (req: UserRequest, res: Response) => {
   }
 
   const hashedPassword = await hashPassword(password);
-  const user: UserData = {
+  const user: Prisma.UserCreateInput = {
     name,
     email,
     password: hashedPassword,
