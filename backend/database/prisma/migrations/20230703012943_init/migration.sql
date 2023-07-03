@@ -7,7 +7,7 @@
 */
 -- AlterTable
 ALTER TABLE `post` DROP COLUMN `image`,
-    ADD COLUMN `image_path` VARCHAR(191) NULL;
+    ADD COLUMN `imagePath` VARCHAR(191) NULL;
 
 -- AlterTable
 ALTER TABLE `user` DROP COLUMN `avatar`,

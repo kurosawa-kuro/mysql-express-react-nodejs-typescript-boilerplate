@@ -34,7 +34,7 @@ export async function getTagsOfSpecificPost(
 
   return {
     id: specificPostTags.id,
-    image_path: specificPostTags.image_path,
+    imagePath: specificPostTags.imagePath,
     description: specificPostTags.description,
     user: {
       id: specificPostTags.user.id,

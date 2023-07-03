@@ -4,9 +4,9 @@ import { db } from "../prismaClient";
 
 export async function clearDatabase() {
   await db.$executeRaw`SET FOREIGN_KEY_CHECKS=0;`;
-  await db.$executeRaw`TRUNCATE TABLE TagsOnPosts;`;
-  await db.$executeRaw`TRUNCATE TABLE Post;`;
-  await db.$executeRaw`TRUNCATE TABLE Tag;`;
-  await db.$executeRaw`TRUNCATE TABLE User;`;
+  await db.$executeRaw`TRUNCATE TABLE tags_on_posts;`;
+  await db.$executeRaw`TRUNCATE TABLE post;`;
+  await db.$executeRaw`TRUNCATE TABLE tag;`;
+  await db.$executeRaw`TRUNCATE TABLE user;`;
   await db.$executeRaw`SET FOREIGN_KEY_CHECKS=1;`;
 }
