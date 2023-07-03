@@ -6,7 +6,7 @@ import {
   clearDatabase,
   createUserInDB,
   loginUserAndGetToken,
-} from "../test-utils";
+} from "../testUtils";
 
 describe("POST /api/users/logout", () => {
   let agent: SuperAgentTest;

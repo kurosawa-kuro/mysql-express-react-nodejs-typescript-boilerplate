@@ -1,4 +1,4 @@
-// frontend\src\screens\admin\product\test-utils.ts
+// frontend\src\screens\admin\product\testUtils.ts
 
 import {
   fireEvent,

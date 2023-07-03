@@ -7,7 +7,7 @@ import { App } from "../../../App";
 import { LoginScreen } from "../../../screens/auth/LoginScreen";
 import { ProductListScreen } from "../../../screens/admin/product/ProductListScreen";
 import { product } from "../../mocks";
-import { createServer, inputField, TEST_ADMIN_USER } from "../../test-utils";
+import { createServer, inputField, TEST_ADMIN_USER } from "../../testUtils";
 import { ProductNewScreen } from "../../../screens/admin/product/ProductNewScreen";
 
 const server = createServer();

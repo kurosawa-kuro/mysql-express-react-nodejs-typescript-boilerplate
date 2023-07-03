@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { LoginScreen } from "../../screens/auth/LoginScreen";
-import { createServer, inputField, TEST_USER } from "../test-utils";
+import { createServer, inputField, TEST_USER } from "../testUtils";
 import { HomeScreen } from "../../screens/product/HomeScreen";
 import { product } from "../mocks";
 

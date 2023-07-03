@@ -11,7 +11,7 @@ import { PaymentScreen } from "../../screens/order/PaymentScreen";
 import { PlaceOrderScreen } from "../../screens/order/PlaceOrderScreen";
 import { OrderScreen } from "../../screens/order/OrderScreen";
 import { OrderInfo } from "../../../../backend/interfaces";
-import { simulateLogin } from "../test-utils";
+import { simulateLogin } from "../testUtils";
 
 const product: Product = {
   id: 1,

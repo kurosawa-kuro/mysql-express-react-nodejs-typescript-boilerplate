@@ -15,7 +15,7 @@ import {
   inputField,
   // printDOM,
   TEST_ADMIN_USER,
-} from "../../test-utils";
+} from "../../testUtils";
 import { rest } from "msw";
 import { OrderInfo } from "../../../../../backend/interfaces";
 

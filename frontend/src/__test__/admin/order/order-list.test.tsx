@@ -14,7 +14,7 @@ import {
   inputField,
   // printDOM,
   TEST_ADMIN_USER,
-} from "../../test-utils";
+} from "../../testUtils";
 
 const server = createServer();
 

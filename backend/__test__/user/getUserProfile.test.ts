@@ -6,7 +6,7 @@ import {
   clearDatabase,
   createUserInDB,
   loginUserAndGetToken,
-} from "../test-utils";
+} from "../testUtils";
 
 describe("GET /api/users/profile", () => {
   let agent: SuperAgentTest;

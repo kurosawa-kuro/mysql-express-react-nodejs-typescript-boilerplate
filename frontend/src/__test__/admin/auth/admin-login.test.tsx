@@ -5,7 +5,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { App } from "../../../App";
 import { LoginScreen } from "../../../screens/auth/LoginScreen";
-import { createServer, inputField, TEST_ADMIN_USER } from "../../test-utils";
+import { createServer, inputField, TEST_ADMIN_USER } from "../../testUtils";
 
 const server = createServer();
 

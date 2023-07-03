@@ -1,5 +1,5 @@
 // frontend\src\__test__\state\store.test.ts
-import { act } from "react-dom/test-utils";
+import { act } from "react-dom/testUtils";
 import { renderHook } from "@testing-library/react";
 
 import { useAuthStore, useCartStore } from "../../state/store";

@@ -2,7 +2,7 @@
 
 // import { User } from "@prisma/client";
 // import { db } from "../../database/prisma/prismaClient";
-// import { clearDatabase } from "../test-utils";
+// import { clearDatabase } from "../testUtils";
 // import { hashPassword } from "../../utils";
 
 // describe("Database ", () => {

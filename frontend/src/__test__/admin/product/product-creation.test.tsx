@@ -15,7 +15,7 @@ import {
   inputField,
   TEST_ADMIN_USER,
   API_BASE_URL,
-} from "../../test-utils";
+} from "../../testUtils";
 
 jest.mock("../../../services/api", () => ({
   ...jest.requireActual("../../../services/api"),

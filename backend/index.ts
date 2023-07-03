@@ -47,11 +47,11 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 // Serve Static Files in Production
 if (NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
-  app.get("*", (req, res) =>
+  app.get("*", (_req, res) =>
     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
   );
 } else {
-  app.get("/api/", (req, res) => {
+  app.get("/api/", (_req, res) => {
     res.send("API is running....");
   });
   app.get("/api/endpoints", (req, res) => {

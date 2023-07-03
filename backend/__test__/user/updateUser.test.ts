@@ -7,7 +7,7 @@ import {
   createUserInDB,
   loginUserAndGetToken,
   createAdminUser,
-} from "../test-utils";
+} from "../testUtils";
 
 describe("User management endpoints", () => {
   let agent: SuperAgentTest;
