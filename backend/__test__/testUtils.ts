@@ -4,6 +4,7 @@ import { SuperAgentTest } from "supertest";
 import { db } from "../database/prisma/prismaClient";
 import { User } from "@prisma/client";
 import { hashPassword } from "../utils";
+import { AdminData, UserData } from "./testData";
 
 /**
  * Database Operations
@@ -37,7 +38,7 @@ const createUserWithRole = async (
   try {
     const user = await db.user.create({
       data: {
-        name: isAdmin ? "Admin" : "User1",
+        name: isAdmin ? AdminData.name : UserData.name,
         email,
         password: hashedPassword,
         isAdmin,

@@ -24,18 +24,25 @@
 ### User Data
 
 ```json
-{
-      name: "Admin",
-      email: "admin@email.com",
-      password: "123456",
-      isAdmin: true,
-    },
-    {
-      name: "User1",
-      email: "user1@email.com",
-      password: "123456",
-      isAdmin: false,
-    },
+export const AdminData = {
+  name: "Admin",
+  email: "admin@email.com",
+  password: "123456",
+  isAdmin: true,
+};
+
+export const UserData = {
+  name: "User",
+  email: "user@email.com",
+  password: "123456",
+  isAdmin: false,
+};
+export const User2Data = {
+  name: "User2",
+  email: "user2@email.com",
+  password: "123456",
+  isAdmin: false,
+};
 ```
 
 ```:powershell
