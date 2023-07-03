@@ -2,17 +2,15 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { SearchBox } from "../features/SearchBox";
 
 import {
   FaUser,
-  FaShoppingCart,
   FaChevronDown,
   FaChevronUp,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
-import { useAuthStore, useCartStore } from "../../state/store";
+import { useAuthStore } from "../../state/store";
 import { logoutUser } from "../../services/api";
 
 export const Header: React.FC = () => {
@@ -23,7 +21,6 @@ export const Header: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const adminDropdownRef = useRef<HTMLDivElement | null>(null);
   const { userInfo, logout } = useAuthStore();
-  const { cartItems } = useCartStore();
 
   useEffect(() => {
     const closeDropdown = (e: MouseEvent) => {
@@ -59,19 +56,6 @@ export const Header: React.FC = () => {
           </button>
         </div>
         <div className={`space-x-8 ${isOpen ? "block" : "hidden"} sm:flex`}>
-          <SearchBox />
-          {!userInfo?.isAdmin && (
-            <Link to="/cart" className="flex items-center space-x-2">
-              <FaShoppingCart className="h-5 w-5" />
-              <span>Cart</span>
-              {cartItems.length > 0 && (
-                <span className="inline-block rounded-full bg-green-500 px-2 text-sm">
-                  {cartItems.reduce((a, c) => a + c.qty, 0)}
-                </span>
-              )}
-            </Link>
-          )}
-
           {userInfo ? (
             <div className="relative inline-block text-left" ref={dropdownRef}>
               <div className="group">

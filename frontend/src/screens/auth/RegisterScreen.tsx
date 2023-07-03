@@ -7,11 +7,11 @@ import { FormContainer } from "../../components/layout/FormContainer";
 import { Loader } from "../../components/common/Loader";
 import { registerUser } from "../../services/api";
 import { useAuthStore } from "../../state/store";
-import { UserInfo, UserAuth } from "../../../../backend/interfaces";
+import { UserAuth } from "../../../../backend/interfaces";
 import { User } from "@prisma/client";
 
 export const RegisterScreen = () => {
-  const [credentials, setCredentials] = useState<UserInfo>({
+  const [credentials, setCredentials] = useState<any>({
     name: "",
     email: "",
     password: "",

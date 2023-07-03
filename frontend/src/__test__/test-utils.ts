@@ -11,7 +11,6 @@ import {
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 
-import { order, product } from "./mocks";
 import { useAuthStore } from "../state/store";
 import { UserInfo } from "../../../backend/interfaces";
 
@@ -36,11 +35,7 @@ function authenticate(email: string, password: string, user: typeof TEST_USER) {
   return email === user.email && password === user.password;
 }
 
-let productList = [product];
-export const products = { page: 1, pages: 2, products: productList };
-
 export function createServer() {
-  let orderList = [order];
   return setupServer(
     rest.post(`${API_BASE_URL}/users/register`, async (_req, res, ctx) => {
       return res(ctx.json({ id: 1, ...TEST_USER }));
@@ -61,61 +56,6 @@ export function createServer() {
         ctx.status(401),
         ctx.json({ message: "Invalid email or password" })
       );
-    }),
-    rest.get(`${API_BASE_URL}/products/top`, (_req, res, ctx) => {
-      return res(ctx.json([product]));
-    }),
-    // rest.get(`${API_BASE_URL}/products/:id`, (_req, res, ctx) =>
-    //   res(ctx.json(product))
-    // ),
-    rest.post(`${API_BASE_URL}/products`, async (req, res, ctx) => {
-      const postProduct = (await req.json()) as typeof product;
-      productList.push(postProduct);
-      return res(ctx.json(postProduct));
-    }),
-    rest.get(`${API_BASE_URL}/products`, (_req, res, ctx) =>
-      res(ctx.json(products))
-    ),
-    rest.delete(`${API_BASE_URL}/products/:id`, (_req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ message: "Product removed" }));
-    }),
-    rest.post(`${API_BASE_URL}/orders`, (_req, res, ctx) =>
-      res(ctx.status(200), ctx.json({ id: 1 }))
-    ),
-    rest.get(`${API_BASE_URL}/orders`, (_req, res, ctx) =>
-      res(ctx.json(orderList))
-    ),
-    rest.get(`${API_BASE_URL}/orders/:id`, (_req, res, ctx) =>
-      res(ctx.status(200), ctx.json(order))
-    ),
-    rest.put(`${API_BASE_URL}/orders/:id/pay`, (req, res, ctx) => {
-      const id = Number(req.params.id);
-      const orderIndex = orderList.findIndex((order) => order.id === id);
-
-      orderList[orderIndex] = {
-        ...orderList[orderIndex],
-        status: {
-          ...orderList[orderIndex].status,
-          isPaid: true,
-          paidAt: new Date(),
-        },
-      };
-
-      return res(ctx.status(200), ctx.json(orderList[orderIndex]));
-    }),
-    rest.put(`${API_BASE_URL}/orders/:id/deliver`, (req, res, ctx) => {
-      const id = Number(req.params.id);
-      const orderIndex = orderList.findIndex((order) => order.id === id);
-
-      orderList[orderIndex] = {
-        ...orderList[orderIndex],
-        status: {
-          ...orderList[orderIndex].status,
-          isDelivered: true,
-          deliveredAt: new Date(),
-        },
-      };
-      return res(ctx.status(200), ctx.json(orderList[orderIndex]));
     })
   );
 }

@@ -13,7 +13,10 @@ import { useAuthStore } from "../../state/store";
 import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
 export const LoginScreen = () => {
-  const [credentials, setCredentials] = useState<UserInfo>({
+  const [credentials, setCredentials] = useState<{
+    email: string;
+    password: string;
+  }>({
     email: "",
     password: "",
   });

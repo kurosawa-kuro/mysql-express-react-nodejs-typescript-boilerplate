@@ -31,7 +31,7 @@ const performRequest = async (request: Promise<AxiosResponse<any>>) => {
 export const registerUser = (user: Prisma.UserCreateInput) =>
   performRequest(apiClient.post("/api/users/register", user));
 
-export const loginUser = (credentials: UserInfo) =>
+export const loginUser = (credentials: any) =>
   performRequest(apiClient.post("/api/users/login", credentials));
 
 export const readUserProfile = () =>

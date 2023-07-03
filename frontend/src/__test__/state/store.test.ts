@@ -1,9 +1,9 @@
 // frontend\src\__test__\state\store.test.ts
-import { act } from "react-dom/testUtils";
-import { renderHook } from "@testing-library/react";
+// frontend\src\__test__\state\store.test.ts
+// frontend\src\__test__\state\store.test.ts
+import { renderHook, act } from "@testing-library/react-hooks";
 
-import { useAuthStore, useCartStore } from "../../state/store";
-import { product } from "../mocks";
+import { useAuthStore } from "../../state/store";
 
 describe("useAuthStore", () => {
   beforeEach(() => {
@@ -51,38 +51,94 @@ describe("useAuthStore", () => {
   });
 });
 
-describe("useCartStore", () => {
+describe("useAuthStore", () => {
   beforeEach(() => {
     localStorage.clear();
   });
+  beforeAll(() => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
 
-  it("should handle adding and removing from cart", () => {
-    const { result } = renderHook(() => useCartStore());
-    const testProduct = {
-      product: product,
-      qty: 1,
-    };
-
-    act(() => {
-      result.current.createCartItem(testProduct);
-    });
-
-    let storedCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
-
-    storedCartItems = storedCartItems.map((item: any) => {
-      item.product.createdAt = new Date(item.product.createdAt);
-      item.product.updatedAt = new Date(item.product.updatedAt);
-      return item;
-    });
-
-    expect(storedCartItems).toEqual([testProduct]);
-    expect(result.current.cartItems).toEqual([testProduct]);
+  it("should handle setting and clearing user information", () => {
+    const { result } = renderHook(() => useAuthStore());
 
     act(() => {
-      result.current.deleteCartItem(testProduct.product.id);
+      result.current.setUserInfo({
+        id: 1,
+        name: "Test User",
+        email: "test@example.com",
+        isAdmin: false,
+        token: "testToken",
+      });
     });
 
-    expect(localStorage.getItem("cart")).toEqual("[]");
-    expect(result.current.cartItems).toEqual([]);
+    const storedUserInfo = JSON.parse(localStorage.getItem("userInfo") || "");
+    expect(storedUserInfo).toEqual({
+      id: 1,
+      name: "Test User",
+      email: "test@example.com",
+      isAdmin: false,
+      token: "testToken",
+    });
+    expect(result.current.userInfo).toEqual({
+      id: 1,
+      name: "Test User",
+      email: "test@example.com",
+      isAdmin: false,
+      token: "testToken",
+    });
+
+    act(() => {
+      result.current.logout();
+    });
+
+    expect(localStorage.getItem("userInfo")).toBeNull();
+    expect(result.current.userInfo).toBeNull();
+  });
+});
+
+describe("useAuthStore", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+  beforeAll(() => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  it("should handle setting and clearing user information", () => {
+    const { result } = renderHook(() => useAuthStore());
+
+    act(() => {
+      result.current.setUserInfo({
+        id: 1,
+        name: "Test User",
+        email: "test@example.com",
+        isAdmin: false,
+        token: "testToken",
+      });
+    });
+
+    const storedUserInfo = JSON.parse(localStorage.getItem("userInfo") || "");
+    expect(storedUserInfo).toEqual({
+      id: 1,
+      name: "Test User",
+      email: "test@example.com",
+      isAdmin: false,
+      token: "testToken",
+    });
+    expect(result.current.userInfo).toEqual({
+      id: 1,
+      name: "Test User",
+      email: "test@example.com",
+      isAdmin: false,
+      token: "testToken",
+    });
+
+    act(() => {
+      result.current.logout();
+    });
+
+    expect(localStorage.getItem("userInfo")).toBeNull();
+    expect(result.current.userInfo).toBeNull();
   });
 });
