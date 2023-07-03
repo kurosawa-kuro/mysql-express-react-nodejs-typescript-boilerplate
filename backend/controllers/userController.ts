@@ -152,6 +152,8 @@ const updateUser = asyncHandler(async (req: UserRequest, res: Response) => {
   }
 });
 
+// const updateUserPassword = asyncHandler(
+
 // DELETE
 const logoutUser = (req: UserRequest, res: Response) => {
   res.cookie("jwt", "", {

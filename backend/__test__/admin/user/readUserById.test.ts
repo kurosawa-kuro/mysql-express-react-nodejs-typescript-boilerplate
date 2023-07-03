@@ -1,13 +1,13 @@
 // backend\__test__\admin\readUserById.test.ts
 
 import request, { SuperAgentTest } from "supertest";
-import { app } from "../../index";
+import { app } from "../../../index";
 import {
   clearDatabase,
   createUserInDB,
   loginUserAndGetToken,
   createAdminUser,
-} from "../testUtils";
+} from "../../testUtils";
 
 describe("User management endpoints", () => {
   let agent: SuperAgentTest;

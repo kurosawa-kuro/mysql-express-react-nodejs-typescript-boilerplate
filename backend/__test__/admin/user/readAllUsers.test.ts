@@ -1,17 +1,17 @@
 // backend\__test__\admin\readAllUsers.test.ts
 
 import request, { SuperAgentTest } from "supertest";
-import { app } from "../../index";
+import { app } from "../../../index";
 import {
   clearDatabase,
   createUserInDB,
   loginUserAndGetToken,
   createAdminUser,
-} from "../testUtils";
-import { db } from "../../database/prisma/prismaClient";
-import { UserInfo } from "../../interfaces";
+} from "../../testUtils";
+import { db } from "../../../database/prisma/prismaClient";
+import { UserInfo } from "../../../interfaces";
 import { User } from "@prisma/client";
-import { AdminData } from "../testData";
+import { AdminData } from "../../testData";
 
 describe("User management endpoints", () => {
   let agent: SuperAgentTest;
