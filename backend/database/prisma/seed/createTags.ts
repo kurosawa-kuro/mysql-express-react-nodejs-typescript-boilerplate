@@ -1,9 +1,9 @@
-// backend\database\prisma\seed\createAndSaveTags.ts
+// backend\database\prisma\seed\createTags.ts
 
 import { Prisma } from "@prisma/client";
 import { db } from "../prismaClient";
 
-export async function createAndSaveTags() {
+export async function createTags() {
   const tags: Prisma.TagCreateInput[] = [
     {
       name: "Tag1",

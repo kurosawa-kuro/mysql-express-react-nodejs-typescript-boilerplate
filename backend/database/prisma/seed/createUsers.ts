@@ -1,10 +1,10 @@
-// backend\database\prisma\seed\createAndSaveUsers.ts
+// backend\database\prisma\seed\createUsers.ts
 
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { db } from "../prismaClient";
 
-export async function createAndSaveUsers() {
+export async function createUsers() {
   const users: Prisma.UserCreateInput[] = [
     {
       name: "Admin",

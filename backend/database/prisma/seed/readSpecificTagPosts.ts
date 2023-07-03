@@ -2,7 +2,7 @@ import { Tag } from "@prisma/client";
 import { db } from "../prismaClient";
 import { TagWithUserAndPosts } from "../../../interfaces";
 
-export async function getPostsOfSpecificTag(
+export async function readSpecificTagPosts(
   tagEntities: Tag[]
 ): Promise<TagWithUserAndPosts | null> {
   const specificTagPosts = await db.tag.findUnique({

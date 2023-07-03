@@ -1,10 +1,10 @@
-// backend\database\prisma\seed\getTagsOfSpecificPost.ts
+// backend\database\prisma\seed\readSpecificPostTags.ts
 
 import { Post } from "@prisma/client";
 import { db } from "../prismaClient";
 import { PostWithUserAndTags } from "../../../interfaces";
 
-export async function getTagsOfSpecificPost(
+export async function readSpecificPostTags(
   postEntities: Post[]
 ): Promise<PostWithUserAndTags | null> {
   const specificPostTags = await db.post.findUnique({

@@ -1,9 +1,9 @@
-// backend\database\prisma\seed\createAndSavePosts.ts
+// backend\database\prisma\seed\createPosts.ts
 
 import { User, Prisma } from "@prisma/client";
 import { db } from "../prismaClient";
 
-export async function createAndSavePosts(userEntities: User[]) {
+export async function createPosts(userEntities: User[]) {
   const user = userEntities.filter((user) => !user.isAdmin);
 
   const posts: Prisma.PostCreateInput[] = [

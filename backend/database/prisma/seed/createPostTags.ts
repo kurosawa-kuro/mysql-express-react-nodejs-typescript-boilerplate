@@ -1,12 +1,9 @@
-// backend\database\prisma\seed\createAndSavePostTags.ts
+// backend\database\prisma\seed\createPostTags.ts
 
 import { Post, Tag, Prisma } from "@prisma/client";
 import { db } from "../prismaClient";
 
-export async function createAndSavePostTags(
-  postEntities: Post[],
-  tagEntities: Tag[]
-) {
+export async function createPostTags(postEntities: Post[], tagEntities: Tag[]) {
   const postTags: Prisma.TagsOnPostsCreateInput[] = [
     {
       post: { connect: { id: postEntities[0].id } },
