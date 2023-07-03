@@ -43,6 +43,10 @@ export interface PostWithUserAndTags extends Omit<Post, "userId"> {
   tags: Tag[];
 }
 
+export interface TagWithUserAndPosts extends Tag {
+  posts: Omit<Post, "userId">[];
+}
+
 // --------------------------
 // Other interfaces
 

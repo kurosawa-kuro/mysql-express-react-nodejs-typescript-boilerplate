@@ -8,6 +8,7 @@ import { createAndSaveTags } from "./createAndSaveTags";
 import { createAndSavePostTags } from "./createAndSavePostTags";
 import { getTagsOfAllPosts } from "./getTagsOfAllPosts";
 import { getTagsOfSpecificPost } from "./getTagsOfSpecificPost";
+import { getPostsOfSpecificTag } from "./getPostsOfSpecificTag";
 
 async function main() {
   console.log("main.js clearDatabase()");
@@ -40,10 +41,17 @@ async function main() {
   console.log("main.js getTagsOfAllPosts() allPostTags:");
   console.dir(allPostTags, { depth: null });
 
+  // 特定のPostからTagを取得する
   console.log("main.js getTagsOfSpecificPost()");
   const specificPostTags = await getTagsOfSpecificPost(postEntities);
   console.log("main.js getTagsOfSpecificPost() specificPostTags:");
   console.dir(specificPostTags, { depth: null });
+
+  // Todo:特定のTagからPostを取得する
+  console.log("main.js getTagsOfSpecificPost()");
+  const specificTagPosts = await getPostsOfSpecificTag(tagEntities);
+  console.log("main.js getPostsOfSpecificTag() specificTagPosts:");
+  console.dir(specificTagPosts, { depth: null });
 }
 
 main()

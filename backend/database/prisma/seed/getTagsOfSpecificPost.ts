@@ -18,8 +18,6 @@ export async function getTagsOfSpecificPost(
           name: true,
           email: true,
           isAdmin: true,
-          createdAt: true,
-          updatedAt: true,
         },
       },
       tagsOnPosts: {
