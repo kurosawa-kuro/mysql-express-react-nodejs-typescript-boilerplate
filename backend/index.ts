@@ -51,7 +51,6 @@ if (NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
   );
 } else {
-  // console.log(expressListEndpoints(app));
   app.get("/api/", (req, res) => {
     res.send("API is running....");
   });
