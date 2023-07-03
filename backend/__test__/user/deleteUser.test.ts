@@ -18,7 +18,7 @@ describe("User management endpoints", () => {
     await clearDatabase();
     agent = request.agent(app);
 
-    admin = await createAdminUser("admin@email.com", "123456");
+    admin = await createAdminUser();
     adminToken = await loginUserAndGetToken(agent, "admin@email.com", "123456");
   });
 

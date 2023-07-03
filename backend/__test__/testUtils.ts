@@ -57,8 +57,8 @@ const createUserWithRole = async (
 
 export const createUserInDB = (email: string, password: string) =>
   createUserWithRole(email, password, false);
-export const createAdminUser = (email: string, password: string) =>
-  createUserWithRole(email, password, true);
+export const createAdminUser = () =>
+  createUserWithRole(AdminData.email, AdminData.password, true);
 
 /**
  * Other Operations
