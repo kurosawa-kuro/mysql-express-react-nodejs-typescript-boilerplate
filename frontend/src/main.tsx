@@ -16,6 +16,7 @@ import "./index.css";
 import { LoginScreen } from "./screens/auth/LoginScreen.tsx";
 import { RegisterScreen } from "./screens/auth/RegisterScreen.tsx";
 import { HomeScreen } from "./screens/HomeScreen.tsx";
+import { InformationScreen } from "./screens/InformationScreen.tsx";
 
 import { ProfileScreen } from "./screens/user/ProfileScreen";
 import { UserListScreen } from "./screens/admin/user/UserListScreen";
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />} />
+      <Route path="/information" element={<InformationScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/login" element={<LoginScreen />} />
 
