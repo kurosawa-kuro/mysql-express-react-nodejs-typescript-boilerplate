@@ -37,121 +37,129 @@ const fillForm = async (email: string, password: string) => {
 };
 
 describe("Successful login", () => {
-  it("shows the user's name in the header after successful login", async () => {
-    renderLoginScreen();
+  describe("when the user successfully logs in", () => {
+    it("shows the user's name in the header", async () => {
+      renderLoginScreen();
+      await fillForm(UserData.email, UserData.password);
 
-    await fillForm(UserData.email, UserData.password);
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-    });
+      expect(
+        await screen.findByText("Successfully logged in")
+      ).toBeInTheDocument();
 
-    expect(
-      await screen.findByText("Successfully logged in")
-    ).toBeInTheDocument();
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
-        UserData.name
-      );
+      await waitFor(async () => {
+        expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+          UserData.name
+        );
+      });
     });
   });
 
-  it("toggles the logout menu visibility on user name click after successful login", async () => {
-    renderLoginScreen();
+  describe("after the user has logged in", () => {
+    it("toggles the logout menu visibility on user name click", async () => {
+      renderLoginScreen();
+      await fillForm(UserData.email, UserData.password);
 
-    await fillForm(UserData.email, UserData.password);
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(
+        await screen.findByText("Successfully logged in")
+      ).toBeInTheDocument();
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+          UserData.name
+        );
+      });
+
+      fireEvent.click(screen.getByText(UserData.name));
+      expect(screen.getByRole("menuitem", { name: "Logout" })).toBeVisible();
+
+      fireEvent.mouseDown(document.body);
+      expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
     });
 
-    expect(
-      await screen.findByText("Successfully logged in")
-    ).toBeInTheDocument();
+    it("redirects the user to the login page after successful logout", async () => {
+      renderLoginScreen();
+      await fillForm(UserData.email, UserData.password);
 
-    await waitFor(async () => {
-      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
-        UserData.name
-      );
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+
+      expect(
+        await screen.findByText("Successfully logged in")
+      ).toBeInTheDocument();
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+          UserData.name
+        );
+      });
+
+      fireEvent.click(screen.getByText(UserData.name));
+      fireEvent.click(await screen.findByText(`Logout`));
+
+      await screen.findByRole("heading", { name: /Log in/i });
     });
-
-    fireEvent.click(screen.getByText(UserData.name));
-    expect(screen.getByRole("menuitem", { name: "Logout" })).toBeVisible();
-
-    fireEvent.mouseDown(document.body);
-    expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
-  });
-
-  it("redirects the user to the login page after successful logout", async () => {
-    renderLoginScreen();
-
-    await fillForm(UserData.email, UserData.password);
-
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-    });
-
-    expect(
-      await screen.findByText("Successfully logged in")
-    ).toBeInTheDocument();
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
-        UserData.name
-      );
-    });
-
-    fireEvent.click(screen.getByText(UserData.name));
-    fireEvent.click(await screen.findByText(`Logout`));
-
-    await screen.findByRole("heading", { name: /Log in/i });
   });
 });
 
-describe("Error handling", () => {
-  it("displays an error message when the login credentials are incorrect", async () => {
-    renderLoginScreen();
+describe("Error handling during login", () => {
+  describe("when the login credentials are incorrect", () => {
+    it("displays an error message", async () => {
+      renderLoginScreen();
 
-    server.use(
-      rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
-        return res(
-          ctx.status(401),
-          ctx.json({ message: "Invalid email or password" })
-        );
-      })
-    );
+      server.use(
+        rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
+          return res(
+            ctx.status(401),
+            ctx.json({ message: "Invalid email or password" })
+          );
+        })
+      );
 
-    await fillForm(UserData.email, "12345");
+      await fillForm(UserData.email, "12345");
 
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+
+      expect(
+        await screen.findByText("Invalid email or password")
+      ).toBeInTheDocument();
     });
-
-    expect(
-      await screen.findByText("Invalid email or password")
-    ).toBeInTheDocument();
   });
 
-  it("displays a network error message when the server is unreachable", async () => {
-    renderLoginScreen();
+  describe("when the server is unreachable", () => {
+    it("displays a network error message", async () => {
+      renderLoginScreen();
 
-    server.use(
-      rest.post("http://localhost:8080/api/users/login", (_req, res, _ctx) => {
-        return res.networkError("Failed to connect");
-      })
-    );
+      server.use(
+        rest.post(
+          "http://localhost:8080/api/users/login",
+          (_req, res, _ctx) => {
+            return res.networkError("Failed to connect");
+          }
+        )
+      );
 
-    await fillForm(UserData.email, UserData.password);
+      await fillForm(UserData.email, UserData.password);
 
-    await waitFor(() => {
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      });
+
+      expect(
+        await screen.findByText(
+          "Unable to connect to the server. Please try again."
+        )
+      ).toBeInTheDocument();
     });
-
-    expect(
-      await screen.findByText(
-        "Unable to connect to the server. Please try again."
-      )
-    ).toBeInTheDocument();
   });
 });
