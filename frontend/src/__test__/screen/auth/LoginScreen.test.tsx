@@ -37,7 +37,27 @@ const fillForm = async (email: string, password: string) => {
 };
 
 describe("Login Screen", () => {
-  it("shows username in header after successful login", async () => {
+  it("displays the user's name in the header after a successful login", async () => {
+    renderLoginScreen();
+
+    await fillForm(UserData.email, UserData.password);
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+
+    expect(
+      await screen.findByText("Successfully logged in")
+    ).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+        UserData.name
+      );
+    });
+  });
+
+  it("allows the user to toggle the logout menu after a successful login", async () => {
     renderLoginScreen();
 
     await fillForm(UserData.email, UserData.password);
@@ -63,7 +83,7 @@ describe("Login Screen", () => {
     expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
   });
 
-  it("login fail", async () => {
+  it("displays an error message when the login attempt fails", async () => {
     renderLoginScreen();
 
     server.use(
@@ -86,7 +106,7 @@ describe("Login Screen", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows error message when unable to connect to the server", async () => {
+  it("displays an error message when the server cannot be reached", async () => {
     renderLoginScreen();
 
     server.use(
