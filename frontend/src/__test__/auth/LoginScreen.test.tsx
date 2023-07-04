@@ -25,7 +25,7 @@ const renderLoginScreen = () => {
   );
 };
 
-const fillLoginForm = async (email: string, password: string) => {
+const fillForm = async (email: string, password: string) => {
   fireEvent.change(screen.getByLabelText("email"), {
     target: { value: email },
   });
@@ -41,7 +41,7 @@ describe("Login Screen", () => {
   it("shows username in header after successful login", async () => {
     renderLoginScreen();
 
-    await fillLoginForm(UserData.email, UserData.password);
+    await fillForm(UserData.email, UserData.password);
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe("Login Screen", () => {
       })
     );
 
-    await fillLoginForm(UserData.email, "12345");
+    await fillForm(UserData.email, "12345");
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();

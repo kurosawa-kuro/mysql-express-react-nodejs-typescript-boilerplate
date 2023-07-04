@@ -1,8 +1,5 @@
-// frontend\src\screens\admin\product\ProductNewScreenLoggedIn.test.tsx
-
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-
 import { App } from "../../../App";
 import { LoginScreen } from "../../../screens/auth/LoginScreen";
 import { createServer } from "../../testUtils";
@@ -14,8 +11,8 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test("shows username in header after successful admin login", async () => {
-  render(
+const renderAdminLoginScreen = () => {
+  return render(
     <MemoryRouter initialEntries={["/login"]}>
       <Routes>
         <Route path="/" element={<App />}>
@@ -24,20 +21,30 @@ test("shows username in header after successful admin login", async () => {
       </Routes>
     </MemoryRouter>
   );
+};
 
+const fillLoginForm = async (email: string, password: string) => {
   fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: AdminData.email },
+    target: { value: email },
   });
 
   fireEvent.change(screen.getByLabelText("password"), {
-    target: { value: AdminData.password },
+    target: { value: password },
   });
 
   fireEvent.click(screen.getByTestId("login"));
+};
 
-  await waitFor(async () => {
-    expect(screen.getByTestId("user-info-name")).toHaveTextContent(
-      AdminData.name
-    );
+describe("Admin Login Screen", () => {
+  it("shows username in header after successful admin login", async () => {
+    renderAdminLoginScreen();
+
+    await fillLoginForm(AdminData.email, AdminData.password);
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+        AdminData.name
+      );
+    });
   });
 });

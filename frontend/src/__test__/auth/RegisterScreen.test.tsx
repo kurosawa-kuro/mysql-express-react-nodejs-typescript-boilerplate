@@ -13,7 +13,6 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-// Define helper functions for repeated operations
 const renderRegisterScreen = () => {
   return render(
     <MemoryRouter initialEntries={["/register"]}>
@@ -92,8 +91,11 @@ describe("Registration Screen", () => {
         "http://localhost:8080/api/users/register",
         (_req, res, ctx) => {
           return res(
-            ctx.status(401),
-            ctx.json({ message: "Invalid email or password" })
+            ctx.status(501),
+            ctx.json({
+              message:
+                "Registration failed due to a server error. Please try again later.",
+            })
           );
         }
       )
@@ -106,7 +108,9 @@ describe("Registration Screen", () => {
     });
 
     expect(
-      await screen.findByText("Invalid email or password")
+      await screen.findByText(
+        "Registration failed due to a server error. Please try again later."
+      )
     ).toBeInTheDocument();
   });
 });
