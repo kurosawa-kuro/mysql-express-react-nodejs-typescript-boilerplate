@@ -80,4 +80,26 @@ describe("Login Screen", () => {
       await screen.findByText("Invalid email or password")
     ).toBeInTheDocument();
   });
+
+  it("shows error message when unable to connect to the server", async () => {
+    renderLoginScreen();
+
+    server.use(
+      rest.post("http://localhost:8080/api/users/login", (_req, res, _ctx) => {
+        return res.networkError("Failed to connect");
+      })
+    );
+
+    await fillForm(UserData.email, UserData.password);
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+
+    expect(
+      await screen.findByText(
+        "Unable to connect to the server. Please try again."
+      )
+    ).toBeInTheDocument();
+  });
 });

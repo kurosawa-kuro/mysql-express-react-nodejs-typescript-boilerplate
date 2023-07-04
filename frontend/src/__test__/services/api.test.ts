@@ -10,27 +10,15 @@ interface ReqBody {
 }
 
 const API_BASE_URL = "http://localhost:8080/api";
-const product = {
-  id: 1,
-  name: "Test Product",
-  image: "url-to-your-image",
-  brand: "Test Brand",
-  category: "Test Category",
-  description: "Test Description",
-  price: 100,
-  countInStock: 10,
-};
 
 const user = {
-  name: "John Doe",
-  email: "john@email.com",
+  name: "User",
+  email: "user@email.com",
   password: "123456",
+  isAdmin: false,
 };
 
 const server = setupServer(
-  rest.get(`${API_BASE_URL}/products/:id`, (_req, res, ctx) => {
-    return res(ctx.json(product));
-  }),
   rest.post(`${API_BASE_URL}/users/login`, (req, res, ctx) => {
     const requestBody = req.body as ReqBody;
     if (
