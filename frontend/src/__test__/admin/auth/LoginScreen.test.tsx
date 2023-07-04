@@ -23,7 +23,7 @@ const renderAdminLoginScreen = () => {
   );
 };
 
-const fillLoginForm = async (email: string, password: string) => {
+const fillForm = async (email: string, password: string) => {
   fireEvent.change(screen.getByLabelText("email"), {
     target: { value: email },
   });
@@ -39,7 +39,7 @@ describe("Admin Login Screen", () => {
   it("shows username in header after successful admin login", async () => {
     renderAdminLoginScreen();
 
-    await fillLoginForm(AdminData.email, AdminData.password);
+    await fillForm(AdminData.email, AdminData.password);
 
     await waitFor(async () => {
       expect(screen.getByTestId("user-info-name")).toHaveTextContent(

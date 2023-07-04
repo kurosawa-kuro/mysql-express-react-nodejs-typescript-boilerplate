@@ -4,6 +4,7 @@ export const AdminData = {
   email: "admin@email.com",
   password: "123456",
   isAdmin: true,
+  token: "adminToken",
 };
 
 export const UserData = {
@@ -11,6 +12,7 @@ export const UserData = {
   email: "user@email.com",
   password: "123456",
   isAdmin: false,
+  token: "userToken",
 };
 export const User2Data = {
   name: "User2",
