@@ -4,8 +4,8 @@ import "@testing-library/jest-dom/extend-expect";
 import { App } from "../../../App";
 import { RegisterScreen } from "../../../screens/auth/RegisterScreen";
 import { createServer } from "../../testUtils";
-import { rest } from "msw";
 import { UserData } from "../../../../../backend/__test__/testData";
+import { rest } from "msw";
 
 const server = createServer();
 
@@ -83,25 +83,19 @@ describe("Registration Screen", () => {
     });
   });
 
-  it("should show an error message when registration fails due to server error", async () => {
+  it("displays a network error message when the server is unreachable", async () => {
     renderRegisterScreen();
 
     server.use(
       rest.post(
         "http://localhost:8080/api/users/register",
-        (_req, res, ctx) => {
-          return res(
-            ctx.status(501),
-            ctx.json({
-              message:
-                "Registration failed due to a server error. Please try again later.",
-            })
-          );
+        (_req, res, _ctx) => {
+          return res.networkError("Failed to connect");
         }
       )
     );
 
-    await fillForm("john", "john@email.com", "123456", "123456");
+    await fillForm("User", "user@email.com", "123456", "123456");
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -109,7 +103,7 @@ describe("Registration Screen", () => {
 
     expect(
       await screen.findByText(
-        "Registration failed due to a server error. Please try again later."
+        "Unable to connect to the server. Please try again."
       )
     ).toBeInTheDocument();
   });
