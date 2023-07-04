@@ -5,6 +5,7 @@ import { App } from "../../App";
 import { LoginScreen } from "../../screens/auth/LoginScreen";
 import { createServer } from "../testUtils";
 import { UserData } from "../../../../backend/__test__/testData";
+import { rest } from "msw";
 
 const server = createServer();
 
@@ -44,12 +45,21 @@ test("login fail", async () => {
   render(
     <MemoryRouter initialEntries={["/login"]}>
       <Routes>
-        <Route path="/login" element={<LoginScreen />} />
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<App />}>
+          <Route path="/login" element={<LoginScreen />} />
+        </Route>
       </Routes>
     </MemoryRouter>
   );
 
+  server.use(
+    rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
+      return res(
+        ctx.status(401),
+        ctx.json({ message: "Invalid email or password" })
+      );
+    })
+  );
   fireEvent.change(screen.getByLabelText("email"), {
     target: { value: "user@email.co" },
   });
@@ -59,7 +69,9 @@ test("login fail", async () => {
   });
 
   fireEvent.click(screen.getByTestId("login"));
-
+  expect(
+    await screen.findByText("Invalid email or password")
+  ).toBeInTheDocument();
   await waitFor(() => {
     const johnText = screen.queryByText("john");
     expect(johnText).not.toBeInTheDocument();

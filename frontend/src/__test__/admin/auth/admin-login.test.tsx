@@ -41,29 +41,3 @@ test("shows username in header after successful admin login", async () => {
     );
   });
 });
-
-test("admin login fail", async () => {
-  render(
-    <MemoryRouter initialEntries={["/login"]}>
-      <Routes>
-        <Route path="/login" element={<LoginScreen />} />
-        <Route path="/" element={<App />} />
-      </Routes>
-    </MemoryRouter>
-  );
-
-  fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: "admin@email.co" },
-  });
-
-  fireEvent.change(screen.getByLabelText("password"), {
-    target: { value: AdminData.password },
-  });
-
-  fireEvent.click(screen.getByTestId("login"));
-
-  await waitFor(() => {
-    const adminText = screen.queryByText(AdminData.name);
-    expect(adminText).not.toBeInTheDocument();
-  });
-});
