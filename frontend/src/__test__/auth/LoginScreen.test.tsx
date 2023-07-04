@@ -61,19 +61,20 @@ test("login fail", async () => {
     })
   );
   fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: "user@email.co" },
+    target: { value: UserData.email },
   });
 
   fireEvent.change(screen.getByLabelText("password"), {
-    target: { value: "123456" },
+    target: { value: "12345" },
   });
 
   fireEvent.click(screen.getByTestId("login"));
+
+  await waitFor(() => {
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+
   expect(
     await screen.findByText("Invalid email or password")
   ).toBeInTheDocument();
-  await waitFor(() => {
-    const johnText = screen.queryByText("john");
-    expect(johnText).not.toBeInTheDocument();
-  });
 });
