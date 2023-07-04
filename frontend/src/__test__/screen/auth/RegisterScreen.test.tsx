@@ -54,7 +54,12 @@ describe("Registration Screen", () => {
   it("should show username in header after successful registration", async () => {
     renderRegisterScreen();
 
-    await fillForm("User", "user@email.com", "123456", "123456");
+    await fillForm(
+      UserData.name,
+      UserData.email,
+      UserData.password,
+      UserData.password
+    );
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -65,7 +70,9 @@ describe("Registration Screen", () => {
     ).toBeInTheDocument();
 
     await waitFor(async () => {
-      expect(screen.getByTestId("user-info-name")).toHaveTextContent("User");
+      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+        UserData.name
+      );
     });
   });
 
@@ -95,7 +102,12 @@ describe("Registration Screen", () => {
       )
     );
 
-    await fillForm("User", "user@email.com", "123456", "123456");
+    await fillForm(
+      UserData.name,
+      UserData.email,
+      UserData.password,
+      UserData.password
+    );
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
