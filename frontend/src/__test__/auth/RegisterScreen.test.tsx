@@ -4,7 +4,7 @@ import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { RegisterScreen } from "../../screens/auth/RegisterScreen"; // Ensure this import is correct
-import { createServer } from "../test-utils";
+import { createServer } from "../testUtils";
 
 const server = createServer();
 

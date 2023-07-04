@@ -3,7 +3,7 @@ import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { LoginScreen } from "../../screens/auth/LoginScreen";
-import { createServer } from "../test-utils";
+import { createServer } from "../testUtils";
 import { UserData } from "../../../../backend/__test__/testData";
 
 const server = createServer();
