@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { LoginScreen } from "../../screens/auth/LoginScreen";
 import { createServer } from "../test-utils";
+import { UserData } from "../../../../backend/__test__/testData";
 
 const server = createServer();
 
@@ -23,17 +24,19 @@ test("shows username in header after successful login", async () => {
   );
 
   fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: "john@email.com" },
+    target: { value: UserData.email },
   });
 
   fireEvent.change(screen.getByLabelText("password"), {
-    target: { value: "123456" },
+    target: { value: UserData.password },
   });
 
   fireEvent.click(screen.getByTestId("login"));
 
   await waitFor(async () => {
-    expect(screen.getByTestId("user-info-name")).toHaveTextContent("john");
+    expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+      UserData.name
+    );
   });
 });
 

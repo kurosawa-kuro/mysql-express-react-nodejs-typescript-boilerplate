@@ -5,8 +5,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { App } from "../../../App";
 import { LoginScreen } from "../../../screens/auth/LoginScreen";
-import { createServer, inputField, TEST_ADMIN_USER } from "../../test-utils";
-
+import { createServer, inputField } from "../../test-utils";
+import { AdminData } from "../../../../../backend/__test__/testData";
 const server = createServer();
 
 const LABELS = {
@@ -41,12 +41,12 @@ describe("Admin Product Management", () => {
         </MemoryRouter>
       );
 
-      inputField(LABELS.email, TEST_ADMIN_USER.email);
-      inputField(LABELS.password, TEST_ADMIN_USER.password);
+      inputField(LABELS.email, AdminData.email);
+      inputField(LABELS.password, AdminData.password);
 
       fireEvent.click(screen.getByTestId("login"));
 
-      await screen.findByText("admin", {
+      await screen.findByText(AdminData.name, {
         selector: '[data-testid="user-info-name"]',
       });
     });

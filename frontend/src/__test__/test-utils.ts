@@ -13,43 +13,30 @@ import { setupServer } from "msw/node";
 
 import { useAuthStore } from "../state/store";
 import { UserInfo } from "../../../backend/interfaces";
+import { UserData, AdminData } from "../../../backend/__test__/testData";
 
 export const printDOM = (length: number = 50000) =>
   console.log(prettyDOM(document.body, length));
 
 export const API_BASE_URL = "http://localhost:8080/api";
-export const TEST_USER = {
-  name: "john",
-  email: "john@email.com",
-  password: "123456",
-  isAdmin: false,
-};
-export const TEST_ADMIN_USER = {
-  name: "admin",
-  email: "admin@email.com",
-  password: "123456",
-  isAdmin: true,
-};
 
-function authenticate(email: string, password: string, user: typeof TEST_USER) {
+function authenticate(email: string, password: string, user: typeof UserData) {
   return email === user.email && password === user.password;
 }
 
 export function createServer() {
   return setupServer(
     rest.post(`${API_BASE_URL}/users/register`, async (_req, res, ctx) => {
-      return res(ctx.json({ id: 1, ...TEST_USER }));
+      return res(ctx.json({ id: 1, ...UserData }));
     }),
     rest.post(`${API_BASE_URL}/users/login`, async (req, res, ctx) => {
       const requestBody = JSON.parse(await req.text()) as any;
-      if (
-        authenticate(requestBody.email, requestBody.password, TEST_ADMIN_USER)
-      ) {
-        return res(ctx.json({ id: 1, ...TEST_ADMIN_USER }));
+      if (authenticate(requestBody.email, requestBody.password, AdminData)) {
+        return res(ctx.json({ id: 1, ...AdminData }));
       }
 
-      if (authenticate(requestBody.email, requestBody.password, TEST_USER)) {
-        return res(ctx.json({ id: 1, ...TEST_USER }));
+      if (authenticate(requestBody.email, requestBody.password, UserData)) {
+        return res(ctx.json({ id: 1, ...UserData }));
       }
 
       return res(
@@ -65,8 +52,8 @@ export const inputField = (label: Matcher, value: any) =>
 
 export async function simulateLogin(isAdmin: boolean = false) {
   let userInfo: UserInfo = isAdmin
-    ? { ...TEST_ADMIN_USER, id: 1, token: "aaaaaaaa" }
-    : { ...TEST_USER, id: 1, token: "aaaaaaaa" };
+    ? { ...AdminData, id: 1, token: "aaaaaaaa" }
+    : { ...UserData, id: 1, token: "aaaaaaaa" };
 
   const { result } = renderHook(() => useAuthStore());
 

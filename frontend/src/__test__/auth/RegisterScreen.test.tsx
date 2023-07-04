@@ -23,12 +23,16 @@ test("shows username in header after successful registration", async () => {
     </MemoryRouter>
   );
 
+  //   name: "User",
+  // email: "user@email.com",
+  // password: "123456",
+  // isAdmin: false,
   fireEvent.change(screen.getByTestId("input-name"), {
-    target: { value: "john" },
+    target: { value: "User" },
   });
 
   fireEvent.change(screen.getByTestId("input-email"), {
-    target: { value: "john@email.com" },
+    target: { value: "user@email.com" },
   });
 
   fireEvent.change(screen.getByTestId("input-password"), {
@@ -42,7 +46,7 @@ test("shows username in header after successful registration", async () => {
   fireEvent.click(screen.getByTestId("register"));
 
   await waitFor(async () => {
-    expect(screen.getByTestId("user-info-name")).toHaveTextContent("john");
+    expect(screen.getByTestId("user-info-name")).toHaveTextContent("User");
   });
 });
 
