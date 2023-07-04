@@ -46,5 +46,11 @@ describe("Admin Login Screen", () => {
         AdminData.name
       );
     });
+
+    fireEvent.click(await screen.findByText(`Admin Function`));
+    expect(screen.getByRole("menuitem", { name: "Users" })).toBeVisible();
+
+    fireEvent.mouseDown(document.body);
+    expect(screen.queryByRole("menuitem", { name: "Users" })).toBeNull();
   });
 });
