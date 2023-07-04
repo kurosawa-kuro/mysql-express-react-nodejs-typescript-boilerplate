@@ -1,54 +1,69 @@
 // frontend\src\screens\admin\product\ProductNewScreenLoggedIn.test.tsx
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { App } from "../../../App";
 import { LoginScreen } from "../../../screens/auth/LoginScreen";
-import { createServer, inputField } from "../../testUtils";
+import { createServer } from "../../testUtils";
 import { AdminData } from "../../../../../backend/__test__/testData";
+
 const server = createServer();
 
-const LABELS = {
-  email: "email",
-  password: "password",
-  name: "Name",
-  price: "Price",
-  imageFile: "Image File",
-  brand: "Brand",
-  countInStock: "Count In Stock",
-  category: "Category",
-  description: "Description",
-};
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-describe("Admin Product Management", () => {
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterEach(() => {
-    server.resetHandlers();
-    server.close();
+test("shows username in header after successful admin login", async () => {
+  render(
+    <MemoryRouter initialEntries={["/login"]}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/login" element={<LoginScreen />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
+  );
+
+  fireEvent.change(screen.getByLabelText("email"), {
+    target: { value: AdminData.email },
   });
 
-  describe("Login process", () => {
-    it("renders login and admin can login", async () => {
-      render(
-        <MemoryRouter initialEntries={["/login"]}>
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route path="/login" element={<LoginScreen />} />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      );
+  fireEvent.change(screen.getByLabelText("password"), {
+    target: { value: AdminData.password },
+  });
 
-      inputField(LABELS.email, AdminData.email);
-      inputField(LABELS.password, AdminData.password);
+  fireEvent.click(screen.getByTestId("login"));
 
-      fireEvent.click(screen.getByTestId("login"));
+  await waitFor(async () => {
+    expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+      AdminData.name
+    );
+  });
+});
 
-      await screen.findByText(AdminData.name, {
-        selector: '[data-testid="user-info-name"]',
-      });
-    });
+test("admin login fail", async () => {
+  render(
+    <MemoryRouter initialEntries={["/login"]}>
+      <Routes>
+        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/" element={<App />} />
+      </Routes>
+    </MemoryRouter>
+  );
+
+  fireEvent.change(screen.getByLabelText("email"), {
+    target: { value: "admin@email.co" },
+  });
+
+  fireEvent.change(screen.getByLabelText("password"), {
+    target: { value: AdminData.password },
+  });
+
+  fireEvent.click(screen.getByTestId("login"));
+
+  await waitFor(() => {
+    const johnText = screen.queryByText(AdminData.name);
+    expect(johnText).not.toBeInTheDocument();
   });
 });

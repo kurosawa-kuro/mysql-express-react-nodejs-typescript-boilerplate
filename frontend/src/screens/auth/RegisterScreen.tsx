@@ -7,8 +7,7 @@ import { FormContainer } from "../../components/layout/FormContainer";
 import { Loader } from "../../components/common/Loader";
 import { registerUser } from "../../services/api";
 import { useAuthStore } from "../../state/store";
-import { UserAuth } from "../../../../backend/interfaces";
-import { User } from "@prisma/client";
+import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
 export const RegisterScreen = () => {
   const [credentials, setCredentials] = useState<any>({
@@ -35,7 +34,7 @@ export const RegisterScreen = () => {
     setLoading(true);
     try {
       if (credentials.name && credentials.email && credentials.password) {
-        const user: User = await registerUser({
+        const user: UserInfo = await registerUser({
           name: credentials.name,
           email: credentials.email,
           password: credentials.password,

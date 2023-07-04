@@ -51,7 +51,7 @@ test("login fail", async () => {
   );
 
   fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: "john@email.co" },
+    target: { value: "user@email.co" },
   });
 
   fireEvent.change(screen.getByLabelText("password"), {

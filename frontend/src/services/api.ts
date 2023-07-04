@@ -3,7 +3,11 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { getApiClient } from "./apiClient";
-import { UserInfo, ErrorMessage } from "../../../backend/interfaces";
+import {
+  UserInfo,
+  ErrorMessage,
+  UserLoginData,
+} from "../../../backend/interfaces";
 import { Prisma } from "@prisma/client";
 
 const apiClient = getApiClient();
@@ -31,7 +35,7 @@ const performRequest = async (request: Promise<AxiosResponse<any>>) => {
 export const registerUser = (user: Prisma.UserCreateInput) =>
   performRequest(apiClient.post("/api/users/register", user));
 
-export const loginUser = (credentials: any) =>
+export const loginUser = (credentials: UserLoginData) =>
   performRequest(apiClient.post("/api/users/login", credentials));
 
 export const readUserProfile = () =>
