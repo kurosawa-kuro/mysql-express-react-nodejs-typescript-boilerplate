@@ -36,7 +36,7 @@ const fillForm = async (email: string, password: string) => {
   fireEvent.click(screen.getByTestId("login"));
 };
 
-describe("Login Screen", () => {
+describe("Login Screen Success", () => {
   it("shows the user's name in the header after successful login", async () => {
     renderLoginScreen();
 
@@ -107,7 +107,9 @@ describe("Login Screen", () => {
 
     await screen.findByRole("heading", { name: /Log in/i });
   });
+});
 
+describe("Login Screen Error", () => {
   it("displays an error message when the login credentials are incorrect", async () => {
     renderLoginScreen();
 
