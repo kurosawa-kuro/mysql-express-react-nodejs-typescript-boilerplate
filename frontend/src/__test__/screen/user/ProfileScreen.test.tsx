@@ -27,7 +27,7 @@ const server = setupServer(
     return res(
       ctx.json({
         name: "UserData.name",
-        email: "UserData.email",
+        email: "new Email Address",
         avatarPath: "url-to-your-image",
         isAdmin: false,
       })
@@ -100,7 +100,7 @@ describe("ProfileScreen", () => {
     ).toBeInTheDocument();
     expect(await screen.findByText("Update")).toBeInTheDocument();
     // printDOM();
-    const emailInput2 = await screen.findByDisplayValue("UserData.email");
+    const emailInput2 = await screen.findByDisplayValue("new Email Address");
     expect(emailInput2).toBeInTheDocument();
     // printDOM();
   });
