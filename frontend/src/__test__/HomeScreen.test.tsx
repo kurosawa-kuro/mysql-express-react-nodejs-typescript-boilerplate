@@ -34,3 +34,26 @@ test("renders HomeScreen with product list", async () => {
     expect(screen.getByText("API is running....")).toBeInTheDocument()
   );
 });
+
+test("sets error message when API request fails", async () => {
+  server.use(
+    rest.get("http://localhost:8080/api/", (_req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ message: "Server error" }));
+    })
+  );
+
+  render(
+    <MemoryRouter initialEntries={["/"]}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/" element={<HomeScreen />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
+  );
+
+  await simulateLogin();
+  await waitFor(() =>
+    expect(screen.getByText("Server error")).toBeInTheDocument()
+  );
+});

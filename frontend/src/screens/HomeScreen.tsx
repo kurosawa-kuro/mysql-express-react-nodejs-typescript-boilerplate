@@ -1,4 +1,4 @@
-// File Path: frontend\src\screens\product\HomeScreen.tsx
+// frontend\src\screens\HomeScreen.tsx
 
 import { useEffect, useState } from "react";
 
