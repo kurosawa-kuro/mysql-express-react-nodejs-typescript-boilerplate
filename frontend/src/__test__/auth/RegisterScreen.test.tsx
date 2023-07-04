@@ -45,6 +45,14 @@ describe("Registration Screen", () => {
 
     fireEvent.click(screen.getByTestId("register"));
 
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+
+    expect(
+      await screen.findByText("Registration successful")
+    ).toBeInTheDocument();
+
     await waitFor(async () => {
       expect(screen.getByTestId("user-info-name")).toHaveTextContent("User");
     });

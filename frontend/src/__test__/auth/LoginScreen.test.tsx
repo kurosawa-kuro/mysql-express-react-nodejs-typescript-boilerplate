@@ -34,6 +34,11 @@ test("shows username in header after successful login", async () => {
 
   fireEvent.click(screen.getByTestId("login"));
 
+  await waitFor(() => {
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+  expect(await screen.findByText("Successfully logged in")).toBeInTheDocument();
+
   await waitFor(async () => {
     expect(screen.getByTestId("user-info-name")).toHaveTextContent(
       UserData.name
