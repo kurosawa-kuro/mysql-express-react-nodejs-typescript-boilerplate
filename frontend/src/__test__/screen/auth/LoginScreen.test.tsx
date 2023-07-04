@@ -37,7 +37,7 @@ const fillForm = async (email: string, password: string) => {
 };
 
 describe("Login Screen", () => {
-  it("displays the user's name in the header after a successful login", async () => {
+  it("shows the user's name in the header after successful login", async () => {
     renderLoginScreen();
 
     await fillForm(UserData.email, UserData.password);
@@ -57,7 +57,7 @@ describe("Login Screen", () => {
     });
   });
 
-  it("allows the user to toggle the logout menu after a successful login", async () => {
+  it("toggles the logout menu visibility on user name click after successful login", async () => {
     renderLoginScreen();
 
     await fillForm(UserData.email, UserData.password);
@@ -83,7 +83,7 @@ describe("Login Screen", () => {
     expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
   });
 
-  it("allows the user to toggle the logout menu after a successful login", async () => {
+  it("redirects the user to the login page after successful logout", async () => {
     renderLoginScreen();
 
     await fillForm(UserData.email, UserData.password);
@@ -108,7 +108,7 @@ describe("Login Screen", () => {
     await screen.findByRole("heading", { name: /Log in/i });
   });
 
-  it("displays an error message when the login attempt fails", async () => {
+  it("displays an error message when the login credentials are incorrect", async () => {
     renderLoginScreen();
 
     server.use(
@@ -131,7 +131,7 @@ describe("Login Screen", () => {
     ).toBeInTheDocument();
   });
 
-  it("displays an error message when the server cannot be reached", async () => {
+  it("displays a network error message when the server is unreachable", async () => {
     renderLoginScreen();
 
     server.use(
