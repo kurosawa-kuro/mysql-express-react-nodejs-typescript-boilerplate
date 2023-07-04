@@ -7,6 +7,9 @@ import { Post, Prisma, Tag, User } from "@prisma/client";
 export interface UserWithoutPassWord extends Omit<User, "password"> {}
 
 export type UserLoginData = Omit<Prisma.UserCreateInput, "name">;
+export type UserRegisterData = Prisma.UserCreateInput & {
+  confirmPassword?: string;
+};
 
 export interface UserInfo extends Partial<UserWithoutPassWord> {
   confirmPassword?: string;
