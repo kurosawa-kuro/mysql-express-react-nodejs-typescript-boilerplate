@@ -9,14 +9,21 @@ import { simulateLogin } from "../../testUtils";
 import { App } from "../../../App";
 import { ProfileScreen } from "../../../screens/user/ProfileScreen";
 
+const uploadImageResponse = {
+  image: "url-to-your-image",
+  message: "Image uploaded successfully",
+};
+
+const userProfileResponse = {
+  name: "new name",
+  email: "new Email Address",
+  avatarPath: "url-to-your-image",
+  isAdmin: false,
+};
+
 jest.mock("../../../services/api", () => ({
   ...jest.requireActual("../../../services/api"),
-  uploadImage: jest.fn(() =>
-    Promise.resolve({
-      image: "url-to-your-image",
-      message: "Image uploaded successfully",
-    })
-  ),
+  uploadImage: jest.fn(() => Promise.resolve(uploadImageResponse)),
 }));
 
 const server = setupServer(
@@ -24,14 +31,7 @@ const server = setupServer(
     return res(ctx.text("API is running...."));
   }),
   rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
-    return res(
-      ctx.json({
-        name: "new name",
-        email: "new Email Address",
-        avatarPath: "url-to-your-image",
-        isAdmin: false,
-      })
-    );
+    return res(ctx.json(userProfileResponse));
   })
 );
 
@@ -52,57 +52,40 @@ describe("ProfileScreen", () => {
     );
 
     await simulateLogin();
-
     await screen.findByRole("heading", { name: /User Profile/i });
 
-    const nameInput = await screen.findByDisplayValue("User");
-    expect(nameInput).toBeInTheDocument();
+    const [nameInput, emailInput] = await Promise.all([
+      screen.findByDisplayValue("User"),
+      screen.findByDisplayValue("user@email.com"),
+    ]);
 
-    const emailInput = await screen.findByDisplayValue("user@email.com");
+    expect(nameInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
 
-    // ========
-    // fireEvent.change(screen.getByLabelText("Name"), {
-    //   target: { value: "new Name" },
-    // });
+    const file = new File(["dummy content"], "test.png", { type: "image/png" });
+    const inputFile = screen.getByLabelText("Image File") as HTMLInputElement;
+    userEvent.upload(inputFile, file);
 
-    // fireEvent.change(screen.getByLabelText("Email Address"), {
-    //   target: { value: "new Email Address" },
-    // });
+    const [uploadMessage, imageInput] = await Promise.all([
+      screen.findByText(uploadImageResponse.message),
+      screen.findByDisplayValue(uploadImageResponse.image),
+    ]);
 
-    // fireEvent.change(screen.getByLabelText("Password"), {
-    //   target: { value: "123456" },
-    // });
-
-    // fireEvent.change(screen.getByLabelText("Confirm Password"), {
-    //   target: { value: "123456" },
-    // });
-    // ====
-
-    const file = new File(["dummy content"], "test.png", {
-      type: "image/png",
-    });
-
-    const input = screen.getByLabelText("Image File") as HTMLInputElement;
-    userEvent.upload(input, file);
-
-    expect(
-      await screen.findByText("Image uploaded successfully")
-    ).toBeInTheDocument();
-
-    const imageInput = await screen.findByDisplayValue("url-to-your-image");
+    expect(uploadMessage).toBeInTheDocument();
     expect(imageInput).toBeInTheDocument();
 
-    fireEvent.click(await screen.findByRole("button", { name: /Update/i }));
-    // "Profile updated successfully"
-    expect(
-      await screen.findByText("Profile updated successfully")
-    ).toBeInTheDocument();
-    expect(await screen.findByText("Update")).toBeInTheDocument();
-    const nameInput2 = await screen.findByDisplayValue("new name");
-    expect(nameInput2).toBeInTheDocument();
-    const emailInput2 = await screen.findByDisplayValue("new Email Address");
-    expect(emailInput2).toBeInTheDocument();
-    // printDOM();
+    const updateButton = await screen.findByRole("button", { name: /Update/i });
+    fireEvent.click(updateButton);
+
+    const [updateMessage, updatedNameInput, updatedEmailInput] =
+      await Promise.all([
+        screen.findByText("Profile updated successfully"),
+        screen.findByDisplayValue(userProfileResponse.name),
+        screen.findByDisplayValue(userProfileResponse.email),
+      ]);
+
+    expect(updateMessage).toBeInTheDocument();
+    expect(updatedNameInput).toBeInTheDocument();
+    expect(updatedEmailInput).toBeInTheDocument();
   });
 });
