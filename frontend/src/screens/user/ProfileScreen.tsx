@@ -6,6 +6,7 @@ import { Loader } from "../../components/common/Loader";
 import { updateUserProfile } from "../../services/api"; // Import the api functions
 import { useAuthStore } from "../../state/store";
 import { Message } from "../../components/common/Message";
+import { FormContainer } from "../../components/layout/FormContainer";
 
 export const ProfileScreen: React.FC = () => {
   const [name, setName] = useState("");
@@ -59,95 +60,93 @@ export const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="mx-auto w-full px-2 md:w-1/3">
-        <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-          User Profile
-        </h1>
-        {loading && <Loader />}
-        {error && <Message variant="danger">{error}</Message>}
-        <form
-          onSubmit={submitHandler}
-          className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
-        >
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="name"
-            >
-              Name
-            </label>
-            <input
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-              id="name"
-              type="text"
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+    <FormContainer>
+      <h1 className="mb-2 mt-2 text-center text-3xl font-bold text-custom-blue-dark">
+        User Profile
+      </h1>
+      {loading && <Loader />}
+      {error && <Message variant="danger">{error}</Message>}
+      <form
+        onSubmit={submitHandler}
+        className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
+      >
+        <div className="mb-4">
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="name"
+          >
+            Name
+          </label>
+          <input
+            className="relative mb-4 mt-2 block w-full appearance-none rounded-none border border-custom-blue-light px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
+            id="name"
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="email"
-            >
-              Email Address
-            </label>
-            <input
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-              id="email"
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        <div className="mb-4">
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="email"
+          >
+            Email Address
+          </label>
+          <input
+            className="relative mb-4 mt-2 block w-full appearance-none rounded-none border border-custom-blue-light px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
+            id="email"
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-              id="password"
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+        <div className="mb-4">
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            className="relative mb-4 mt-2 block w-full appearance-none rounded-none border border-custom-blue-light px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
+            id="password"
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="confirmPassword"
-            >
-              Confirm Password
-            </label>
-            <input
-              className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-              id="confirmPassword"
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
+        <div className="mb-4">
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="confirmPassword"
+          >
+            Confirm Password
+          </label>
+          <input
+            className="relative mb-4 mt-2 block w-full appearance-none rounded-none border border-custom-blue-light px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
+            id="confirmPassword"
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
 
-          <div className="flex items-center justify-between">
-            <button
-              className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-              type="submit"
-            >
-              Update
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+        <div className="flex items-center justify-between">
+          <button
+            className="group relative flex w-full justify-center rounded-md border border-transparent bg-custom-blue-dark px-4 py-2 text-sm font-medium text-white hover:bg-custom-blue-darkest focus:outline-none focus:ring-2 focus:ring-custom-blue-dark focus:ring-offset-2"
+            type="submit"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </FormContainer>
   );
 };
