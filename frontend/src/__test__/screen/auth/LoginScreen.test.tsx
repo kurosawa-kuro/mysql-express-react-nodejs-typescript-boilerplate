@@ -83,6 +83,31 @@ describe("Login Screen", () => {
     expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
   });
 
+  it("allows the user to toggle the logout menu after a successful login", async () => {
+    renderLoginScreen();
+
+    await fillForm(UserData.email, UserData.password);
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+
+    expect(
+      await screen.findByText("Successfully logged in")
+    ).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+        UserData.name
+      );
+    });
+
+    fireEvent.click(screen.getByText(UserData.name));
+    fireEvent.click(await screen.findByText(`Logout`));
+
+    await screen.findByRole("heading", { name: /Log in/i });
+  });
+
   it("displays an error message when the login attempt fails", async () => {
     renderLoginScreen();
 
