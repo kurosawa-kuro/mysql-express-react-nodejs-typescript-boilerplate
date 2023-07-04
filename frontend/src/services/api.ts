@@ -56,3 +56,6 @@ export const logoutUser = () =>
 
 export const readTopStatusApi = (): Promise<string> =>
   performRequest(apiClient.get(`/api/`));
+
+export const uploadImage = async (imageData: FormData) =>
+  performRequest(apiClient.post("/api/upload", imageData));

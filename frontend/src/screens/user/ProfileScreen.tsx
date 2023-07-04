@@ -3,7 +3,7 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import { toast } from "react-toastify";
 import { Loader } from "../../components/common/Loader";
-import { updateUserProfile } from "../../services/api"; // Import the api functions
+import { updateUserProfile, uploadImage } from "../../services/api";
 import { useAuthStore } from "../../state/store";
 import { Message } from "../../components/common/Message";
 import { FormContainer } from "../../components/layout/FormContainer";
@@ -11,6 +11,7 @@ import { FormContainer } from "../../components/layout/FormContainer";
 export const ProfileScreen: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,9 +20,15 @@ export const ProfileScreen: React.FC = () => {
   const { userInfo, setUserInfo } = useAuthStore();
 
   useEffect(() => {
+    console.log("userInfo", userInfo);
     if (userInfo && userInfo.name && userInfo.email) {
       setName(userInfo.name);
       setEmail(userInfo.email);
+      if (userInfo.avatarPath) {
+        setImage(userInfo.avatarPath);
+      } else {
+        setImage("");
+      }
     }
   }, [userInfo]);
 
@@ -44,6 +51,7 @@ export const ProfileScreen: React.FC = () => {
       const res = await updateUserProfile({
         name,
         email,
+        avatarPath: image,
         password,
         isAdmin: userInfo.isAdmin || false,
       });
@@ -56,6 +64,23 @@ export const ProfileScreen: React.FC = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await uploadImage(formData);
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
     }
   };
 
@@ -101,6 +126,37 @@ export const ProfileScreen: React.FC = () => {
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="image-file" className="text-custom-blue-dark">
+            Image File
+          </label>
+          {image && (
+            <img
+              className="w-40"
+              src={image.replace(/\\/g, "/").replace("/frontend/public", "")}
+              alt={image}
+            />
+          )}
+          <input
+            id="image"
+            name="image"
+            type="text"
+            required
+            className="relative block w-full appearance-none rounded-none border border-custom-blue-light px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
+            placeholder="Enter image url"
+            value={image.replace(/\\/g, "/").replace("/frontend/public", "")}
+            onChange={(e) => setImage(e.target.value)}
+            style={{ display: "none" }}
+          />
+          <input
+            id="image-file"
+            name="image-file"
+            type="file"
+            className="relative mb-4 block w-full appearance-none rounded-none border border-custom-blue-light bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
+            onChange={uploadFileHandler}
           />
         </div>
 

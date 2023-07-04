@@ -116,11 +116,16 @@ const updateUserProfile = asyncHandler(
 
     const id = req.user.id;
     const user = await readUserByIdInDB(id);
-
+    console.log("req.body", req.body);
+    // req.body.avatarPath.replace(/\\/g, "/").replace("/frontend/public", "")
     if (user) {
       const updatedUser = await updateUserByIdInDB(id, {
         name: req.body.name || user.name,
         email: req.body.email || user.email,
+        avatarPath:
+          req.body.avatarPath
+            .replace(/\\/g, "/")
+            .replace("/frontend/public", "") || user.avatarPath,
         password: req.body.password
           ? await hashPassword(req.body.password)
           : user.password,
