@@ -63,7 +63,7 @@ test("admin login fail", async () => {
   fireEvent.click(screen.getByTestId("login"));
 
   await waitFor(() => {
-    const johnText = screen.queryByText(AdminData.name);
-    expect(johnText).not.toBeInTheDocument();
+    const adminText = screen.queryByText(AdminData.name);
+    expect(adminText).not.toBeInTheDocument();
   });
 });
