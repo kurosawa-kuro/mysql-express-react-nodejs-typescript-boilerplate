@@ -26,7 +26,7 @@ const server = setupServer(
   rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
     return res(
       ctx.json({
-        name: "UserData.name",
+        name: "new name",
         email: "new Email Address",
         avatarPath: "url-to-your-image",
         isAdmin: false,
@@ -99,7 +99,8 @@ describe("ProfileScreen", () => {
       await screen.findByText("Profile updated successfully")
     ).toBeInTheDocument();
     expect(await screen.findByText("Update")).toBeInTheDocument();
-    // printDOM();
+    const nameInput2 = await screen.findByDisplayValue("new name");
+    expect(nameInput2).toBeInTheDocument();
     const emailInput2 = await screen.findByDisplayValue("new Email Address");
     expect(emailInput2).toBeInTheDocument();
     // printDOM();
