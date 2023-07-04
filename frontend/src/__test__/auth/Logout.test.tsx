@@ -2,7 +2,7 @@ import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
 import { LoginScreen } from "../../screens/auth/LoginScreen";
-import { createServer, printDOM, simulateLogin } from "../testUtils";
+import { createServer, simulateLogin } from "../testUtils";
 import { UserData } from "../../../../backend/__test__/testData";
 
 const server = createServer();
@@ -11,7 +11,6 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-// Define helper functions for repeated operations
 const renderLoginScreen = () => {
   return render(
     <MemoryRouter initialEntries={["/"]}>
@@ -25,7 +24,7 @@ const renderLoginScreen = () => {
 };
 
 describe("App Screen", () => {
-  it("shows username in header after successful login for logout", async () => {
+  it("navigates back to the login screen after a user logs out", async () => {
     renderLoginScreen();
 
     await simulateLogin();
@@ -38,6 +37,7 @@ describe("App Screen", () => {
 
     fireEvent.click(await screen.findByText(`User`));
     fireEvent.click(await screen.findByText(`Logout`));
-    printDOM();
+
+    await screen.findByRole("heading", { name: /Log in/i });
   });
 });

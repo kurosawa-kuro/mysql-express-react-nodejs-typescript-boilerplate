@@ -36,6 +36,9 @@ export function createServer() {
         ctx.status(401),
         ctx.json({ message: "Invalid email or password" })
       );
+    }),
+    rest.post(`${API_BASE_URL}/users/logout`, (_req, res, ctx) => {
+      return res(ctx.json({ message: "Logged out successfully" }));
     })
   );
 }
