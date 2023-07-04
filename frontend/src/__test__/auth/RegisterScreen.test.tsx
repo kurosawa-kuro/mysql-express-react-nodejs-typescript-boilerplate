@@ -1,10 +1,8 @@
-// frontend\src\__test__\auth\RegisterScreen.test.tsx
-
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import "@testing-library/jest-dom/extend-expect";
 import { App } from "../../App";
-import { RegisterScreen } from "../../screens/auth/RegisterScreen"; // Ensure this import is correct
+import { RegisterScreen } from "../../screens/auth/RegisterScreen";
 import { createServer } from "../testUtils";
 import { rest } from "msw";
 import { UserData } from "../../../../backend/__test__/testData";
@@ -15,35 +13,49 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+// Define helper functions for repeated operations
+const renderRegisterScreen = () => {
+  return render(
+    <MemoryRouter initialEntries={["/register"]}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/register" element={<RegisterScreen />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
+  );
+};
+
+const fillForm = async (
+  name: string,
+  email: string,
+  password: string,
+  confirmPassword: string
+) => {
+  fireEvent.change(screen.getByTestId("input-name"), {
+    target: { value: name },
+  });
+
+  fireEvent.change(screen.getByTestId("input-email"), {
+    target: { value: email },
+  });
+
+  fireEvent.change(screen.getByTestId("input-password"), {
+    target: { value: password },
+  });
+
+  fireEvent.change(screen.getByTestId("input-confirmPassword"), {
+    target: { value: confirmPassword },
+  });
+
+  fireEvent.click(screen.getByTestId("register"));
+};
+
 describe("Registration Screen", () => {
   it("should show username in header after successful registration", async () => {
-    render(
-      <MemoryRouter initialEntries={["/register"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/register" element={<RegisterScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderRegisterScreen();
 
-    fireEvent.change(screen.getByTestId("input-name"), {
-      target: { value: "User" },
-    });
-
-    fireEvent.change(screen.getByTestId("input-email"), {
-      target: { value: "user@email.com" },
-    });
-
-    fireEvent.change(screen.getByTestId("input-password"), {
-      target: { value: "123456" },
-    });
-
-    fireEvent.change(screen.getByTestId("input-confirmPassword"), {
-      target: { value: "123456" },
-    });
-
-    fireEvent.click(screen.getByTestId("register"));
+    await fillForm("User", "user@email.com", "123456", "123456");
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -59,33 +71,9 @@ describe("Registration Screen", () => {
   });
 
   it("should show an error message when password confirmation does not match", async () => {
-    render(
-      <MemoryRouter initialEntries={["/register"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/register" element={<RegisterScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderRegisterScreen();
 
-    fireEvent.change(screen.getByTestId("input-name"), {
-      target: { value: UserData.name },
-    });
-
-    fireEvent.change(screen.getByTestId("input-email"), {
-      target: { value: UserData.email },
-    });
-
-    fireEvent.change(screen.getByTestId("input-password"), {
-      target: { value: UserData.password },
-    });
-
-    fireEvent.change(screen.getByTestId("input-confirmPassword"), {
-      target: { value: "12345" },
-    });
-
-    fireEvent.click(screen.getByTestId("register"));
+    await fillForm(UserData.name, UserData.email, UserData.password, "12345");
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -97,15 +85,7 @@ describe("Registration Screen", () => {
   });
 
   it("should show an error message when registration fails due to server error", async () => {
-    render(
-      <MemoryRouter initialEntries={["/register"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/register" element={<RegisterScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderRegisterScreen();
 
     server.use(
       rest.post(
@@ -119,23 +99,7 @@ describe("Registration Screen", () => {
       )
     );
 
-    fireEvent.change(screen.getByTestId("input-name"), {
-      target: { value: "john" },
-    });
-
-    fireEvent.change(screen.getByTestId("input-email"), {
-      target: { value: "john@email.com" },
-    });
-
-    fireEvent.change(screen.getByTestId("input-password"), {
-      target: { value: "123456" },
-    });
-
-    fireEvent.change(screen.getByTestId("input-confirmPassword"), {
-      target: { value: "123456" },
-    });
-
-    fireEvent.click(screen.getByTestId("register"));
+    await fillForm("john", "john@email.com", "123456", "123456");
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
