@@ -91,10 +91,7 @@ export const ProfileScreen: React.FC = () => {
         className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
       >
         <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="name"
-          >
+          <label className="text-custom-blue-dark" htmlFor="name">
             Name
           </label>
           <input
@@ -108,10 +105,7 @@ export const ProfileScreen: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="email"
-          >
+          <label className="text-custom-blue-dark" htmlFor="email">
             Email Address
           </label>
           <input
@@ -125,12 +119,12 @@ export const ProfileScreen: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="image-file" className="text-custom-blue-dark">
+          <label htmlFor="image-file" className="mb-4 text-custom-blue-dark">
             Image File
           </label>
           {image && (
             <img
-              className="w-40"
+              className="mt-2 w-40"
               src={image.replace(/\\/g, "/").replace("/frontend/public", "")}
               alt={image}
             />
@@ -156,10 +150,7 @@ export const ProfileScreen: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="password"
-          >
+          <label className="text-custom-blue-dark" htmlFor="password">
             Password
           </label>
           <input
@@ -173,10 +164,7 @@ export const ProfileScreen: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="confirmPassword"
-          >
+          <label className="text-custom-blue-dark" htmlFor="confirmPassword">
             Confirm Password
           </label>
           <input
