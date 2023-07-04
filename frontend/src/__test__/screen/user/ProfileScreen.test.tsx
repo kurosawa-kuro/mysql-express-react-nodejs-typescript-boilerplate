@@ -1,14 +1,13 @@
 // frontend\src\screens\product\HomeScreen.test.tsx
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { printDOM, simulateLogin } from "../../testUtils";
+import { simulateLogin } from "../../testUtils";
 import { App } from "../../../App";
 import { ProfileScreen } from "../../../screens/user/ProfileScreen";
-// import { ProfileScreen } from "../../../services/api";
 
 jest.mock("../../../services/api", () => ({
   ...jest.requireActual("../../../services/api"),
@@ -23,6 +22,16 @@ jest.mock("../../../services/api", () => ({
 const server = setupServer(
   rest.get("http://localhost:8080/api/", (_req, res, ctx) => {
     return res(ctx.text("API is running...."));
+  }),
+  rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
+    return res(
+      ctx.json({
+        name: "UserData.name",
+        email: "UserData.email",
+        avatarPath: "url-to-your-image",
+        isAdmin: false,
+      })
+    );
   })
 );
 
@@ -32,10 +41,6 @@ afterAll(() => server.close());
 
 describe("ProfileScreen", () => {
   it("renders the ProfileScreen and displays the API status when API request is successful", async () => {
-    // const { uploadProductImage } = require("../../../services/api");
-    // const mockUpload = uploadProductImage as jest.MockedFunction<
-    //   typeof uploadProductImage
-    // >;
     render(
       <MemoryRouter initialEntries={["/profile"]}>
         <Routes>
@@ -48,7 +53,6 @@ describe("ProfileScreen", () => {
 
     await simulateLogin();
 
-    // User Profile
     await screen.findByRole("heading", { name: /User Profile/i });
 
     const nameInput = await screen.findByDisplayValue("User");
@@ -57,6 +61,24 @@ describe("ProfileScreen", () => {
     const emailInput = await screen.findByDisplayValue("user@email.com");
     expect(emailInput).toBeInTheDocument();
 
+    // ========
+    // fireEvent.change(screen.getByLabelText("Name"), {
+    //   target: { value: "new Name" },
+    // });
+
+    // fireEvent.change(screen.getByLabelText("Email Address"), {
+    //   target: { value: "new Email Address" },
+    // });
+
+    // fireEvent.change(screen.getByLabelText("Password"), {
+    //   target: { value: "123456" },
+    // });
+
+    // fireEvent.change(screen.getByLabelText("Confirm Password"), {
+    //   target: { value: "123456" },
+    // });
+    // ====
+
     const file = new File(["dummy content"], "test.png", {
       type: "image/png",
     });
@@ -64,11 +86,22 @@ describe("ProfileScreen", () => {
     const input = screen.getByLabelText("Image File") as HTMLInputElement;
     userEvent.upload(input, file);
 
-    // await waitFor(() => expect(mockUpload).toHaveBeenCalledTimes(1));
     expect(
       await screen.findByText("Image uploaded successfully")
     ).toBeInTheDocument();
 
-    printDOM();
+    const imageInput = await screen.findByDisplayValue("url-to-your-image");
+    expect(imageInput).toBeInTheDocument();
+
+    fireEvent.click(await screen.findByRole("button", { name: /Update/i }));
+    // "Profile updated successfully"
+    expect(
+      await screen.findByText("Profile updated successfully")
+    ).toBeInTheDocument();
+    expect(await screen.findByText("Update")).toBeInTheDocument();
+    // printDOM();
+    const emailInput2 = await screen.findByDisplayValue("UserData.email");
+    expect(emailInput2).toBeInTheDocument();
+    // printDOM();
   });
 });

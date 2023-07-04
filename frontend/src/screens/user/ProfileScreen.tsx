@@ -28,6 +28,7 @@ export const ProfileScreen: React.FC = () => {
   }, [userInfo]);
 
   const submitHandler = async (e: FormEvent) => {
+    console.log("submitHandler");
     e.preventDefault();
     if (!userInfo) {
       toast.error("User info is not available");
@@ -50,6 +51,7 @@ export const ProfileScreen: React.FC = () => {
         password,
         isAdmin: userInfo.isAdmin || false,
       });
+      console.log("res", res);
       setUserInfo({ ...res });
       toast.success("Profile updated successfully");
     } catch (err: unknown) {
@@ -63,18 +65,12 @@ export const ProfileScreen: React.FC = () => {
   };
 
   const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("uploadFileHandler");
     if (!e.target.files) return;
-
-    console.log("e.target.files", e.target.files);
-
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("image", file);
     try {
       const res = await uploadImage(formData);
-      console.log("res", res);
-      console.log("res.image", res.image);
       toast.success(res.message);
       setImage(res.image);
     } catch (err: unknown) {
