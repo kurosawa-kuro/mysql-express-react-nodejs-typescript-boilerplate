@@ -20,15 +20,10 @@ export const ProfileScreen: React.FC = () => {
   const { userInfo, setUserInfo } = useAuthStore();
 
   useEffect(() => {
-    console.log("userInfo", userInfo);
     if (userInfo && userInfo.name && userInfo.email) {
       setName(userInfo.name);
       setEmail(userInfo.email);
-      if (userInfo.avatarPath) {
-        setImage(userInfo.avatarPath);
-      } else {
-        setImage("");
-      }
+      setImage(userInfo.avatarPath || "");
     }
   }, [userInfo]);
 
