@@ -4,7 +4,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { HomeScreen } from "../../screens/HomeScreen";
+import { HomeScreen } from "../screens/HomeScreen";
+import { simulateLogin } from "./testUtils";
+import { App } from "../App";
 
 const server = setupServer(
   rest.get("http://localhost:8080/api/", (_req, res, ctx) => {
@@ -20,11 +22,14 @@ test("renders HomeScreen with product list", async () => {
   render(
     <MemoryRouter initialEntries={["/"]}>
       <Routes>
-        <Route path="/" element={<HomeScreen />} />
+        <Route path="/" element={<App />}>
+          <Route path="/" element={<HomeScreen />} />
+        </Route>
       </Routes>
     </MemoryRouter>
   );
 
+  await simulateLogin();
   await waitFor(() =>
     expect(screen.getByText("API is running....")).toBeInTheDocument()
   );
