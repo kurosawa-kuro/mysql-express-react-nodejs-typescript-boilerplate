@@ -1,4 +1,3 @@
-// frontend\src\__test__\auth\LoginScreen.test.tsx
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { App } from "../../App";
@@ -13,8 +12,9 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test("shows username in header after successful login", async () => {
-  render(
+// Define helper functions for repeated operations
+const renderLoginScreen = () => {
+  return render(
     <MemoryRouter initialEntries={["/login"]}>
       <Routes>
         <Route path="/" element={<App />}>
@@ -23,63 +23,61 @@ test("shows username in header after successful login", async () => {
       </Routes>
     </MemoryRouter>
   );
+};
 
+const fillLoginForm = async (email: string, password: string) => {
   fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: UserData.email },
+    target: { value: email },
   });
 
   fireEvent.change(screen.getByLabelText("password"), {
-    target: { value: UserData.password },
+    target: { value: password },
   });
 
   fireEvent.click(screen.getByTestId("login"));
+};
 
-  await waitFor(() => {
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-  });
-  expect(await screen.findByText("Successfully logged in")).toBeInTheDocument();
+describe("Login Screen", () => {
+  it("shows username in header after successful login", async () => {
+    renderLoginScreen();
 
-  await waitFor(async () => {
-    expect(screen.getByTestId("user-info-name")).toHaveTextContent(
-      UserData.name
-    );
-  });
-});
+    await fillLoginForm(UserData.email, UserData.password);
 
-test("login fail", async () => {
-  render(
-    <MemoryRouter initialEntries={["/login"]}>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="/login" element={<LoginScreen />} />
-        </Route>
-      </Routes>
-    </MemoryRouter>
-  );
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
 
-  server.use(
-    rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
-      return res(
-        ctx.status(401),
-        ctx.json({ message: "Invalid email or password" })
+    expect(
+      await screen.findByText("Successfully logged in")
+    ).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("user-info-name")).toHaveTextContent(
+        UserData.name
       );
-    })
-  );
-  fireEvent.change(screen.getByLabelText("email"), {
-    target: { value: UserData.email },
+    });
   });
 
-  fireEvent.change(screen.getByLabelText("password"), {
-    target: { value: "12345" },
+  it("login fail", async () => {
+    renderLoginScreen();
+
+    server.use(
+      rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({ message: "Invalid email or password" })
+        );
+      })
+    );
+
+    await fillLoginForm(UserData.email, "12345");
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+
+    expect(
+      await screen.findByText("Invalid email or password")
+    ).toBeInTheDocument();
   });
-
-  fireEvent.click(screen.getByTestId("login"));
-
-  await waitFor(() => {
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-  });
-
-  expect(
-    await screen.findByText("Invalid email or password")
-  ).toBeInTheDocument();
 });
