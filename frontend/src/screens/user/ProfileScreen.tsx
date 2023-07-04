@@ -134,7 +134,6 @@ export const ProfileScreen: React.FC = () => {
             id="image"
             name="image"
             type="text"
-            required
             className="relative block w-full appearance-none rounded-none border border-custom-blue-light px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-custom-blue-dark focus:outline-none focus:ring-custom-blue-dark sm:text-sm"
             placeholder="Enter image url"
             value={image.replace(/\\/g, "/").replace("/frontend/public", "")}
