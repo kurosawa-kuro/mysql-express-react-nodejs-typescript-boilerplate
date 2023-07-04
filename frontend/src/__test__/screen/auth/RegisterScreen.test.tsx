@@ -1,11 +1,11 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import "@testing-library/jest-dom/extend-expect";
-import { App } from "../../App";
-import { RegisterScreen } from "../../screens/auth/RegisterScreen";
-import { createServer } from "../testUtils";
+import { App } from "../../../App";
+import { RegisterScreen } from "../../../screens/auth/RegisterScreen";
+import { createServer } from "../../testUtils";
 import { rest } from "msw";
-import { UserData } from "../../../../backend/__test__/testData";
+import { UserData } from "../../../../../backend/__test__/testData";
 
 const server = createServer();
 

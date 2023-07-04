@@ -1,9 +1,9 @@
 import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { App } from "../../App";
-import { LoginScreen } from "../../screens/auth/LoginScreen";
-import { createServer, simulateLogin } from "../testUtils";
-import { UserData } from "../../../../backend/__test__/testData";
+import { App } from "../../../App";
+import { LoginScreen } from "../../../screens/auth/LoginScreen";
+import { createServer, simulateLogin } from "../../testUtils";
+import { UserData } from "../../../../../backend/__test__/testData";
 
 const server = createServer();
 

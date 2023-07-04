@@ -1,9 +1,9 @@
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { App } from "../../App";
-import { LoginScreen } from "../../screens/auth/LoginScreen";
-import { createServer } from "../testUtils";
-import { UserData } from "../../../../backend/__test__/testData";
+import { App } from "../../../App";
+import { LoginScreen } from "../../../screens/auth/LoginScreen";
+import { createServer } from "../../testUtils";
+import { UserData } from "../../../../../backend/__test__/testData";
 import { rest } from "msw";
 
 const server = createServer();
@@ -12,7 +12,6 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-// Define helper functions for repeated operations
 const renderLoginScreen = () => {
   return render(
     <MemoryRouter initialEntries={["/login"]}>
@@ -56,6 +55,12 @@ describe("Login Screen", () => {
         UserData.name
       );
     });
+
+    fireEvent.click(screen.getByText(UserData.name));
+    expect(screen.getByRole("menuitem", { name: "Logout" })).toBeVisible();
+
+    fireEvent.mouseDown(document.body);
+    expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
   });
 
   it("login fail", async () => {
