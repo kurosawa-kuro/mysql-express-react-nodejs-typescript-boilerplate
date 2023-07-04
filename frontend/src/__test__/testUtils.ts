@@ -1,13 +1,6 @@
 // frontend\src\screens\admin\product\testUtils.ts
 
-import {
-  fireEvent,
-  screen,
-  Matcher,
-  renderHook,
-  prettyDOM,
-  act,
-} from "@testing-library/react";
+import { screen, renderHook, prettyDOM, act } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 
@@ -46,9 +39,6 @@ export function createServer() {
     })
   );
 }
-
-export const inputField = (label: Matcher, value: any) =>
-  fireEvent.change(screen.getByLabelText(label), { target: { value } });
 
 export async function simulateLogin(isAdmin: boolean = false) {
   let userInfo: UserInfo = isAdmin
