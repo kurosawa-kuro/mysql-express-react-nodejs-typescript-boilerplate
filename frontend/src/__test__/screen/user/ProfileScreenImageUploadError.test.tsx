@@ -71,18 +71,36 @@ describe("ProfileScreen", () => {
     expect(uploadMessage).toBeInTheDocument();
     expect(imageInput).toBeInTheDocument();
 
+    // ======
+    const passwordInputElement = screen.getByPlaceholderText(
+      "Enter password"
+    ) as HTMLInputElement;
+    expect(passwordInputElement.value).toBe("");
+
+    fireEvent.change(passwordInputElement, {
+      target: { value: "new password" },
+    });
+    expect(passwordInputElement.value).toBe("new password");
+
+    // Confirm password
+    const confirmPasswordInputElement = screen.getByPlaceholderText(
+      "Confirm password"
+    ) as HTMLInputElement;
+    expect(confirmPasswordInputElement.value).toBe("");
+
+    fireEvent.change(confirmPasswordInputElement, {
+      target: { value: "new confirm password" },
+    });
+    expect(confirmPasswordInputElement.value).toBe("new confirm password");
+    // ======
+
     const updateButton = await screen.findByRole("button", { name: /Update/i });
     fireEvent.click(updateButton);
 
-    const [updateMessage, updatedNameInput, updatedEmailInput] =
-      await Promise.all([
-        screen.findByText("Profile updated successfully"),
-        screen.findByDisplayValue(userProfileResponse.name),
-        screen.findByDisplayValue(userProfileResponse.email),
-      ]);
+    const [updateMessage] = await Promise.all([
+      screen.findByText("Passwords do not match"),
+    ]);
 
     expect(updateMessage).toBeInTheDocument();
-    expect(updatedNameInput).toBeInTheDocument();
-    expect(updatedEmailInput).toBeInTheDocument();
   });
 });
