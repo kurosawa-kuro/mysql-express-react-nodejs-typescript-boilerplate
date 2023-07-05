@@ -6,14 +6,14 @@ import express from "express";
 // Internal Imports
 import {
   registerUser,
-  readUserById,
+  readUserByIdAdminOnly,
   readUserProfile,
   readAllUsers,
   loginUser,
-  updateUser,
+  updateUserByAdminOnly,
   updateUserProfile,
   logoutUser,
-  deleteUser,
+  deleteUserAdminOnly,
 } from "../controllers/userController";
 import { admin, protect } from "../middleware/authMiddleware";
 
@@ -33,8 +33,8 @@ router
 // User Management and Users List Routes (Admin Access Only)
 router
   .route("/:id")
-  .delete(protect, admin, deleteUser)
-  .get(protect, admin, readUserById)
-  .put(protect, admin, updateUser);
+  .get(protect, admin, readUserByIdAdminOnly)
+  .put(protect, admin, updateUserByAdminOnly)
+  .delete(protect, admin, deleteUserAdminOnly);
 
 router.route("/").get(protect, admin, readAllUsers);

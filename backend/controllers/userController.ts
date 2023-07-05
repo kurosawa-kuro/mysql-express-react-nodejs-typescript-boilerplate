@@ -95,7 +95,7 @@ export const readAllUsers = asyncHandler(
   }
 );
 
-export const readUserById = asyncHandler(
+export const readUserByIdAdminOnly = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
     const user = await readUserByIdInDB(id);
@@ -132,7 +132,7 @@ export const updateUserProfile = asyncHandler(
   }
 );
 
-export const updateUser = asyncHandler(
+export const updateUserByAdminOnly = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
     const user = await readUserByIdInDB(id);
@@ -161,7 +161,7 @@ export const logoutUser = (req: UserRequest, res: Response) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-export const deleteUser = asyncHandler(
+export const deleteUserAdminOnly = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
     const user = await readUserByIdInDB(id);
