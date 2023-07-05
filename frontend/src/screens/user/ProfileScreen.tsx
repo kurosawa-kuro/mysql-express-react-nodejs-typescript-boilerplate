@@ -29,11 +29,6 @@ export const ProfileScreen: React.FC = () => {
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    if (!userInfo) {
-      toast.error("User info is not available");
-      setError("User info is not available");
-      return;
-    }
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -43,15 +38,17 @@ export const ProfileScreen: React.FC = () => {
 
     setLoading(true);
     try {
-      const res = await updateUserProfile({
-        name,
-        email,
-        avatarPath: image,
-        password,
-        isAdmin: userInfo.isAdmin || false,
-      });
-      setUserInfo({ ...res });
-      toast.success("Profile updated successfully");
+      if (userInfo) {
+        const res = await updateUserProfile({
+          name,
+          email,
+          avatarPath: image,
+          password,
+          isAdmin: userInfo.isAdmin || false,
+        });
+        setUserInfo({ ...res });
+        toast.success("Profile updated successfully");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message);
