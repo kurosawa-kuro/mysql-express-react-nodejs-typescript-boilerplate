@@ -22,21 +22,21 @@ beforeAll(() => {
 describe("Authentication Middleware", () => {
   describe("when no token is provided", () => {
     it("should return 401 error and appropriate error message", async () => {
-      const res = await request(server).get("/protected");
+      const response = await request(server).get("/protected");
 
-      expect(res.status).toBe(401);
-      expect(res.body.message).toContain("Not authorized, no token");
+      expect(response.status).toBe(401);
+      expect(response.body.message).toContain("Not authorized, no token");
     });
   });
 
   describe("when an invalid token is provided", () => {
     it("should return 401 error and appropriate error message", async () => {
-      const res = await request(server)
+      const response = await request(server)
         .get("/protected")
         .set("Cookie", ["jwt=invalidtoken"]);
 
-      expect(res.status).toBe(401);
-      expect(res.body.message).toContain("Not authorized, token failed");
+      expect(response.status).toBe(401);
+      expect(response.body.message).toContain("Not authorized, token failed");
     });
   });
 });
@@ -44,21 +44,21 @@ describe("Authentication Middleware", () => {
 describe("Admin Authorization Middleware", () => {
   describe("when no token is provided", () => {
     it("should return 401 error and appropriate error message", async () => {
-      const res = await request(server).get("/admin");
+      const response = await request(server).get("/admin");
 
-      expect(res.status).toBe(401);
-      expect(res.body.message).toContain("Not authorized as an admin");
+      expect(response.status).toBe(401);
+      expect(response.body.message).toContain("Not authorized as an admin");
     });
   });
 
   describe("when an invalid token is provided", () => {
     it("should return 401 error and appropriate error message", async () => {
-      const res = await request(server)
+      const response = await request(server)
         .get("/admin")
         .set("Cookie", ["jwt=invalidtoken"]);
 
-      expect(res.status).toBe(401);
-      expect(res.body.message).toContain("Not authorized as an admin");
+      expect(response.status).toBe(401);
+      expect(response.body.message).toContain("Not authorized as an admin");
     });
   });
 });
