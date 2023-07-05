@@ -37,7 +37,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe("ProfileScreen ", () => {
-  it("renders the ProfileScreen and displays the API status when API request is successful", async () => {
+  it("validates password mismatch during profile update", async () => {
     renderApp();
 
     await simulateLogin();
@@ -81,7 +81,33 @@ describe("ProfileScreen ", () => {
     expect(updateMessage).toBeInTheDocument();
   });
 
-  it("updateUserProfile fail", async () => {
+  it("handles server error during image upload", async () => {
+    renderApp();
+
+    await simulateLogin();
+    await screen.findByRole("heading", { name: /User Profile/i });
+
+    server.use(
+      rest.post("http://localhost:8080/api/upload", (_req, res, ctx) => {
+        return res(
+          ctx.status(500),
+          ctx.json({ message: "Server error when file upload" })
+        );
+      })
+    );
+
+    const file = new File(["dummy content"], "test.png", { type: "image/png" });
+    const inputFile = screen.getByLabelText("Image File") as HTMLInputElement;
+    userEvent.upload(inputFile, file);
+
+    await waitFor(() =>
+      expect(
+        screen.getByText("Server error when file upload")
+      ).toBeInTheDocument()
+    );
+  });
+
+  it("handles server error during user profile update", async () => {
     server.use(
       rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
         return res(
@@ -114,32 +140,6 @@ describe("ProfileScreen ", () => {
     await waitFor(() =>
       expect(
         screen.getByText("Server error when upload user's profile")
-      ).toBeInTheDocument()
-    );
-  });
-
-  it("renders the ProfileScreen and displays the API status when API request is successful", async () => {
-    renderApp();
-
-    await simulateLogin();
-    await screen.findByRole("heading", { name: /User Profile/i });
-
-    server.use(
-      rest.post("http://localhost:8080/api/upload", (_req, res, ctx) => {
-        return res(
-          ctx.status(500),
-          ctx.json({ message: "Server error when file upload" })
-        );
-      })
-    );
-
-    const file = new File(["dummy content"], "test.png", { type: "image/png" });
-    const inputFile = screen.getByLabelText("Image File") as HTMLInputElement;
-    userEvent.upload(inputFile, file);
-
-    await waitFor(() =>
-      expect(
-        screen.getByText("Server error when file upload")
       ).toBeInTheDocument()
     );
   });
