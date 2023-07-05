@@ -10,15 +10,8 @@ describe("Error Middlewares", () => {
 
   beforeEach(() => {
     app = express();
-    app.use(express.json());
-
-    // テストルートを追加します。
     app.use("/test", (req, res) => {
       throw new Error("Test error");
-    });
-
-    app.use("/test-route", (req, res) => {
-      res.json({ message: "Test route" });
     });
 
     app.use(errorHandler);

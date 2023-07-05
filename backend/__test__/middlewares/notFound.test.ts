@@ -8,10 +8,6 @@ describe("Error Middlewares", () => {
 
   beforeEach(() => {
     app = express();
-    app.use(express.json());
-    app.use("/test", (req, res) => {
-      res.json({ message: "Test route" });
-    });
     app.use(notFound);
     app.use(errorHandler);
   });
