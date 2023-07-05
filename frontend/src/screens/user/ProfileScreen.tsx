@@ -60,17 +60,18 @@ export const ProfileScreen: React.FC = () => {
   };
 
   const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await uploadImage(formData);
-      toast.success(res.message);
-      setImage(res.image);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        toast.error(err.message);
+    if (e.target.files) {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("image", file);
+      try {
+        const res = await uploadImage(formData);
+        toast.success(res.message);
+        setImage(res.image);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toast.error(err.message);
+        }
       }
     }
   };
