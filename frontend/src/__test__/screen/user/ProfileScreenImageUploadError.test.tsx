@@ -1,5 +1,3 @@
-// frontend\src\screens\product\HomeScreen.test.tsx
-
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -9,31 +7,28 @@ import { App } from "../../../App";
 import { ProfileScreen } from "../../../screens/user/ProfileScreen";
 import userEvent from "@testing-library/user-event";
 
-const uploadImageResponse = {
-  image: "url-to-your-image",
-  message: "Image uploaded successfully",
-};
-
-const userProfileResponse = {
+const userProfile = {
   name: "new name",
   email: "new Email Address",
   avatarPath: "url-to-your-image",
   isAdmin: false,
 };
 
-jest.mock("../../../services/api", () => ({
-  ...jest.requireActual("../../../services/api"),
-  uploadImage: jest.fn(() => Promise.resolve(uploadImageResponse)),
-}));
-
-jest.mock("../../../services/api", () => ({
-  ...jest.requireActual("../../../services/api"),
-  uploadImage: jest.fn(() => Promise.reject(new Error("Test error message"))),
-}));
+function renderApp() {
+  render(
+    <MemoryRouter initialEntries={["/profile"]}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/profile" element={<ProfileScreen />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
+  );
+}
 
 const server = setupServer(
   rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
-    return res(ctx.json(userProfileResponse));
+    return res(ctx.json(userProfile));
   })
 );
 
@@ -43,15 +38,7 @@ afterAll(() => server.close());
 
 describe("ProfileScreen ", () => {
   it("renders the ProfileScreen and displays the API status when API request is successful", async () => {
-    render(
-      <MemoryRouter initialEntries={["/profile"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/profile" element={<ProfileScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderApp();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
@@ -64,28 +51,25 @@ describe("ProfileScreen ", () => {
     expect(nameInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
 
-    // ======
-    const passwordInputElement = screen.getByPlaceholderText(
+    const passwordInput = screen.getByPlaceholderText(
       "Enter password"
     ) as HTMLInputElement;
-    expect(passwordInputElement.value).toBe("");
+    expect(passwordInput.value).toBe("");
 
-    fireEvent.change(passwordInputElement, {
+    fireEvent.change(passwordInput, {
       target: { value: "new password" },
     });
-    expect(passwordInputElement.value).toBe("new password");
+    expect(passwordInput.value).toBe("new password");
 
-    // Confirm password
-    const confirmPasswordInputElement = screen.getByPlaceholderText(
+    const confirmPassInput = screen.getByPlaceholderText(
       "Confirm password"
     ) as HTMLInputElement;
-    expect(confirmPasswordInputElement.value).toBe("");
+    expect(confirmPassInput.value).toBe("");
 
-    fireEvent.change(confirmPasswordInputElement, {
+    fireEvent.change(confirmPassInput, {
       target: { value: "new confirm password" },
     });
-    expect(confirmPasswordInputElement.value).toBe("new confirm password");
-    // ======
+    expect(confirmPassInput.value).toBe("new confirm password");
 
     const updateButton = await screen.findByRole("button", { name: /Update/i });
     fireEvent.click(updateButton);
@@ -98,76 +82,54 @@ describe("ProfileScreen ", () => {
   });
 
   it("updateUserProfile fail", async () => {
-    // jest.mock("../../../services/api", () => ({
-    //   ...jest.requireActual("../../../services/api"),
-    //   updateUserProfile: jest.fn(() =>
-    //     Promise.reject(new Error("Test error message"))
-    //   ),
-    // }));
-
-    // server.useでrest.put("http://localhost:8080/api/users/profile"が失敗する設定
     server.use(
       rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ message: "Server error" }));
+        return res(
+          ctx.status(500),
+          ctx.json({ message: "Server error when upload user's profile" })
+        );
       })
     );
 
-    // const server = setupServer(
-    //   rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
-    //     return res(ctx.json(userProfileResponse));
-    //   })
-    // );
-    render(
-      <MemoryRouter initialEntries={["/profile"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/profile" element={<ProfileScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderApp();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
-    const passwordInputElement = screen.getByPlaceholderText(
+    const passwordInput = screen.getByPlaceholderText(
       "Enter password"
     ) as HTMLInputElement;
-    fireEvent.change(passwordInputElement, { target: { value: "password" } });
+    fireEvent.change(passwordInput, { target: { value: "password" } });
 
-    const confirmPasswordInputElement = screen.getByPlaceholderText(
+    const confirmPassInput = screen.getByPlaceholderText(
       "Confirm password"
     ) as HTMLInputElement;
-    fireEvent.change(confirmPasswordInputElement, {
+    fireEvent.change(confirmPassInput, {
       target: { value: "password" },
     });
 
     const updateButton = await screen.findByRole("button", { name: /Update/i });
     fireEvent.click(updateButton);
 
-    // Verify that the error toast is displayed
     await waitFor(() =>
-      expect(screen.getByText("Server error")).toBeInTheDocument()
+      expect(
+        screen.getByText("Server error when upload user's profile")
+      ).toBeInTheDocument()
     );
   });
 
   it("renders the ProfileScreen and displays the API status when API request is successful", async () => {
-    render(
-      <MemoryRouter initialEntries={["/profile"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/profile" element={<ProfileScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderApp();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
     server.use(
       rest.post("http://localhost:8080/api/upload", (_req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ message: "Server error" }));
+        return res(
+          ctx.status(500),
+          ctx.json({ message: "Server error when file upload" })
+        );
       })
     );
 
@@ -176,7 +138,9 @@ describe("ProfileScreen ", () => {
     userEvent.upload(inputFile, file);
 
     await waitFor(() =>
-      expect(screen.getByText("Test error message")).toBeInTheDocument()
+      expect(
+        screen.getByText("Server error when file upload")
+      ).toBeInTheDocument()
     );
   });
 });
