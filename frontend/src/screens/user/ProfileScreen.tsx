@@ -28,7 +28,6 @@ export const ProfileScreen: React.FC = () => {
   }, [userInfo]);
 
   const submitHandler = async (e: FormEvent) => {
-    console.log("submitHandler");
     e.preventDefault();
     if (!userInfo) {
       toast.error("User info is not available");
@@ -51,7 +50,6 @@ export const ProfileScreen: React.FC = () => {
         password,
         isAdmin: userInfo.isAdmin || false,
       });
-      console.log("res", res);
       setUserInfo({ ...res });
       toast.success("Profile updated successfully");
     } catch (err: unknown) {
