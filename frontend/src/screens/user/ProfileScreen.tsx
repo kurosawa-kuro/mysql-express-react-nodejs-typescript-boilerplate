@@ -52,7 +52,7 @@ export const ProfileScreen: React.FC = () => {
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message);
-        setError(err.message);
+        // setError(err.message);
       }
     } finally {
       setLoading(false);
