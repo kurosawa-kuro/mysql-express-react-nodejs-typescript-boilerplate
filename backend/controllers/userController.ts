@@ -54,9 +54,6 @@ const registerUser = asyncHandler(async (req: UserRequest, res: Response) => {
   if (createdUser) {
     generateToken(res, createdUser.id);
     res.status(201).json(sanitizeUser(createdUser));
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
   }
 });
 
@@ -76,19 +73,13 @@ const loginUser = asyncHandler(async (req: UserRequest, res: Response) => {
 
 const readUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    if (!req.user || !req.user.id) {
-      res.status(401);
-      throw new Error("Not authorized");
-    }
+    if (req.user && req.user.id) {
+      const id = req.user.id;
+      const user = await readUserByIdInDB(id);
 
-    const id = req.user.id;
-    const user = await readUserByIdInDB(id);
-
-    if (user) {
-      res.json(sanitizeUser(user));
-    } else {
-      res.status(404);
-      throw new Error("User not found");
+      if (user) {
+        res.json(sanitizeUser(user));
+      }
     }
   }
 );
@@ -113,28 +104,22 @@ const readUserById = asyncHandler(async (req: UserRequest, res: Response) => {
 // UPDATE
 const updateUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    if (!req.user || !req.user.id) {
-      res.status(401);
-      throw new Error("Not authorized");
-    }
+    if (req.user && req.user.id) {
+      const id = req.user.id;
+      const user = await readUserByIdInDB(id);
 
-    const id = req.user.id;
-    const user = await readUserByIdInDB(id);
-
-    if (user) {
-      let avatarPath = getSanitizedAvatarPath(req.body.avatarPath);
-      const updatedUser = await updateUserByIdInDB(id, {
-        name: req.body.name || user.name,
-        email: req.body.email || user.email,
-        avatarPath: avatarPath || user.avatarPath,
-        password: req.body.password
-          ? await hashPassword(req.body.password)
-          : user.password,
-      });
-      res.json(sanitizeUser(updatedUser));
-    } else {
-      res.status(404);
-      throw new Error("User not found");
+      if (user) {
+        let avatarPath = getSanitizedAvatarPath(req.body.avatarPath);
+        const updatedUser = await updateUserByIdInDB(id, {
+          name: req.body.name || user.name,
+          email: req.body.email || user.email,
+          avatarPath: avatarPath || user.avatarPath,
+          password: req.body.password
+            ? await hashPassword(req.body.password)
+            : user.password,
+        });
+        res.json(sanitizeUser(updatedUser));
+      }
     }
   }
 );

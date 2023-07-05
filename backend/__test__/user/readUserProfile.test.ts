@@ -40,4 +40,11 @@ describe("GET /api/users/profile", () => {
 
     expect(profileResponse.status).toBe(401);
   });
+
+  // it("returns 401 error when user id is not available", async () => {
+  //   const profileResponse = await agent.get("/api/users/profile");
+
+  //   expect(profileResponse.status).toBe(401);
+  //   expect(profileResponse.body.message).toBe("Not authorized");
+  // });
 });
