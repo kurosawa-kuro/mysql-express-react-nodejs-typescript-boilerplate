@@ -19,38 +19,46 @@ beforeAll(() => {
   server.use(errorHandler);
 });
 
-describe("Auth Middleware", () => {
-  it("should return 401 error if no token is provided", async () => {
-    const res = await request(server).get("/protected");
+describe("Authentication Middleware", () => {
+  describe("when no token is provided", () => {
+    it("should return 401 error and appropriate error message", async () => {
+      const res = await request(server).get("/protected");
 
-    expect(res.status).toBe(401);
-    expect(res.body.message).toContain("Not authorized, no token");
+      expect(res.status).toBe(401);
+      expect(res.body.message).toContain("Not authorized, no token");
+    });
   });
 
-  it("should return 401 error if the token is invalid", async () => {
-    const res = await request(server)
-      .get("/protected")
-      .set("Cookie", ["jwt=invalidtoken"]);
+  describe("when an invalid token is provided", () => {
+    it("should return 401 error and appropriate error message", async () => {
+      const res = await request(server)
+        .get("/protected")
+        .set("Cookie", ["jwt=invalidtoken"]);
 
-    expect(res.status).toBe(401);
-    expect(res.body.message).toContain("Not authorized, token failed");
+      expect(res.status).toBe(401);
+      expect(res.body.message).toContain("Not authorized, token failed");
+    });
   });
 });
 
-describe("Admin Middleware", () => {
-  it("should return 401 error if no token is provided", async () => {
-    const res = await request(server).get("/admin");
+describe("Admin Authorization Middleware", () => {
+  describe("when no token is provided", () => {
+    it("should return 401 error and appropriate error message", async () => {
+      const res = await request(server).get("/admin");
 
-    expect(res.status).toBe(401);
-    expect(res.body.message).toContain("Not authorized as an admin");
+      expect(res.status).toBe(401);
+      expect(res.body.message).toContain("Not authorized as an admin");
+    });
   });
 
-  it("should return 401 error if the token is invalid", async () => {
-    const res = await request(server)
-      .get("/admin")
-      .set("Cookie", ["jwt=invalidtoken"]);
+  describe("when an invalid token is provided", () => {
+    it("should return 401 error and appropriate error message", async () => {
+      const res = await request(server)
+        .get("/admin")
+        .set("Cookie", ["jwt=invalidtoken"]);
 
-    expect(res.status).toBe(401);
-    expect(res.body.message).toContain("Not authorized as an admin");
+      expect(res.status).toBe(401);
+      expect(res.body.message).toContain("Not authorized as an admin");
+    });
   });
 });
