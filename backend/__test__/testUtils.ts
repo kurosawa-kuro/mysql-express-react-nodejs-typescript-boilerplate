@@ -35,24 +35,17 @@ const createUserWithRole = async (
   isAdmin: boolean
 ): Promise<User> => {
   const hashedPassword = await hashPassword(password);
-  try {
-    const user = await db.user.create({
-      data: {
-        name: isAdmin ? AdminData.name : UserData.name,
-        email,
-        password: hashedPassword,
-        isAdmin,
-      },
-    });
 
-    if (!user) {
-      throw new Error(`Failed to create user with email ${email}`);
-    }
+  const user = await db.user.create({
+    data: {
+      name: isAdmin ? AdminData.name : UserData.name,
+      email,
+      password: hashedPassword,
+      isAdmin,
+    },
+  });
 
-    return user;
-  } catch (error) {
-    throw new Error(`An error occurred while creating the user: ${error}`);
-  }
+  return user;
 };
 
 export const createUserInDB = (email: string, password: string) =>
@@ -68,18 +61,15 @@ export const loginUserAndGetToken = async (
   email: string,
   password: string
 ): Promise<string> => {
-  const loginResponse = await agent
+  const response = await agent
     .post("/api/users/login")
     .send({ email, password });
 
-  if (loginResponse.status !== 200) {
+  if (response.status !== 200) {
     throw new Error("Login failed during test setup");
   }
 
-  const match = loginResponse.headers["set-cookie"][0].match(/jwt=([^;]+)/);
-  if (!match) {
-    throw new Error("Failed to extract token from cookie");
-  }
+  const match = response.headers["set-cookie"][0].match(/jwt=([^;]+)/);
 
   return match[1];
 };
