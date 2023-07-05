@@ -3,7 +3,11 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { getApiClient } from "./apiClient";
-import { ErrorMessage, UserLoginData } from "../../../backend/interfaces";
+import {
+  ErrorMessage,
+  UserInfo,
+  UserLoginData,
+} from "../../../backend/interfaces";
 import { Prisma } from "@prisma/client";
 
 const apiClient = getApiClient();
@@ -28,24 +32,32 @@ const performRequest = async (request: Promise<AxiosResponse<any>>) => {
 };
 
 // User related APIs
-export const registerUser = (user: Prisma.UserCreateInput) =>
+export const registerUser = (user: Prisma.UserCreateInput): Promise<UserInfo> =>
   performRequest(apiClient.post("/api/users/register", user));
 
-export const loginUser = (userLoginData: UserLoginData) =>
+export const loginUser = (userLoginData: UserLoginData): Promise<UserInfo> =>
   performRequest(apiClient.post("/api/users/login", userLoginData));
 
-export const readUserProfile = () =>
+export const readUserProfile = (): Promise<UserInfo> =>
   performRequest(apiClient.get("/api/users/profile"));
 
-export const readAllUsers = () => performRequest(apiClient.get("/api/users"));
+export const readAllUsers = (): Promise<UserInfo[]> =>
+  performRequest(apiClient.get("/api/users"));
 
-export const readUserById = (userId: number) =>
+export const readUserById = (userId: number): Promise<UserInfo> =>
   performRequest(apiClient.get(`/api/users/${userId}`));
 
-export const updateUserProfile = (user: Prisma.UserUpdateInput) =>
+export const updateUserProfile = (
+  user: Prisma.UserUpdateInput
+): Promise<UserInfo> =>
   performRequest(apiClient.put("/api/users/profile", user));
 
-export const updateUser = (user: any) =>
+export const updateUser = (user: {
+  id: number;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}): Promise<UserInfo> =>
   performRequest(apiClient.put(`/api/users/${user.id}`, user));
 
 export const deleteUser = (id: number) =>
