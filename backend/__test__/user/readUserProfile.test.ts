@@ -26,25 +26,18 @@ describe("GET /api/users/profile", () => {
 
     expect(token).toBeTruthy();
 
-    const profileResponse = await agent
+    const response = await agent
       .get("/api/users/profile")
       .set("Cookie", `jwt=${token}`);
 
-    expect(profileResponse.status).toBe(200);
-    expect(profileResponse.body).toHaveProperty("id");
-    expect(profileResponse.body.email).toEqual("john@email.com");
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.email).toEqual("john@email.com");
   });
 
   it("rejects unauthenticated access", async () => {
-    const profileResponse = await agent.get("/api/users/profile");
+    const response = await agent.get("/api/users/profile");
 
-    expect(profileResponse.status).toBe(401);
+    expect(response.status).toBe(401);
   });
-
-  // it("returns 401 error when user id is not available", async () => {
-  //   const profileResponse = await agent.get("/api/users/profile");
-
-  //   expect(profileResponse.status).toBe(401);
-  //   expect(profileResponse.body.message).toBe("Not authorized");
-  // });
 });

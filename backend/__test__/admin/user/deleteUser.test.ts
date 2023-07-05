@@ -29,27 +29,27 @@ describe("User management endpoints", () => {
   it("allows admin to delete a user", async () => {
     const user = await createUserInDB("doe@email.com", "123456");
 
-    const deleteResponse = await agent
+    const response = await agent
       .delete(`/api/users/${user.id}`)
       .set("Cookie", `jwt=${adminToken}`);
 
-    expect(deleteResponse.status).toBe(200);
-    expect(deleteResponse.body).toEqual({ message: "User removed" });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "User removed" });
   });
 
   it("prevents deleting an admin user", async () => {
-    const deleteResponse = await agent
+    const response = await agent
       .delete(`/api/users/${admin.id}`)
       .set("Cookie", `jwt=${adminToken}`);
 
-    expect(deleteResponse.status).toBe(400);
+    expect(response.status).toBe(400);
   });
 
   it("throws an error when user to be deleted does not exist", async () => {
-    const deleteResponse = await agent
+    const response = await agent
       .delete(`/api/users/9999`)
       .set("Cookie", `jwt=${adminToken}`);
 
-    expect(deleteResponse.status).toBe(404);
+    expect(response.status).toBe(404);
   });
 });

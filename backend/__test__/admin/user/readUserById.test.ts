@@ -29,19 +29,19 @@ describe("User management endpoints", () => {
   it("allows admin to retrieve a user by ID", async () => {
     const user = await createUserInDB("doe@email.com", "123456");
 
-    const getResponse = await agent
+    const response = await agent
       .get(`/api/users/${user.id}`)
       .set("Cookie", `jwt=${adminToken}`);
 
-    expect(getResponse.status).toBe(200);
-    expect(getResponse.body.email).toEqual(user.email);
+    expect(response.status).toBe(200);
+    expect(response.body.email).toEqual(user.email);
   });
 
   it("throws an error when user to be retrieved does not exist", async () => {
-    const getResponse = await agent
+    const response = await agent
       .get(`/api/users/9999`)
       .set("Cookie", `jwt=${adminToken}`);
 
-    expect(getResponse.status).toBe(404);
+    expect(response.status).toBe(404);
   });
 });

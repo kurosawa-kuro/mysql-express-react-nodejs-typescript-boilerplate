@@ -45,12 +45,13 @@ describe("User management endpoints", () => {
 
     expect(response.status).toBe(200);
 
+    const responseBody = response.body;
     users.forEach((user) => {
-      const userInResponse = response.body.find(
+      const response = responseBody.find(
         (resUser: UserInfo) => resUser.id === user.id
       );
-      expect(userInResponse).toBeDefined();
-      expect(userInResponse.email).toEqual(user.email);
+      expect(response).toBeDefined();
+      expect(response.email).toEqual(user.email);
     });
   });
 
