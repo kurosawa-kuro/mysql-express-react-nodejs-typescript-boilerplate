@@ -21,32 +21,53 @@ describe("ProfileScreen", () => {
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
-    const nameInput = screen.getByPlaceholderText(
+    const nameInputElement = screen.getByPlaceholderText(
       "Enter name"
     ) as HTMLInputElement;
-    expect(nameInput.value).toBe("User");
+    expect(nameInputElement.value).toBe("User");
 
-    fireEvent.change(nameInput, { target: { value: "new Name" } });
-    expect(nameInput.value).toBe("new Name");
+    fireEvent.change(nameInputElement, { target: { value: "new Name" } });
+    expect(nameInputElement.value).toBe("new Name");
 
-    const emailAddressInput = screen.getByPlaceholderText(
+    const emailInputElement = screen.getByPlaceholderText(
       "Enter email"
     ) as HTMLInputElement;
-    expect(emailAddressInput.value).toBe("user@email.com");
+    expect(emailInputElement.value).toBe("user@email.com");
 
-    fireEvent.change(emailAddressInput, {
+    fireEvent.change(emailInputElement, {
       target: { value: "new email address" },
     });
-    expect(emailAddressInput.value).toBe("new email address");
+    expect(emailInputElement.value).toBe("new email address");
 
-    const imageInput = screen.getByPlaceholderText(
+    const imageInputElement = screen.getByPlaceholderText(
       "Enter image url"
     ) as HTMLInputElement;
-    expect(imageInput.value).toBe("");
+    expect(imageInputElement.value).toBe("");
 
-    fireEvent.change(imageInput, {
+    fireEvent.change(imageInputElement, {
       target: { value: "new image url" },
     });
-    expect(imageInput.value).toBe("new image url");
+    expect(imageInputElement.value).toBe("new image url");
+
+    const passwordInputElement = screen.getByPlaceholderText(
+      "Enter password"
+    ) as HTMLInputElement;
+    expect(passwordInputElement.value).toBe("");
+
+    fireEvent.change(passwordInputElement, {
+      target: { value: "new password" },
+    });
+    expect(passwordInputElement.value).toBe("new password");
+
+    // Confirm password
+    const confirmPasswordInputElement = screen.getByPlaceholderText(
+      "Confirm password"
+    ) as HTMLInputElement;
+    expect(confirmPasswordInputElement.value).toBe("");
+
+    fireEvent.change(confirmPasswordInputElement, {
+      target: { value: "new confirm password" },
+    });
+    expect(confirmPasswordInputElement.value).toBe("new confirm password");
   });
 });
