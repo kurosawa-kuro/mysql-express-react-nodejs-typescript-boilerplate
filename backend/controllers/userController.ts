@@ -18,98 +18,106 @@ import {
 import { UserRequest, UserInfo } from "../interfaces";
 import { Prisma } from "@prisma/client";
 
-const sanitizeUser = (user: any): UserInfo => {
+const _sanitizeUser = (user: any): UserInfo => {
   const { password, ...UserBase } = user;
   return UserBase;
 };
 
-const getSanitizedAvatarPath = (path: string) => {
+const _sanitizeAvatarPath = (path: string) => {
   return path ? path.replace(/\\/g, "/").replace("/frontend/public", "") : "";
 };
 
 // CREATE
-const registerUser = asyncHandler(async (req: UserRequest, res: Response) => {
-  const { name, email, password } = req.body;
+export const registerUser = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const { name, email, password } = req.body;
 
-  if (!password || !name || !email) {
-    res.status(400);
-    throw new Error("Invalid user data");
+    if (!password || !name || !email) {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+
+    const userExists = await readUserByEmailInDB(email);
+
+    if (userExists) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
+
+    const hashedPassword = await hashPassword(password);
+    const user: Prisma.UserCreateInput = {
+      name,
+      email,
+      password: hashedPassword,
+    };
+    const createdUser = await createUserInDB(user);
+
+    if (createdUser) {
+      generateToken(res, createdUser.id);
+      res.status(201).json(_sanitizeUser(createdUser));
+    }
   }
-
-  const userExists = await readUserByEmailInDB(email);
-
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-
-  const hashedPassword = await hashPassword(password);
-  const user: Prisma.UserCreateInput = {
-    name,
-    email,
-    password: hashedPassword,
-  };
-  const createdUser = await createUserInDB(user);
-
-  if (createdUser) {
-    generateToken(res, createdUser.id);
-    res.status(201).json(sanitizeUser(createdUser));
-  }
-});
+);
 
 // READ
-const loginUser = asyncHandler(async (req: UserRequest, res: Response) => {
-  const { email, password } = req.body;
-  const user = await readUserByEmailInDB(email);
+export const loginUser = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const { email, password } = req.body;
+    const user = await readUserByEmailInDB(email);
 
-  if (user && (await comparePassword(password, user.password))) {
-    generateToken(res, user.id);
-    res.json(sanitizeUser(user));
-  } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
+    if (user && (await comparePassword(password, user.password))) {
+      generateToken(res, user.id);
+      res.json(_sanitizeUser(user));
+    } else {
+      res.status(401);
+      throw new Error("Invalid email or password");
+    }
   }
-});
+);
 
-const readUserProfile = asyncHandler(
+export const readUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {
     if (req.user && req.user.id) {
       const id = req.user.id;
       const user = await readUserByIdInDB(id);
 
       if (user) {
-        res.json(sanitizeUser(user));
+        res.json(_sanitizeUser(user));
       }
     }
   }
 );
 
-const readAllUsers = asyncHandler(async (req: UserRequest, res: Response) => {
-  const users = await readAllUsersFromDB();
-  res.json(users.map((user) => sanitizeUser(user)));
-});
-
-const readUserById = asyncHandler(async (req: UserRequest, res: Response) => {
-  const id = Number(req.params.id);
-  const user = await readUserByIdInDB(id);
-
-  if (user) {
-    res.json(sanitizeUser(user));
-  } else {
-    res.status(404);
-    throw new Error("User not found");
+export const readAllUsers = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const users = await readAllUsersFromDB();
+    res.json(users.map((user) => _sanitizeUser(user)));
   }
-});
+);
+
+export const readUserById = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const id = Number(req.params.id);
+    const user = await readUserByIdInDB(id);
+
+    if (user) {
+      res.json(_sanitizeUser(user));
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  }
+);
 
 // UPDATE
-const updateUserProfile = asyncHandler(
+export const updateUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {
     if (req.user && req.user.id) {
       const id = req.user.id;
       const user = await readUserByIdInDB(id);
 
       if (user) {
-        let avatarPath = getSanitizedAvatarPath(req.body.avatarPath);
+        let avatarPath = _sanitizeAvatarPath(req.body.avatarPath);
         const updatedUser = await updateUserByIdInDB(id, {
           name: req.body.name || user.name,
           email: req.body.email || user.email,
@@ -118,34 +126,34 @@ const updateUserProfile = asyncHandler(
             ? await hashPassword(req.body.password)
             : user.password,
         });
-        res.json(sanitizeUser(updatedUser));
+        res.json(_sanitizeUser(updatedUser));
       }
     }
   }
 );
 
-const updateUser = asyncHandler(async (req: UserRequest, res: Response) => {
-  const id = Number(req.params.id);
-  const user = await readUserByIdInDB(id);
+export const updateUser = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const id = Number(req.params.id);
+    const user = await readUserByIdInDB(id);
 
-  if (user) {
-    const updatedUser = await updateUserByIdInDB(id, {
-      name: req.body.name || user.name,
-      email: req.body.email || user.email,
-      isAdmin: Boolean(req.body.isAdmin),
-    });
+    if (user) {
+      const updatedUser = await updateUserByIdInDB(id, {
+        name: req.body.name || user.name,
+        email: req.body.email || user.email,
+        isAdmin: Boolean(req.body.isAdmin),
+      });
 
-    res.json(sanitizeUser(updatedUser));
-  } else {
-    res.status(404);
-    throw new Error("User not found");
+      res.json(_sanitizeUser(updatedUser));
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
   }
-});
-
-// const updateUserPassword = asyncHandler(
+);
 
 // DELETE
-const logoutUser = (req: UserRequest, res: Response) => {
+export const logoutUser = (req: UserRequest, res: Response) => {
   res.cookie("jwt", "", {
     httpOnly: true,
     expires: new Date(0),
@@ -153,32 +161,22 @@ const logoutUser = (req: UserRequest, res: Response) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-const deleteUser = asyncHandler(async (req: UserRequest, res: Response) => {
-  const id = Number(req.params.id);
-  const user = await readUserByIdInDB(id);
+export const deleteUser = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const id = Number(req.params.id);
+    const user = await readUserByIdInDB(id);
 
-  if (user) {
-    if (user.isAdmin) {
-      res.status(400);
-      throw new Error("Can not delete admin user");
+    if (user) {
+      if (user.isAdmin) {
+        res.status(400);
+        throw new Error("Can not delete admin user");
+      }
+
+      await deleteUserByIdInDB(id);
+      res.json({ message: "User removed" });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
     }
-
-    await deleteUserByIdInDB(id);
-    res.json({ message: "User removed" });
-  } else {
-    res.status(404);
-    throw new Error("User not found");
   }
-});
-
-export {
-  registerUser,
-  loginUser,
-  readUserProfile,
-  readAllUsers,
-  readUserById,
-  updateUserProfile,
-  updateUser,
-  logoutUser,
-  deleteUser,
-};
+);
