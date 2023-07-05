@@ -14,7 +14,7 @@ const userProfile = {
   isAdmin: false,
 };
 
-function renderApp() {
+function renderScreen() {
   render(
     <MemoryRouter initialEntries={["/profile"]}>
       <Routes>
@@ -38,7 +38,7 @@ afterAll(() => server.close());
 
 describe("ProfileScreen ", () => {
   it("validates password mismatch during profile update", async () => {
-    renderApp();
+    renderScreen();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
@@ -82,7 +82,7 @@ describe("ProfileScreen ", () => {
   });
 
   it("handles server error during image upload", async () => {
-    renderApp();
+    renderScreen();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
@@ -117,7 +117,7 @@ describe("ProfileScreen ", () => {
       })
     );
 
-    renderApp();
+    renderScreen();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
