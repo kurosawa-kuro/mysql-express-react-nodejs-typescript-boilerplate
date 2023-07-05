@@ -13,13 +13,12 @@ import { User } from "@prisma/client";
 describe("User management endpoints", () => {
   let agent: SuperAgentTest;
   let adminToken: string;
-  let admin: User;
 
   beforeEach(async () => {
     await clearDatabase();
     agent = request.agent(app);
 
-    admin = await createAdminUser();
+    await createAdminUser();
     adminToken = await loginUserAndGetToken(agent, "admin@email.com", "123456");
   });
 

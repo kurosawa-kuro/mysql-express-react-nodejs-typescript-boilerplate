@@ -10,7 +10,6 @@ import {
 } from "../../testUtils";
 import { db } from "../../../database/prisma/prismaClient";
 import { UserInfo } from "../../../interfaces";
-import { User } from "@prisma/client";
 import { AdminData } from "../../testData";
 
 describe("User management endpoints", () => {

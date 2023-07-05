@@ -8,11 +8,12 @@ import {
   loginUserAndGetToken,
   createAdminUser,
 } from "../../testUtils";
+import { User } from "@prisma/client";
 
 describe("User management endpoints", () => {
   let agent: SuperAgentTest;
   let adminToken: string;
-  let admin: any;
+  let admin: User;
 
   beforeEach(async () => {
     await clearDatabase();
