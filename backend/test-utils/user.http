@@ -3,8 +3,8 @@ POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "name": "User1",
-  "email": "user1@email.com",
+  "name": "User",
+  "email": "user@email.com",
   "password": "123456"
 }
 
@@ -13,7 +13,7 @@ POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "email": "user1@email.com",
+  "email": "user@email.com",
   "password": "123456"
 }
 
@@ -35,8 +35,8 @@ PUT http://localhost:8080/api/users/profile
 Content-Type: application/json
 
 {
-  "name": "Updated User1",
-  "email": "user1@email.com"
+  "name": " Updated User",
+  "email": "updated_user@email.com"
 }
 
 ### Update user profile password (requires authentication)
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 {
   "name": "New Admin Name",
-  "email": "new_admin@example.com",
+  "email": "new_admin@email.com",
   "isAdmin": true
 }
 
