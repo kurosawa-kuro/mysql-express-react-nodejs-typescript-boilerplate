@@ -89,11 +89,11 @@ export const Header: React.FC = () => {
                   >
                     {!userInfo.isAdmin && (
                       <Link
-                        to="/orders"
+                        to="/users"
                         className="block px-4 py-2 text-sm text-custom-blue-lighter hover:bg-custom-blue-darkest"
                         role="menuitem"
                       >
-                        Orders
+                        Users
                       </Link>
                     )}
 

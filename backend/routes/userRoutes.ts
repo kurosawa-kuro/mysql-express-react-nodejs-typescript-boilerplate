@@ -40,4 +40,4 @@ router
   .put(protect, admin, updateUserByAdminOnly)
   .delete(protect, admin, deleteUserAdminOnly);
 
-router.route("/").get(protect, admin, readAllUsers);
+router.route("/").get(protect, readAllUsers);
