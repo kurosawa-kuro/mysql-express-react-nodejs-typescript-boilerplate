@@ -60,8 +60,8 @@ export const updateUserProfile = (
 // }): Promise<UserInfo> =>
 //   performRequest(apiClient.put(`/api/users/${user.id}`, user));
 
-// export const deleteUser = (id: number) =>
-//   performRequest(apiClient.delete(`/api/users/${id}`));
+export const deleteUser = (id: number) =>
+  performRequest(apiClient.delete(`/api/users/${id}`));
 
 export const logoutUser = () =>
   performRequest(apiClient.post("/api/users/logout"));
