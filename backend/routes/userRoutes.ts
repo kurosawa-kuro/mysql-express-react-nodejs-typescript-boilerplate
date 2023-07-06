@@ -12,6 +12,7 @@ import {
   loginUser,
   updateUserByAdminOnly,
   updateUserProfile,
+  updateUserProfilePassword,
   logoutUser,
   deleteUserAdminOnly,
 } from "../controllers/userController";
@@ -29,6 +30,8 @@ router
   .route("/profile")
   .get(protect, readUserProfile)
   .put(protect, updateUserProfile);
+
+router.route("/profile/password").put(protect, updateUserProfilePassword);
 
 // User Management and Users List Routes (Admin Access Only)
 router

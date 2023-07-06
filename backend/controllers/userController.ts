@@ -122,9 +122,27 @@ export const updateUserProfile = asyncHandler(
           name: req.body.name || user.name,
           email: req.body.email || user.email,
           avatarPath: avatarPath || user.avatarPath,
-          password: req.body.password
-            ? await hashPassword(req.body.password)
-            : user.password,
+        });
+        res.json(_sanitizeUser(updatedUser));
+      }
+    }
+  }
+);
+
+export const updateUserProfilePassword = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    if (req.body.password !== req.body.confirmPassword) {
+      res.status(400);
+      throw new Error("Passwords do not match");
+    }
+
+    if (req.user && req.user.id) {
+      const id = req.user.id;
+      const user = await readUserByIdInDB(id);
+
+      if (user) {
+        const updatedUser = await updateUserByIdInDB(id, {
+          password: await hashPassword(req.body.newPassword),
         });
         res.json(_sanitizeUser(updatedUser));
       }

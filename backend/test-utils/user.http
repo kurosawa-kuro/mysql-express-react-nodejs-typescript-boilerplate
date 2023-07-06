@@ -36,8 +36,17 @@ Content-Type: application/json
 
 {
   "name": "Updated User1",
-  "email": "user1@email.com",
-  "password": "123456"
+  "email": "user1@email.com"
+}
+
+### Update user profile password (requires authentication)
+PUT http://localhost:8080/api/users/profile/password
+Content-Type: application/json
+
+{
+  "password": "123456",
+  "confirmPassword": "123456",
+  "newPassword": "1234567"
 }
 
 ### Get list of users (requires authentication and admin access)
