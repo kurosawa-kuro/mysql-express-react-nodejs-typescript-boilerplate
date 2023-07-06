@@ -7,6 +7,7 @@ import {
   createUserInDB,
   loginUserAndGetToken,
 } from "../testUtils";
+import { UserData } from "../testData";
 
 describe("GET /api/users/profile", () => {
   let agent: SuperAgentTest;
@@ -21,8 +22,12 @@ describe("GET /api/users/profile", () => {
   });
 
   it("gets a user profile", async () => {
-    await createUserInDB("john@email.com", "123456");
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeTruthy();
 
@@ -32,7 +37,7 @@ describe("GET /api/users/profile", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
-    expect(response.body.email).toEqual("john@email.com");
+    expect(response.body.email).toEqual(UserData.email);
   });
 
   it("rejects unauthenticated access", async () => {

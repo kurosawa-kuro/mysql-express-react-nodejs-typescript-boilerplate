@@ -7,6 +7,7 @@ import {
   createUserInDB,
   loginUserAndGetToken,
 } from "../testUtils";
+import { UserData } from "../testData";
 
 describe("POST /api/users/logout", () => {
   let agent: SuperAgentTest;
@@ -21,8 +22,12 @@ describe("POST /api/users/logout", () => {
   });
 
   it("logs out a user", async () => {
-    await createUserInDB("john@email.com", "123456");
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeTruthy();
 

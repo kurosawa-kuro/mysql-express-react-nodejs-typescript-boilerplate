@@ -7,6 +7,7 @@ import {
   createUserInDB,
   loginUserAndGetToken,
 } from "../testUtils";
+import { UserData } from "../testData";
 
 describe("PUT /api/users/profile", () => {
   let agent: SuperAgentTest;
@@ -21,20 +22,27 @@ describe("PUT /api/users/profile", () => {
   });
 
   it("updates a user profile", async () => {
-    await createUserInDB("john@email.com", "123456");
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeTruthy();
 
     const response = await agent
       .put("/api/users/profile")
       .set("Cookie", `jwt=${token}`)
-      .send({ name: "john updated", email: "johnupdated@email.com" });
+      .send({
+        name: "updated " + UserData.name,
+        email: "updated " + UserData.email,
+      });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
-    expect(response.body.email).toEqual("johnupdated@email.com");
-    expect(response.body.name).toEqual("john updated");
+    expect(response.body.name).toEqual("updated " + UserData.name);
+    expect(response.body.email).toEqual("updated " + UserData.email);
   });
 
   it("rejects unauthenticated access", async () => {
@@ -44,17 +52,21 @@ describe("PUT /api/users/profile", () => {
   });
 
   it("updates a user profile even if email is missing", async () => {
-    await createUserInDB("john@email.com", "123456");
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeTruthy();
 
     const response = await agent
       .put("/api/users/profile")
       .set("Cookie", `jwt=${token}`)
-      .send({ name: "john updated" });
+      .send({ name: "updated " + UserData.name });
 
     expect(response.status).toBe(200);
-    expect(response.body.name).toEqual("john updated");
+    expect(response.body.name).toEqual("updated " + UserData.name);
   });
 });

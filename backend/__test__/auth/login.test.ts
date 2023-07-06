@@ -7,6 +7,7 @@ import {
   createUserInDB,
   loginUserAndGetToken,
 } from "../testUtils";
+import { UserData } from "../testData";
 
 describe("POST /api/login", () => {
   let agent: SuperAgentTest;
@@ -15,18 +16,22 @@ describe("POST /api/login", () => {
     await clearDatabase();
     agent = request.agent(app);
 
-    await createUserInDB("john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
   });
 
   it("logs in a user with correct credentials", async () => {
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeDefined();
   });
 
   it("rejects login with incorrect credentials", async () => {
     try {
-      await loginUserAndGetToken(agent, "john@email.com", "wrong-password");
+      await loginUserAndGetToken(agent, UserData.email, "wrong-password");
     } catch (error) {
       expect(error).toEqual(new Error("Login failed during test setup"));
     }

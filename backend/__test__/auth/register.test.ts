@@ -3,6 +3,7 @@
 import request, { SuperAgentTest } from "supertest";
 import { app } from "../../index";
 import { clearDatabase, createUserInDB } from "../testUtils";
+import { UserData } from "../testData";
 
 describe("POST /api/users/register", () => {
   let agent: SuperAgentTest;
@@ -17,21 +18,25 @@ describe("POST /api/users/register", () => {
   });
 
   it("registers a new user", async () => {
-    const registerResponse = await agent
-      .post("/api/users/register")
-      .send({ name: "john", email: "john@email.com", password: "123456" });
+    const registerResponse = await agent.post("/api/users/register").send({
+      name: UserData.name,
+      email: UserData.email,
+      password: UserData.password,
+    });
 
     expect(registerResponse.status).toBe(201);
     expect(registerResponse.body).toHaveProperty("id");
-    expect(registerResponse.body.email).toEqual("john@email.com");
+    expect(registerResponse.body.email).toEqual(UserData.email);
   });
 
   it("rejects registration with existing email", async () => {
-    await createUserInDB("john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
 
-    const registerResponse = await agent
-      .post("/api/users/register")
-      .send({ name: "john", email: "john@email.com", password: "123456" });
+    const registerResponse = await agent.post("/api/users/register").send({
+      name: UserData.name,
+      email: UserData.email,
+      password: UserData.password,
+    });
 
     expect(registerResponse.status).toBe(400);
   });
@@ -39,7 +44,7 @@ describe("POST /api/users/register", () => {
   it("rejects registration with invalid user data", async () => {
     const registerResponse = await agent
       .post("/api/users/register")
-      .send({ name: "john", email: "john@email.com" }); // password is missing
+      .send({ name: UserData.name, email: UserData.email });
 
     expect(registerResponse.status).toBe(400);
   });

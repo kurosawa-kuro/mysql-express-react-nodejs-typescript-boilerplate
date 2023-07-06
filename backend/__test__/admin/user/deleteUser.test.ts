@@ -9,6 +9,7 @@ import {
   createAdminUser,
 } from "../../testUtils";
 import { User } from "@prisma/client";
+import { AdminData } from "../../testData";
 
 describe("User management endpoints", () => {
   let agent: SuperAgentTest;
@@ -20,7 +21,11 @@ describe("User management endpoints", () => {
     agent = request.agent(app);
 
     admin = await createAdminUser();
-    adminToken = await loginUserAndGetToken(agent, "admin@email.com", "123456");
+    adminToken = await loginUserAndGetToken(
+      agent,
+      AdminData.email,
+      AdminData.password
+    );
   });
 
   afterEach(async () => {

@@ -7,6 +7,7 @@ import {
   createUserInDB,
   loginUserAndGetToken,
 } from "../testUtils";
+import { UserData } from "../testData";
 
 describe("PUT /api/users/profile/password", () => {
   let agent: SuperAgentTest;
@@ -21,8 +22,12 @@ describe("PUT /api/users/profile/password", () => {
   });
 
   it("updates a user profile password", async () => {
-    await createUserInDB("john@email.com", "123456");
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeTruthy();
 
@@ -30,8 +35,8 @@ describe("PUT /api/users/profile/password", () => {
       .put("/api/users/profile/password")
       .set("Cookie", `jwt=${token}`)
       .send({
-        password: "123456",
-        confirmPassword: "123456",
+        password: UserData.password,
+        confirmPassword: UserData.password,
         newPassword: "1234567",
       });
 
@@ -40,8 +45,12 @@ describe("PUT /api/users/profile/password", () => {
   });
 
   it("updates a user profile password", async () => {
-    await createUserInDB("john@email.com", "123456");
-    const token = await loginUserAndGetToken(agent, "john@email.com", "123456");
+    await createUserInDB(UserData.email, UserData.password);
+    const token = await loginUserAndGetToken(
+      agent,
+      UserData.email,
+      UserData.password
+    );
 
     expect(token).toBeTruthy();
 
@@ -49,7 +58,7 @@ describe("PUT /api/users/profile/password", () => {
       .put("/api/users/profile/password")
       .set("Cookie", `jwt=${token}`)
       .send({
-        password: "123456",
+        password: UserData.password,
         confirmPassword: "1234567",
         newPassword: "1234567",
       });
