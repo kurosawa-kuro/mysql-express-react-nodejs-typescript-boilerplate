@@ -38,8 +38,8 @@ export const registerUser = (user: Prisma.UserCreateInput): Promise<UserInfo> =>
 export const loginUser = (userLoginData: UserLoginData): Promise<UserInfo> =>
   performRequest(apiClient.post("/api/users/login", userLoginData));
 
-export const readUserProfile = (): Promise<UserInfo> =>
-  performRequest(apiClient.get("/api/users/profile"));
+// export const readUserProfile = (): Promise<UserInfo> =>
+//   performRequest(apiClient.get("/api/users/profile"));
 
 export const readAllUsers = (): Promise<UserInfo[]> =>
   performRequest(apiClient.get("/api/users"));
@@ -52,16 +52,16 @@ export const updateUserProfile = (
 ): Promise<UserInfo> =>
   performRequest(apiClient.put("/api/users/profile", user));
 
-export const updateUser = (user: {
-  id: number;
-  name: string;
-  email: string;
-  isAdmin: boolean;
-}): Promise<UserInfo> =>
-  performRequest(apiClient.put(`/api/users/${user.id}`, user));
+// export const updateUser = (user: {
+//   id: number;
+//   name: string;
+//   email: string;
+//   isAdmin: boolean;
+// }): Promise<UserInfo> =>
+//   performRequest(apiClient.put(`/api/users/${user.id}`, user));
 
-export const deleteUser = (id: number) =>
-  performRequest(apiClient.delete(`/api/users/${id}`));
+// export const deleteUser = (id: number) =>
+//   performRequest(apiClient.delete(`/api/users/${id}`));
 
 export const logoutUser = () =>
   performRequest(apiClient.post("/api/users/logout"));
