@@ -18,6 +18,7 @@ describe("GET /endpoints", () => {
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
 
+    console.log("endpoints", response.body);
     const endpoints = response.body;
     for (const endpoint of endpoints) {
       expect(endpoint).toHaveProperty("path");
