@@ -5,7 +5,7 @@ import { db } from "../prismaClient";
 
 export async function createFollows() {
   const usersData = Array.from({ length: 7 }, (_, i) => {
-    const userNumber = i + 3; // starting from 3
+    const userNumber = i + 3;
     return {
       email: `user${userNumber}@email.com`,
       name: `User${userNumber}`,
