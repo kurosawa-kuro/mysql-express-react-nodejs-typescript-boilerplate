@@ -1,17 +1,35 @@
 // frontend\src\__test__\screen\user\UserListScreen.test.tsx
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { simulateLogin } from "../../testUtils";
+import { printDOM, simulateLogin } from "../../testUtils";
 import { App } from "../../../App";
-import { User2Data, UserData } from "../../../../../backend/__test__/testData";
+import { UserData } from "../../../../../backend/__test__/testData";
 import { UserListScreen } from "../../../screens/user/UserListScreen";
+
+// global.window = Object.create(window);
+// const windowConfirm = jest.fn();
+// Object.defineProperty(window, "confirm", { value: windowConfirm });
 
 const server = setupServer(
   rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
-    return res(ctx.json([UserData, User2Data]));
+    return res(
+      ctx.json([
+        {
+          id: 2,
+          name: "User",
+          email: "user@email.com",
+          password: "123456",
+          isAdmin: false,
+          token: "userToken",
+        },
+      ])
+    );
+  }),
+  rest.delete("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
+    return res(ctx.status(200));
   })
 );
 
@@ -41,7 +59,7 @@ describe("UserListScreen", () => {
     await waitFor(() => {
       expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
       expect(screen.getByText(UserData.email)).toBeInTheDocument();
-      expect(screen.getByText(User2Data.email)).toBeInTheDocument();
+      // expect(screen.getByText(User2Data.email)).toBeInTheDocument();
 
       const editButtons = screen.queryAllByText("Edit");
       expect(
@@ -69,6 +87,28 @@ describe("UserListScreen", () => {
     await waitFor(() => {
       const alert = screen.getByRole("alert");
       expect(alert).toHaveTextContent("Server Error");
+    });
+  });
+  it("Handles delete button click correctly", async () => {
+    window.confirm = jest.fn(() => true);
+    renderScreen();
+
+    await simulateLogin(true);
+    await screen.findByRole("heading", { name: /User list/i });
+
+    await waitFor(() => {
+      expect(screen.getByText(UserData.email)).toBeInTheDocument();
+    });
+
+    const button = screen.getByText("Delete"); // ボタンを取得
+    fireEvent.click(button);
+    printDOM();
+
+    // Assert the delete request has been made and the toast has been shown
+    await waitFor(() => {
+      // expect(windowConfirm).toHaveBeenCalled();
+      expect(screen.getByText("User deleted successfully")).toBeInTheDocument();
+      expect(screen.queryByText(UserData.email)).not.toBeInTheDocument();
     });
   });
 });

@@ -1,6 +1,6 @@
 // frontend\src\screens\admin\product\testUtils.ts
 
-import { screen, renderHook, act } from "@testing-library/react";
+import { screen, renderHook, act, prettyDOM } from "@testing-library/react";
 // import { screen, renderHook, act, prettyDOM } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -9,8 +9,8 @@ import { useAuthStore } from "../state/store";
 import { UserInfo } from "../../../backend/interfaces";
 import { UserData, AdminData } from "../../../backend/__test__/testData";
 
-// export const printDOM = (length: number = 50000) =>
-//   console.log(prettyDOM(document.body, length));
+export const printDOM = (length: number = 50000) =>
+  console.log(prettyDOM(document.body, length));
 
 export const API_BASE_URL = "http://localhost:8080/api";
 

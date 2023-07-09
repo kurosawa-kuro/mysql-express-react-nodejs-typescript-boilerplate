@@ -36,7 +36,9 @@ export const UserListScreen: React.FC = () => {
   }, []);
 
   const deleteHandler = async (id: number) => {
+    console.log("hit deleteHandler");
     if (window.confirm("Are you sure")) {
+      console.log("through window.confirm");
       try {
         await deleteUser(id);
         setUsers(users.filter((user) => user.id !== id));
@@ -116,6 +118,9 @@ export const UserListScreen: React.FC = () => {
                     <button
                       className="inline-flex items-center rounded bg-custom-red-light px-2 py-1 text-white hover:bg-custom-red-dark"
                       onClick={() => {
+                        console.log("hit onClick");
+                        console.log("user", user);
+                        console.log("user.id", user.id);
                         user && user.id && deleteHandler(user.id);
                       }}
                     >
