@@ -6,9 +6,9 @@ import express from "express";
 // Internal Imports
 import {
   registerUser,
-  readUserByIdAdminOnly,
+  readUserById,
   readUserProfile,
-  readAllUsers,
+  readUsers,
   loginUser,
   updateUserByAdminOnly,
   updateUserProfile,
@@ -36,8 +36,8 @@ router.route("/profile/password").put(protect, updateUserProfilePassword);
 // User Management and Users List Routes (Admin Access Only)
 router
   .route("/:id")
-  .get(protect, admin, readUserByIdAdminOnly)
+  .get(protect, admin, readUserById)
   .put(protect, admin, updateUserByAdminOnly)
   .delete(protect, admin, deleteUserAdminOnly);
 
-router.route("/").get(protect, readAllUsers);
+router.route("/").get(protect, readUsers);

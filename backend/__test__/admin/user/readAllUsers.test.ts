@@ -1,4 +1,4 @@
-// backend\__test__\admin\readAllUsers.test.ts
+// backend\__test__\admin\readUsers.test.ts
 
 import request, { SuperAgentTest } from "supertest";
 import { app } from "../../../index";

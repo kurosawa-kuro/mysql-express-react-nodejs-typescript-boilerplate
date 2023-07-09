@@ -5,7 +5,7 @@ import { db } from "../../database/prisma/prismaClient";
 import { clearDatabase } from "../testUtils";
 import { hashPassword } from "../../utils";
 import {
-  readAllUsersFromDB,
+  readUsersFromDB,
   readUserByIdInDB,
   updateUserByIdInDB,
   deleteUserByIdInDB,
@@ -43,7 +43,7 @@ describe("Database user operations", () => {
   });
 
   it("should read all users from the database", async () => {
-    const users = await readAllUsersFromDB();
+    const users = await readUsersFromDB();
 
     expect(users.length).toBe(2);
     expect(users[0]).toHaveProperty("name", UserData.name);

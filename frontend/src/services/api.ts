@@ -41,7 +41,7 @@ export const loginUser = (userLoginData: UserLoginData): Promise<UserInfo> =>
 // export const readUserProfile = (): Promise<UserInfo> =>
 //   performRequest(apiClient.get("/api/users/profile"));
 
-export const readAllUsers = (): Promise<UserInfo[]> =>
+export const readUsers = (): Promise<UserInfo[]> =>
   performRequest(apiClient.get("/api/users"));
 
 export const readUserById = (userId: number): Promise<UserInfo> =>

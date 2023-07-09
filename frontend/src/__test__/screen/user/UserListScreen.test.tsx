@@ -1,0 +1,77 @@
+// frontend\src\screens\product\HomeScreen.test.tsx
+
+import { render, screen, waitFor } from "@testing-library/react";
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { simulateLogin } from "../../testUtils";
+import { App } from "../../../App";
+import { User2Data, UserData } from "../../../../../backend/__test__/testData";
+import { UserListScreen } from "../../../screens/user/UserListScreen";
+
+const server = setupServer(
+  rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
+    return res(ctx.json([UserData, User2Data]));
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+const renderScreen = () => {
+  render(
+    <MemoryRouter initialEntries={["/users"]}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/users" element={<UserListScreen />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
+  );
+};
+
+describe("ProfileScreen", () => {
+  it("renders the ProfileScreen and updates profile fields", async () => {
+    renderScreen();
+
+    await simulateLogin();
+    await screen.findByRole("heading", { name: /User list/i });
+
+    await waitFor(() =>
+      expect(screen.getByText("user@email.com")).toBeInTheDocument()
+    );
+  });
+});
+
+describe("ProfileScreen", () => {
+  test("Shows error message when API call fails", async () => {
+    server.use(
+      rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
+        return res(ctx.status(500), ctx.json({ message: "Server Error" }));
+      })
+    );
+
+    renderScreen();
+    await simulateLogin();
+    await screen.findByRole("heading", { name: /User list/i });
+
+    await waitFor(() => {
+      const errorMessage = screen.getByRole("alert");
+      expect(errorMessage).toHaveTextContent("Server Error");
+    });
+
+    screen.debug();
+
+    // await waitFor(() => {
+    //   expect(getByText("Server Error")).toBeInTheDocument();
+    // });
+
+    // // "User list" タイトルが表示されることを確認
+    // expect(queryByText("User list")).toBeInTheDocument();
+
+    // // ユーザー情報が表示されないことを確認
+    // expect(queryByText("User1")).toBeNull();
+    // expect(queryByText("User2")).toBeNull();
+  });
+});

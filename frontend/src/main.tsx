@@ -20,7 +20,7 @@ import { InformationScreen } from "./screens/InformationScreen.tsx";
 
 import { ProfileScreen } from "./screens/user/ProfileScreen";
 import { UserListScreen } from "./screens/user/UserListScreen.tsx";
-import { UserEditScreen } from "./screens/admin/user/UserEditScreen";
+// import { UserEditScreen } from "./screens/admin/user/UserEditScreen";
 import { PrivateRoute } from "./components/routing/PrivateRoute";
 import { AdminRoute } from "./components/routing/AdminRoute";
 
@@ -39,7 +39,7 @@ const router = createBrowserRouter(
 
       <Route path="" element={<AdminRoute />}>
         {/* <Route path="/admin/users" element={<UserListScreen />} /> */}
-        <Route path="/admin/users/:id/edit" element={<UserEditScreen />} />
+        {/* <Route path="/admin/users/:id/edit" element={<UserEditScreen />} /> */}
       </Route>
     </Route>
   )

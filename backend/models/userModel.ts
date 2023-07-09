@@ -12,7 +12,7 @@ export const readUserByEmailInDB = async (email: string) => {
   return await db.user.findUnique({ where: { email } });
 };
 
-export const readAllUsersFromDB = async () => {
+export const readUsersFromDB = async () => {
   return await db.user.findMany();
 };
 

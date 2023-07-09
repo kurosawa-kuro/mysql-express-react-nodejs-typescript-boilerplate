@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+// import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
 import { Loader } from "../../components/common/Loader";
-import { toast } from "react-toastify";
-import { deleteUser, readAllUsers } from "../../services/api";
+// import { toast } from "react-toastify";
+import { readUsers } from "../../services/api";
+// import { deleteUser, readUsers } from "../../services/api";
 import { useAuthStore } from "../../state/store";
 import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
@@ -21,11 +23,10 @@ export const UserListScreen: React.FC = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const data = await readAllUsers();
+        const data = await readUsers();
         setUsers(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          toast.error(err.message);
           setError(err.message);
         }
       } finally {
@@ -36,19 +37,19 @@ export const UserListScreen: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const deleteHandler = async (id: number) => {
-    if (window.confirm("Are you sure")) {
-      try {
-        await deleteUser(id);
-        setUsers(users.filter((user) => user.id !== id));
-        toast.success("User deleted successfully");
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          toast.error(err.message);
-        }
-      }
-    }
-  };
+  // const deleteHandler = async (id: number) => {
+  //   if (window.confirm("Are you sure")) {
+  //     try {
+  //       await deleteUser(id);
+  //       setUsers(users.filter((user) => user.id !== id));
+  //       toast.success("User deleted successfully");
+  //     } catch (err: unknown) {
+  //       if (err instanceof Error) {
+  //         toast.error(err.message);
+  //       }
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -80,8 +81,8 @@ export const UserListScreen: React.FC = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-custom-blue-light ">
-          {users.map((user) => (
-            <tr key={user.id}>
+          {users.map((user, index) => (
+            <tr key={index}>
               <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
                 {user.id}
               </td>
@@ -98,36 +99,33 @@ export const UserListScreen: React.FC = () => {
               </td>
 
               {userInfo?.isAdmin && (
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-                  <td className="whitespace-nowrap px-6 py-4">
+                <>
+                  <td className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
                     {user.isAdmin ? (
                       <FaCheck className="text-custom-green-light" />
                     ) : (
                       <FaTimes className="text-custom-red-light " />
                     )}
                   </td>
-                </th>
-              )}
-
-              {userInfo && userInfo.isAdmin && (
-                <td>
-                  <Link
-                    to={`/admin/users/${user.id}/edit`}
-                    className="mr-2 inline-flex items-center rounded bg-custom-blue-darker px-2 py-1 text-white hover:bg-custom-blue-darkest"
-                  >
-                    <FaEdit size={18} className="mr-1" />
-                    Edit
-                  </Link>
-                  <button
-                    className="inline-flex items-center rounded bg-custom-red-light px-2 py-1 text-white hover:bg-custom-red-dark"
-                    onClick={() => {
-                      user && user.id && deleteHandler(user.id);
-                    }}
-                  >
-                    <FaTrash size={18} className="mr-1" />
-                    Delete
-                  </button>
-                </td>
+                  <td>
+                    <Link
+                      to={`/admin/users/${user.id}/edit`}
+                      className="mr-2 inline-flex items-center rounded bg-custom-blue-darker px-2 py-1 text-white hover:bg-custom-blue-darkest"
+                    >
+                      <FaEdit size={18} className="mr-1" />
+                      Edit
+                    </Link>
+                    {/* <button
+                      className="inline-flex items-center rounded bg-custom-red-light px-2 py-1 text-white hover:bg-custom-red-dark"
+                      onClick={() => {
+                        user && user.id && deleteHandler(user.id);
+                      }}
+                    >
+                      <FaTrash size={18} className="mr-1" />
+                      Delete
+                    </button> */}
+                  </td>
+                </>
               )}
             </tr>
           ))}

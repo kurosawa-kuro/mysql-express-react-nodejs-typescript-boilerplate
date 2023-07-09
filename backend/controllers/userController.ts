@@ -8,7 +8,7 @@ import asyncHandler from "express-async-handler";
 import { generateToken, hashPassword } from "../utils";
 import {
   createUserInDB,
-  readAllUsersFromDB,
+  readUsersFromDB,
   readUserByEmailInDB,
   readUserByIdInDB,
   updateUserByIdInDB,
@@ -88,14 +88,14 @@ export const readUserProfile = asyncHandler(
   }
 );
 
-export const readAllUsers = asyncHandler(
+export const readUsers = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    const users = await readAllUsersFromDB();
+    const users = await readUsersFromDB();
     res.json(users.map((user) => _sanitizeUser(user)));
   }
 );
 
-export const readUserByIdAdminOnly = asyncHandler(
+export const readUserById = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
     const user = await readUserByIdInDB(id);
