@@ -23,9 +23,6 @@ export const Message: React.FC<Props> = ({ variant = "info", children }) => {
       classes =
         "bg-custom-blue-lightest border-custom-blue-light text-custom-blue-dark";
       break;
-    default:
-      classes =
-        "bg-custom-blue-lightest border-custom-blue-light text-custom-blue-dark";
   }
 
   return (
