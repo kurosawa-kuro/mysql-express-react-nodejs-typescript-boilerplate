@@ -3,26 +3,27 @@
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { db } from "../prismaClient";
+import { AdminData, User2Data, UserData } from "../../../__test__/testData";
 
 export async function createUsers() {
   const users: Prisma.UserCreateInput[] = [
     {
-      name: "Admin",
-      email: "admin@email.com",
-      password: "123456",
-      isAdmin: true,
+      name: AdminData.name,
+      email: AdminData.email,
+      password: AdminData.password,
+      isAdmin: AdminData.isAdmin,
     },
     {
-      name: "User",
-      email: "user@email.com",
-      password: "123456",
-      isAdmin: false,
+      name: UserData.name,
+      email: UserData.email,
+      password: UserData.password,
+      isAdmin: UserData.isAdmin,
     },
     {
-      name: "User2",
-      email: "user2@email.com",
-      password: "123456",
-      isAdmin: false,
+      name: User2Data.name,
+      email: User2Data.email,
+      password: User2Data.password,
+      isAdmin: User2Data.isAdmin,
     },
   ];
 

@@ -31,11 +31,21 @@ model User {
   avatarPath String?
   isAdmin    Boolean  @default(false)
   posts      Post[]
+  followedBy Follow[] @relation("follower")
+  following  Follow[] @relation("followee")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
-// tagsOnPostsをtags_on_postsにテーブル名設定
+model Follow {
+  id         Int      @id @default(autoincrement())
+  follower   User     @relation("follower", fields: [followerId], references: [id])
+  followerId Int
+  followee   User     @relation("followee", fields: [followeeId], references: [id])
+  followeeId Int
+  createdAt  DateTime @default(now())
+}
+
 model Post {
   id          Int           @id @default(autoincrement())
   userId      Int

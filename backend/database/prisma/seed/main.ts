@@ -9,6 +9,7 @@ import { createPostTags } from "./createPostTags";
 import { readAllPostTags } from "./readAllPostTags";
 import { readSpecificPostTags } from "./readSpecificPostTags";
 import { readSpecificTagPosts } from "./readSpecificTagPosts";
+import { createFollows } from "./createFollows";
 
 async function main() {
   try {
@@ -30,6 +31,12 @@ async function main() {
     console.log("main.js createPostTags()");
     const postTagEntities = await createPostTags(postEntities, tagEntities);
     console.log("main.js createPostTags() postTagEntities:", postTagEntities);
+
+    // createFollows
+    console.log("main.js createFollows()");
+    // await createFollows();
+    const followsEntities = await createFollows();
+    console.log("main.js createFollows() followsEntities:", followsEntities);
 
     console.log("main.js readAllPostTags()");
     const allPostTags = await readAllPostTags();
@@ -54,6 +61,7 @@ async function main() {
 
 main()
   .catch((error: any) => {
+    console.log("error", error);
     console.error("error.message", error.meta);
     process.exit(1);
   })
