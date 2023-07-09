@@ -31,21 +31,23 @@ const renderScreen = () => {
   );
 };
 
-describe("ProfileScreen", () => {
-  it("renders the ProfileScreen and updates profile fields", async () => {
+describe("UserListScreen", () => {
+  it("renders the UserListScreen", async () => {
     renderScreen();
 
     await simulateLogin();
     await screen.findByRole("heading", { name: /User list/i });
 
-    await waitFor(() =>
-      expect(screen.getByText("user@email.com")).toBeInTheDocument()
-    );
-  });
-});
+    await waitFor(() => {
+      expect(screen.getByText(UserData.name)).toBeInTheDocument();
+      expect(screen.getByText(User2Data.name)).toBeInTheDocument();
 
-describe("ProfileScreen", () => {
-  test("Shows error message when API call fails", async () => {
+      expect(screen.getByText(UserData.email)).toBeInTheDocument();
+      expect(screen.getByText(UserData.email)).toBeInTheDocument();
+    });
+  });
+
+  it("Shows error message when API call fails", async () => {
     server.use(
       rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
         return res(ctx.status(500), ctx.json({ message: "Server Error" }));
@@ -57,21 +59,8 @@ describe("ProfileScreen", () => {
     await screen.findByRole("heading", { name: /User list/i });
 
     await waitFor(() => {
-      const errorMessage = screen.getByRole("alert");
-      expect(errorMessage).toHaveTextContent("Server Error");
+      const alert = screen.getByRole("alert");
+      expect(alert).toHaveTextContent("Server Error");
     });
-
-    screen.debug();
-
-    // await waitFor(() => {
-    //   expect(getByText("Server Error")).toBeInTheDocument();
-    // });
-
-    // // "User list" タイトルが表示されることを確認
-    // expect(queryByText("User list")).toBeInTheDocument();
-
-    // // ユーザー情報が表示されないことを確認
-    // expect(queryByText("User1")).toBeNull();
-    // expect(queryByText("User2")).toBeNull();
   });
 });
