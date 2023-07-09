@@ -99,9 +99,7 @@ describe("UserEditScreen Component", () => {
     });
 
     it("should update input values when they are changed", async () => {
-      renderScreen();
-
-      await simulateLogin(true);
+      await setup();
 
       const nameInput = screen.getByLabelText("Name") as HTMLInputElement;
       const newUserName = "new" + UserData.name;
@@ -129,9 +127,7 @@ describe("UserEditScreen Component", () => {
         })
       );
 
-      renderScreen();
-
-      await simulateLogin(true);
+      await setup();
 
       await waitFor(() => {
         const alert = screen.getByRole("alert");
@@ -146,9 +142,7 @@ describe("UserEditScreen Component", () => {
         })
       );
 
-      renderScreen();
-
-      await simulateLogin(true);
+      await setup();
 
       const button = screen.getByRole("button", { name: /Update/i });
       fireEvent.click(button);
