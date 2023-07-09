@@ -110,4 +110,29 @@ describe("UserListScreen", () => {
       expect(screen.queryByText(UserData.email)).not.toBeInTheDocument();
     });
   });
+
+  it("Fail Handles delete button click correctly", async () => {
+    server.use(
+      rest.delete("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
+        return res(ctx.status(500), ctx.json({ message: "Server Error" }));
+      })
+    );
+    window.confirm = jest.fn(() => true);
+    renderScreen();
+
+    await simulateLogin(true);
+    await screen.findByRole("heading", { name: /User list/i });
+
+    await waitFor(() => {
+      expect(screen.getByText(UserData.email)).toBeInTheDocument();
+    });
+
+    const deleteButtons = screen.getAllByText("Delete");
+    fireEvent.click(deleteButtons[0]);
+
+    await waitFor(() => {
+      const alert = screen.getByRole("alert");
+      expect(alert).toHaveTextContent("Server Error");
+    });
+  });
 });
