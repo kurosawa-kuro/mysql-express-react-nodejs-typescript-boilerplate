@@ -7,6 +7,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { UserScreen } from "../../../screens/user/UserScreen";
 import { UserData } from "../../../../../backend/__test__/testData";
 import { App } from "../../../App";
+import { simulateLogin } from "../../testUtils";
 
 const server = setupServer(
   rest.get("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
@@ -30,9 +31,14 @@ const renderScreen = () => {
   );
 };
 
+const setup = async () => {
+  renderScreen();
+  await simulateLogin(true);
+};
+
 describe("UserScreen", () => {
   it("renders the UserScreen and shows user details", async () => {
-    renderScreen();
+    await setup();
 
     expect(screen.getByText(/User/i)).toBeInTheDocument();
 
@@ -49,7 +55,7 @@ describe("UserScreen", () => {
       })
     );
 
-    renderScreen();
+    await setup();
 
     expect(screen.getByText(/User/i)).toBeInTheDocument();
 

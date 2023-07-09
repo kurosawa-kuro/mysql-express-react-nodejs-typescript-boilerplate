@@ -46,11 +46,15 @@ const renderScreen = () => {
   );
 };
 
+const setup = async () => {
+  renderScreen();
+  await simulateLogin();
+};
+
 describe("ProfileScreen", () => {
   it("renders the ProfileScreen and updates profile fields", async () => {
-    renderScreen();
+    await setup();
 
-    await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
     const nameInputElement = screen.getByPlaceholderText(
@@ -91,7 +95,6 @@ describe("ProfileScreen", () => {
     });
     expect(passwordInputElement.value).toBe("new password");
 
-    // Confirm password
     const confirmPasswordInputElement = screen.getByPlaceholderText(
       "Confirm password"
     ) as HTMLInputElement;
@@ -104,9 +107,8 @@ describe("ProfileScreen", () => {
   });
 
   it("uploads a new profile image and updates profile successfully", async () => {
-    renderScreen();
+    await setup();
 
-    await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
     const [nameInput, emailInput] = await Promise.all([

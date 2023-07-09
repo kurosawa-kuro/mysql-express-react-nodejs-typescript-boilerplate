@@ -49,6 +49,11 @@ const renderScreen = () => {
   );
 };
 
+const setup = async () => {
+  renderScreen();
+  await simulateLogin(true);
+};
+
 describe("UserListScreen Component", () => {
   describe("Rendering", () => {
     it("should correctly render the UserListScreen", async () => {
@@ -84,8 +89,8 @@ describe("UserListScreen Component", () => {
           })
         );
 
-        renderScreen();
-        await simulateLogin();
+        await setup();
+
         await screen.findByRole("heading", { name: /User list/i });
 
         await waitFor(() => {
@@ -98,9 +103,8 @@ describe("UserListScreen Component", () => {
     describe("DELETE /users/:id API", () => {
       it("should handle the delete button click correctly when the API call is successful", async () => {
         window.confirm = jest.fn(() => true);
-        renderScreen();
+        await setup();
 
-        await simulateLogin(true);
         await screen.findByRole("heading", { name: /User list/i });
 
         await waitFor(() => {

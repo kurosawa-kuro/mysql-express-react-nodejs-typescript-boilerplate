@@ -26,6 +26,11 @@ function renderScreen() {
   );
 }
 
+const setup = async () => {
+  renderScreen();
+  await simulateLogin();
+};
+
 const server = setupServer(
   rest.put("http://localhost:8080/api/users/profile", (_req, res, ctx) => {
     return res(ctx.json(userProfile));
@@ -38,9 +43,8 @@ afterAll(() => server.close());
 
 describe("ProfileScreen ", () => {
   it("validates password mismatch during profile update", async () => {
-    renderScreen();
+    await setup();
 
-    await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
     const [nameInput, emailInput] = await Promise.all([
@@ -82,9 +86,8 @@ describe("ProfileScreen ", () => {
   });
 
   it("handles server error during image upload", async () => {
-    renderScreen();
+    await setup();
 
-    await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
     server.use(
@@ -117,9 +120,8 @@ describe("ProfileScreen ", () => {
       })
     );
 
-    renderScreen();
+    await setup();
 
-    await simulateLogin();
     await screen.findByRole("heading", { name: /User Profile/i });
 
     const passwordInput = screen.getByPlaceholderText(

@@ -54,12 +54,15 @@ const renderScreen = () => {
   );
 };
 
+const setup = async () => {
+  renderScreen();
+  await simulateLogin(true);
+};
+
 describe("UserEditScreen Component", () => {
   describe("Rendering", () => {
     it("should render user details correctly", async () => {
-      renderScreen();
-
-      await simulateLogin(true);
+      await setup();
 
       await waitFor(() => {
         expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
@@ -74,9 +77,7 @@ describe("UserEditScreen Component", () => {
     });
 
     it("should toggle isAdmin checkbox when clicked", async () => {
-      renderScreen();
-
-      await simulateLogin(true);
+      await setup();
 
       const checkbox = screen.getByRole("checkbox", { name: /is admin/i });
       expect(checkbox).not.toBeChecked();
@@ -86,9 +87,7 @@ describe("UserEditScreen Component", () => {
     });
 
     it("should send update request when Update button clicked", async () => {
-      renderScreen();
-
-      await simulateLogin(true);
+      await setup();
 
       const button = screen.getByRole("button", { name: /Update/i });
 

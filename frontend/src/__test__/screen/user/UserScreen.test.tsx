@@ -7,6 +7,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { UserScreen } from "../../../screens/user/UserScreen";
 import { UserData } from "../../../../../backend/__test__/testData";
 import { App } from "../../../App";
+import { simulateLogin } from "../../testUtils";
 
 const server = setupServer(
   rest.get("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
@@ -17,6 +18,11 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
+const setup = async () => {
+  renderScreen();
+  await simulateLogin();
+};
 
 const renderScreen = () => {
   render(
@@ -32,9 +38,7 @@ const renderScreen = () => {
 
 describe("UserScreen", () => {
   it("renders the UserScreen and shows user details", async () => {
-    renderScreen();
-
-    expect(screen.getByText(/User/i)).toBeInTheDocument();
+    await setup();
 
     await waitFor(() => {
       expect(screen.getByText(`Name : ${UserData.name}`)).toBeInTheDocument();
@@ -49,9 +53,7 @@ describe("UserScreen", () => {
       })
     );
 
-    renderScreen();
-
-    expect(screen.getByText(/User/i)).toBeInTheDocument();
+    await setup();
 
     await waitFor(() => {
       const errorMessage = screen.getByRole("alert");

@@ -15,6 +15,11 @@ const server = setupServer(
   })
 );
 
+const setup = async () => {
+  renderScreen();
+  await simulateLogin();
+};
+
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -33,9 +38,8 @@ const renderScreen = () => {
 
 describe("UserListScreen", () => {
   it("renders the UserListScreen", async () => {
-    renderScreen();
+    await setup();
 
-    await simulateLogin();
     await screen.findByRole("heading", { name: /User list/i });
 
     await waitFor(() => {
@@ -51,8 +55,7 @@ describe("UserListScreen", () => {
       })
     );
 
-    renderScreen();
-    await simulateLogin();
+    await setup();
     await screen.findByRole("heading", { name: /User list/i });
 
     await waitFor(() => {
