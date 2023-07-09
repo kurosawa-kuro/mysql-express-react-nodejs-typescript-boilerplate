@@ -35,12 +35,23 @@ describe("UserListScreen", () => {
   it("renders the UserListScreen", async () => {
     renderScreen();
 
-    await simulateLogin();
+    await simulateLogin(true);
     await screen.findByRole("heading", { name: /User list/i });
 
     await waitFor(() => {
+      expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
       expect(screen.getByText(UserData.email)).toBeInTheDocument();
       expect(screen.getByText(User2Data.email)).toBeInTheDocument();
+
+      const editButtons = screen.queryAllByText("Edit");
+      expect(
+        editButtons.some((button) => button.textContent === "Edit")
+      ).toBeTruthy();
+
+      const deleteButtons = screen.queryAllByText("Delete");
+      expect(
+        deleteButtons.some((button) => button.textContent === "Delete")
+      ).toBeTruthy();
     });
   });
 
