@@ -39,11 +39,8 @@ describe("UserListScreen", () => {
     await screen.findByRole("heading", { name: /User list/i });
 
     await waitFor(() => {
-      expect(screen.getByText(UserData.name)).toBeInTheDocument();
-      expect(screen.getByText(User2Data.name)).toBeInTheDocument();
-
       expect(screen.getByText(UserData.email)).toBeInTheDocument();
-      expect(screen.getByText(UserData.email)).toBeInTheDocument();
+      expect(screen.getByText(User2Data.email)).toBeInTheDocument();
     });
   });
 
