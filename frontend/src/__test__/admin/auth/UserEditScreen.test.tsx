@@ -75,5 +75,29 @@ describe("UserListScreen Component", () => {
       const button = screen.getByRole("button", { name: /Update/i });
       fireEvent.click(button);
     });
+    it("Fail should correctly render the UserListScreen", async () => {
+      server.use(
+        rest.put("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+          return res(ctx.status(500), ctx.json({ message: "Server Error" }));
+        })
+      );
+      renderScreen();
+
+      await simulateLogin(true);
+
+      await waitFor(() => {
+        expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
+      });
+
+      await screen.findByRole("heading", { name: /Edit User/i });
+
+      const button = screen.getByRole("button", { name: /Update/i });
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        const alert = screen.getByRole("alert");
+        expect(alert).toHaveTextContent("Server Error");
+      });
+    });
   });
 });
