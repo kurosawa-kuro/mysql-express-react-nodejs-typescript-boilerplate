@@ -75,19 +75,6 @@ export const loginUser = asyncHandler(
   }
 );
 
-export const readUserProfile = asyncHandler(
-  async (req: UserRequest, res: Response) => {
-    if (req.user && req.user.id) {
-      const id = req.user.id;
-      const user = await readUserByIdInDB(id);
-
-      if (user) {
-        res.json(_sanitizeUser(user));
-      }
-    }
-  }
-);
-
 export const readUsers = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const users = await readUsersFromDB();

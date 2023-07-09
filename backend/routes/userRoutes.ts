@@ -7,7 +7,6 @@ import express from "express";
 import {
   registerUser,
   readUserById,
-  readUserProfile,
   readUsers,
   loginUser,
   updateUserByAdminOnly,
@@ -26,10 +25,7 @@ router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 
 // User Profile Routes (Get and Update)
-router
-  .route("/profile")
-  .get(protect, readUserProfile)
-  .put(protect, updateUserProfile);
+router.route("/profile").put(protect, updateUserProfile);
 
 router.route("/profile/password").put(protect, updateUserProfilePassword);
 
