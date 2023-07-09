@@ -1,30 +1,32 @@
 // frontend\src\screens\admin\user\UserListScreen.tsx
 
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaEdit, FaCheck, FaTimes } from "react-icons/fa";
 // import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
 import { Loader } from "../../components/common/Loader";
 // import { toast } from "react-toastify";
-import { readUsers } from "../../services/api";
-// import { deleteUser, readUsers } from "../../services/api";
+import { readUserById } from "../../services/api";
+// import { deleteUser, readUser } from "../../services/api";
 import { useAuthStore } from "../../state/store";
 import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
 import { Message } from "../../components/common/Message";
 
-export const UserListScreen: React.FC = () => {
-  const [users, setUsers] = useState<UserInfo[]>([]);
+export const UserScreen: React.FC = () => {
+  // req.params.idを取得する
+  const { id } = useParams();
+  const [user, setUser] = useState<UserInfo>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { userInfo } = useAuthStore() as UserAuth;
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUser = async () => {
       setLoading(true);
       try {
-        const data = await readUsers();
-        setUsers(data);
+        const data = await readUserById(Number(id));
+        setUser(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -34,14 +36,14 @@ export const UserListScreen: React.FC = () => {
       }
     };
 
-    fetchUsers();
+    fetchUser();
   }, []);
 
   // const deleteHandler = async (id: number) => {
   //   if (window.confirm("Are you sure")) {
   //     try {
   //       await deleteUser(id);
-  //       setUsers(users.filter((user) => user.id !== id));
+  //       setUser(user.filter((user) => user.id !== id));
   //       toast.success("User deleted successfully");
   //     } catch (err: unknown) {
   //       if (err instanceof Error) {
@@ -54,7 +56,7 @@ export const UserListScreen: React.FC = () => {
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-        User list
+        User
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
@@ -81,41 +83,40 @@ export const UserListScreen: React.FC = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-custom-blue-light ">
-          {users.map((user, index) => (
-            <tr key={index}>
-              <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                {user.id}
-              </td>
-              <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <a
-                  href={`mailto:${user.email}`}
-                  className="text-custom-blue-dark hover:text-custom-blue-darker"
-                >
-                  {user.email}
-                </a>
-              </td>
+          <tr>
+            <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
+              {user.id}
+            </td>
+            <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
+              {user.name}
+            </td>
+            <td className="whitespace-nowrap px-6 py-4">
+              <a
+                href={`mailto:${user.email}`}
+                className="text-custom-blue-dark hover:text-custom-blue-darker"
+              >
+                {user.email}
+              </a>
+            </td>
 
-              {userInfo?.isAdmin && (
-                <>
-                  <td className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-                    {user.isAdmin ? (
-                      <FaCheck className="text-custom-green-light" />
-                    ) : (
-                      <FaTimes className="text-custom-red-light " />
-                    )}
-                  </td>
-                  <td>
-                    <Link
-                      to={`/admin/users/${user.id}/edit`}
-                      className="mr-2 inline-flex items-center rounded bg-custom-blue-darker px-2 py-1 text-white hover:bg-custom-blue-darkest"
-                    >
-                      <FaEdit size={18} className="mr-1" />
-                      Edit
-                    </Link>
-                    {/* <button
+            {userInfo?.isAdmin && (
+              <>
+                <td className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
+                  {user.isAdmin ? (
+                    <FaCheck className="text-custom-green-light" />
+                  ) : (
+                    <FaTimes className="text-custom-red-light " />
+                  )}
+                </td>
+                <td>
+                  <Link
+                    to={`/admin/user/${user.id}/edit`}
+                    className="mr-2 inline-flex items-center rounded bg-custom-blue-darker px-2 py-1 text-white hover:bg-custom-blue-darkest"
+                  >
+                    <FaEdit size={18} className="mr-1" />
+                    Edit
+                  </Link>
+                  {/* <button
                       className="inline-flex items-center rounded bg-custom-red-light px-2 py-1 text-white hover:bg-custom-red-dark"
                       onClick={() => {
                         user && user.id && deleteHandler(user.id);
@@ -124,11 +125,10 @@ export const UserListScreen: React.FC = () => {
                       <FaTrash size={18} className="mr-1" />
                       Delete
                     </button> */}
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
+                </td>
+              </>
+            )}
+          </tr>
         </tbody>
       </table>
     </>

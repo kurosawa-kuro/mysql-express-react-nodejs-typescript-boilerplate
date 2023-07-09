@@ -36,7 +36,7 @@ router.route("/profile/password").put(protect, updateUserProfilePassword);
 // User Management and Users List Routes (Admin Access Only)
 router
   .route("/:id")
-  .get(protect, admin, readUserById)
+  .get(protect, readUserById)
   .put(protect, admin, updateUserByAdminOnly)
   .delete(protect, admin, deleteUserAdminOnly);
 
