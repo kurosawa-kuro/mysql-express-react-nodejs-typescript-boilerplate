@@ -1,12 +1,24 @@
 // backend\database\prisma\seed\createFollows.ts
 
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { db } from "../prismaClient";
 
 export async function createFollows() {
-  // create many users
+  const usersData = Array.from({ length: 7 }, (_, i) => {
+    const userNumber = i + 3; // starting from 3
+    return {
+      email: `user${userNumber}@email.com`,
+      name: `User${userNumber}`,
+      password: "123456",
+    };
+  });
+
+  await db.user.createMany({
+    data: usersData,
+  });
+
   const users: User[] = await db.user.findMany();
-  console.log({ users });
+  // console.log({ users });
 
   const follows = [
     {

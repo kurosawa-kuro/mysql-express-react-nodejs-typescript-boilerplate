@@ -32,9 +32,7 @@ async function main() {
     const postTagEntities = await createPostTags(postEntities, tagEntities);
     console.log("main.js createPostTags() postTagEntities:", postTagEntities);
 
-    // createFollows
     console.log("main.js createFollows()");
-    // await createFollows();
     const followsEntities = await createFollows();
     console.log("main.js createFollows() followsEntities:", followsEntities);
 
