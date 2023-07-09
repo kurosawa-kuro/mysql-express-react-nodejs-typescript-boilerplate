@@ -4,14 +4,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { printDOM, simulateLogin } from "../../testUtils";
+import { simulateLogin } from "../../testUtils";
 import { App } from "../../../App";
-import { UserData } from "../../../../../backend/__test__/testData";
+import { User2Data, UserData } from "../../../../../backend/__test__/testData";
 import { UserListScreen } from "../../../screens/user/UserListScreen";
-
-// global.window = Object.create(window);
-// const windowConfirm = jest.fn();
-// Object.defineProperty(window, "confirm", { value: windowConfirm });
 
 const server = setupServer(
   rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
@@ -19,11 +15,15 @@ const server = setupServer(
       ctx.json([
         {
           id: 2,
-          name: "User",
-          email: "user@email.com",
-          password: "123456",
-          isAdmin: false,
-          token: "userToken",
+          name: UserData.name,
+          email: UserData.email,
+          isAdmin: UserData.isAdmin,
+        },
+        {
+          id: 3,
+          name: User2Data.name,
+          email: User2Data.email,
+          isAdmin: User2Data.isAdmin,
         },
       ])
     );
@@ -59,7 +59,7 @@ describe("UserListScreen", () => {
     await waitFor(() => {
       expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
       expect(screen.getByText(UserData.email)).toBeInTheDocument();
-      // expect(screen.getByText(User2Data.email)).toBeInTheDocument();
+      expect(screen.getByText(User2Data.email)).toBeInTheDocument();
 
       const editButtons = screen.queryAllByText("Edit");
       expect(
@@ -100,13 +100,13 @@ describe("UserListScreen", () => {
       expect(screen.getByText(UserData.email)).toBeInTheDocument();
     });
 
-    const button = screen.getByText("Delete"); // ボタンを取得
-    fireEvent.click(button);
-    printDOM();
+    const deleteButtons = screen.getAllByText("Delete");
+    // Click the first delete button
+    fireEvent.click(deleteButtons[0]);
 
     // Assert the delete request has been made and the toast has been shown
     await waitFor(() => {
-      // expect(windowConfirm).toHaveBeenCalled();
+      expect(window.confirm).toHaveBeenCalled();
       expect(screen.getByText("User deleted successfully")).toBeInTheDocument();
       expect(screen.queryByText(UserData.email)).not.toBeInTheDocument();
     });
