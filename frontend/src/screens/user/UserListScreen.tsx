@@ -1,4 +1,4 @@
-// frontend\src\screens\admin\user\UserListScreen.tsx
+// frontend\src\screens\user\UserListScreen.tsx
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
