@@ -4,14 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaCheck, FaTimes } from "react-icons/fa";
 // import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
-import { Loader } from "../../components/common/Loader";
+import { Loader } from "../../../components/common/Loader";
 // import { toast } from "react-toastify";
-import { readUsers } from "../../services/api";
+import { readUsers } from "../../../services/api";
 // import { deleteUser, readUsers } from "../../services/api";
-import { useAuthStore } from "../../state/store";
-import { UserAuth, UserInfo } from "../../../../backend/interfaces";
-
-import { Message } from "../../components/common/Message";
+import { useAuthStore } from "../../../state/store";
+import { UserAuth, UserInfo } from "../../../../../backend/interfaces";
+import { Message } from "../../../components/common/Message";
 
 export const UserListScreen: React.FC = () => {
   const [users, setUsers] = useState<UserInfo[]>([]);

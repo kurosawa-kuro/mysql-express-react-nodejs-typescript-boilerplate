@@ -2,18 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader } from "../../components/common/Loader";
-import { readUserById } from "../../services/api";
-import { UserInfo } from "../../../../backend/interfaces";
-
-import { Message } from "../../components/common/Message";
+import { Loader } from "../../../components/common/Loader";
+import { readUserById } from "../../../services/api";
+import { UserInfo } from "../../../../../backend/interfaces";
+import { Message } from "../../../components/common/Message";
 
 export const UserScreen: React.FC = () => {
   const { id } = useParams();
   const [user, setUser] = useState<UserInfo>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const fetchUser = async () => {
+  const readUserByIdAndSet = async () => {
     setLoading(true);
     try {
       const data = await readUserById(Number(id));
@@ -28,7 +27,7 @@ export const UserScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchUser();
+    readUserByIdAndSet();
   }, []);
 
   return (
