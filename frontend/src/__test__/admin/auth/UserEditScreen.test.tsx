@@ -12,7 +12,7 @@ import { UserEditScreen } from "../../../screens/admin/user/UserEditScreen";
 let getHandlerCalled = false;
 
 const server = setupServer(
-  rest.get("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+  rest.get("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
     return res(
       ctx.json({
         id: 2,
@@ -122,7 +122,7 @@ describe("UserEditScreen Component", () => {
 
     it("should display error message when failed to fetch user", async () => {
       server.use(
-        rest.get("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+        rest.get("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
           return res(ctx.status(500), ctx.json({ message: "Server Error" }));
         })
       );
@@ -137,7 +137,7 @@ describe("UserEditScreen Component", () => {
 
     it("should display error message when failed to update user", async () => {
       server.use(
-        rest.put("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+        rest.put("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
           return res(ctx.status(500), ctx.json({ message: "Server Error" }));
         })
       );
