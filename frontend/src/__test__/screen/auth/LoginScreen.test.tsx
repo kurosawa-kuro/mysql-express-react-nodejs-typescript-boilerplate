@@ -12,7 +12,7 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const renderLoginScreen = () => {
+const renderScreen = () => {
   return render(
     <MemoryRouter initialEntries={["/login"]}>
       <Routes>
@@ -39,7 +39,7 @@ const fillForm = async (email: string, password: string) => {
 describe("Successful login", () => {
   describe("when the user successfully logs in", () => {
     it("shows the user's name in the header", async () => {
-      renderLoginScreen();
+      renderScreen();
       await fillForm(UserData.email, UserData.password);
 
       await waitFor(() => {
@@ -60,7 +60,7 @@ describe("Successful login", () => {
 
   describe("after the user has logged in", () => {
     it("toggles the logout menu visibility on user name click", async () => {
-      renderLoginScreen();
+      renderScreen();
       await fillForm(UserData.email, UserData.password);
 
       await waitFor(() => {
@@ -85,7 +85,7 @@ describe("Successful login", () => {
     });
 
     it("redirects the user to the login page after successful logout", async () => {
-      renderLoginScreen();
+      renderScreen();
       await fillForm(UserData.email, UserData.password);
 
       await waitFor(() => {
@@ -113,7 +113,7 @@ describe("Successful login", () => {
 describe("Error handling during login", () => {
   describe("when the login credentials are incorrect", () => {
     it("displays an error message", async () => {
-      renderLoginScreen();
+      renderScreen();
 
       server.use(
         rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
@@ -138,7 +138,7 @@ describe("Error handling during login", () => {
 
   describe("when the server is unreachable", () => {
     it("displays a network error message", async () => {
-      renderLoginScreen();
+      renderScreen();
 
       server.use(
         rest.post(

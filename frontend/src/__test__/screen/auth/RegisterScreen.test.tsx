@@ -13,7 +13,7 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const renderRegisterScreen = () => {
+const renderScreen = () => {
   return render(
     <MemoryRouter initialEntries={["/register"]}>
       <Routes>
@@ -52,7 +52,7 @@ const fillForm = async (
 
 describe("Registration Screen", () => {
   it("should show username in header after successful registration", async () => {
-    renderRegisterScreen();
+    renderScreen();
 
     await fillForm(
       UserData.name,
@@ -77,7 +77,7 @@ describe("Registration Screen", () => {
   });
 
   it("should show an error message when password confirmation does not match", async () => {
-    renderRegisterScreen();
+    renderScreen();
 
     await fillForm(UserData.name, UserData.email, UserData.password, "12345");
 
@@ -91,7 +91,7 @@ describe("Registration Screen", () => {
   });
 
   it("displays a network error message when the server is unreachable", async () => {
-    renderRegisterScreen();
+    renderScreen();
 
     server.use(
       rest.post(

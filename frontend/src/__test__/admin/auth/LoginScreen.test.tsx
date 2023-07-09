@@ -11,7 +11,7 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const renderAdminLoginScreen = () => {
+const renderScreen = () => {
   return render(
     <MemoryRouter initialEntries={["/login"]}>
       <Routes>
@@ -37,7 +37,7 @@ const fillForm = async (email: string, password: string) => {
 
 describe("Admin Login Screen", () => {
   it("shows username in header after successful admin login", async () => {
-    renderAdminLoginScreen();
+    renderScreen();
 
     await fillForm(AdminData.email, AdminData.password);
 

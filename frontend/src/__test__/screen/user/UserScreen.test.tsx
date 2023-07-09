@@ -18,17 +18,21 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+const renderScreen = () => {
+  render(
+    <MemoryRouter initialEntries={["/users/1"]}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/users/:id" element={<UserScreen />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
+  );
+};
+
 describe("UserScreen", () => {
   it("renders the UserScreen and shows user details", async () => {
-    render(
-      <MemoryRouter initialEntries={["/users/1"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/users/:id" element={<UserScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderScreen();
 
     expect(screen.getByText(/User/i)).toBeInTheDocument();
 
@@ -45,15 +49,7 @@ describe("UserScreen", () => {
       })
     );
 
-    render(
-      <MemoryRouter initialEntries={["/users/1"]}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/users/:id" element={<UserScreen />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    );
+    renderScreen();
 
     expect(screen.getByText(/User/i)).toBeInTheDocument();
 
