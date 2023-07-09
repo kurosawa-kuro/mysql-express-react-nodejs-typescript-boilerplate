@@ -9,8 +9,11 @@ import { App } from "../../../App";
 import { UserData } from "../../../../../backend/__test__/testData";
 import { UserEditScreen } from "../../../screens/admin/user/UserEditScreen";
 
+let getHandlerCalled = false;
+
 const server = setupServer(
   rest.get("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+    getHandlerCalled = true;
     return res(
       ctx.json({
         id: 2,
@@ -35,6 +38,9 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+beforeEach(() => {
+  getHandlerCalled = false;
+});
 
 const renderScreen = () => {
   render(
@@ -86,6 +92,8 @@ describe("UserEditScreen Component", () => {
 
       const button = screen.getByRole("button", { name: /Update/i });
       fireEvent.click(button);
+
+      expect(getHandlerCalled).toBe(true);
     });
 
     it("should update input values when they are changed", async () => {
