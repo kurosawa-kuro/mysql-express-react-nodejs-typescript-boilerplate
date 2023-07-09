@@ -104,13 +104,23 @@ describe("UserEditScreen Component", () => {
 
       await simulateLogin(true);
 
-      fireEvent.change(screen.getByLabelText("Name"), {
-        target: { value: "Name" },
+      const nameInput = screen.getByLabelText("Name") as HTMLInputElement;
+      const newUserName = "new" + UserData.name;
+      fireEvent.change(nameInput, {
+        target: { value: newUserName },
       });
+      await waitFor(() => {});
+      expect(nameInput.value).toBe(newUserName);
 
-      fireEvent.change(screen.getByLabelText("Email Address"), {
-        target: { value: "email" },
+      const emailInput = screen.getByLabelText(
+        "Email Address"
+      ) as HTMLInputElement;
+      const newUserEmail = "new" + UserData.email;
+      fireEvent.change(emailInput, {
+        target: { value: newUserEmail },
       });
+      await waitFor(() => {});
+      expect(emailInput.value).toBe(newUserEmail);
     });
 
     it("should display error message when failed to fetch user", async () => {
