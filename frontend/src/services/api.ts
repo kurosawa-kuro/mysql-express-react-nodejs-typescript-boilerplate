@@ -66,7 +66,7 @@ export const deleteUser = (id: number) =>
 export const logoutUser = () =>
   performRequest(apiClient.post("/api/users/logout"));
 
-export const readTopStatusApi = (): Promise<string> =>
+export const readTop = (): Promise<string> =>
   performRequest(apiClient.get(`/api/`));
 
 export const uploadImage = async (imageData: FormData) =>
