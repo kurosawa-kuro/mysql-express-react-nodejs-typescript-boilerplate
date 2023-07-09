@@ -49,90 +49,106 @@ const renderScreen = () => {
   );
 };
 
-describe("UserListScreen", () => {
-  it("renders the UserListScreen", async () => {
-    renderScreen();
+describe("UserListScreen Component", () => {
+  describe("Rendering", () => {
+    it("should correctly render the UserListScreen", async () => {
+      renderScreen();
 
-    await simulateLogin(true);
-    await screen.findByRole("heading", { name: /User list/i });
+      await simulateLogin(true);
+      await screen.findByRole("heading", { name: /User list/i });
 
-    await waitFor(() => {
-      expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
-      expect(screen.getByText(UserData.email)).toBeInTheDocument();
-      expect(screen.getByText(User2Data.email)).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
+        expect(screen.getByText(UserData.email)).toBeInTheDocument();
+        expect(screen.getByText(User2Data.email)).toBeInTheDocument();
 
-      const editButtons = screen.queryAllByText("Edit");
-      expect(
-        editButtons.some((button) => button.textContent === "Edit")
-      ).toBeTruthy();
+        const editButtons = screen.queryAllByText("Edit");
+        expect(
+          editButtons.some((button) => button.textContent === "Edit")
+        ).toBeTruthy();
 
-      const deleteButtons = screen.queryAllByText("Delete");
-      expect(
-        deleteButtons.some((button) => button.textContent === "Delete")
-      ).toBeTruthy();
+        const deleteButtons = screen.queryAllByText("Delete");
+        expect(
+          deleteButtons.some((button) => button.textContent === "Delete")
+        ).toBeTruthy();
+      });
     });
   });
 
-  it("Shows error message when API call fails", async () => {
-    server.use(
-      rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ message: "Server Error" }));
-      })
-    );
+  describe("API Interaction", () => {
+    describe("GET /users API", () => {
+      it("should show an error message when the API call fails", async () => {
+        server.use(
+          rest.get("http://localhost:8080/api/users", (_req, res, ctx) => {
+            return res(ctx.status(500), ctx.json({ message: "Server Error" }));
+          })
+        );
 
-    renderScreen();
-    await simulateLogin();
-    await screen.findByRole("heading", { name: /User list/i });
+        renderScreen();
+        await simulateLogin();
+        await screen.findByRole("heading", { name: /User list/i });
 
-    await waitFor(() => {
-      const alert = screen.getByRole("alert");
-      expect(alert).toHaveTextContent("Server Error");
-    });
-  });
-
-  it("Handles delete button click correctly", async () => {
-    window.confirm = jest.fn(() => true);
-    renderScreen();
-
-    await simulateLogin(true);
-    await screen.findByRole("heading", { name: /User list/i });
-
-    await waitFor(() => {
-      expect(screen.getByText(UserData.email)).toBeInTheDocument();
+        await waitFor(() => {
+          const alert = screen.getByRole("alert");
+          expect(alert).toHaveTextContent("Server Error");
+        });
+      });
     });
 
-    const deleteButtons = screen.getAllByText("Delete");
-    fireEvent.click(deleteButtons[0]);
+    describe("DELETE /users/:id API", () => {
+      it("should handle the delete button click correctly when the API call is successful", async () => {
+        window.confirm = jest.fn(() => true);
+        renderScreen();
 
-    await waitFor(() => {
-      expect(window.confirm).toHaveBeenCalled();
-      expect(screen.getByText("User deleted successfully")).toBeInTheDocument();
-      expect(screen.queryByText(UserData.email)).not.toBeInTheDocument();
-    });
-  });
+        await simulateLogin(true);
+        await screen.findByRole("heading", { name: /User list/i });
 
-  it("Fail Handles delete button click correctly", async () => {
-    server.use(
-      rest.delete("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ message: "Server Error" }));
-      })
-    );
-    window.confirm = jest.fn(() => true);
-    renderScreen();
+        await waitFor(() => {
+          expect(screen.getByText(UserData.email)).toBeInTheDocument();
+        });
 
-    await simulateLogin(true);
-    await screen.findByRole("heading", { name: /User list/i });
+        const deleteButtons = screen.getAllByText("Delete");
+        fireEvent.click(deleteButtons[0]);
 
-    await waitFor(() => {
-      expect(screen.getByText(UserData.email)).toBeInTheDocument();
-    });
+        await waitFor(() => {
+          expect(window.confirm).toHaveBeenCalled();
+          expect(
+            screen.getByText("User deleted successfully")
+          ).toBeInTheDocument();
+          expect(screen.queryByText(UserData.email)).not.toBeInTheDocument();
+        });
+      });
 
-    const deleteButtons = screen.getAllByText("Delete");
-    fireEvent.click(deleteButtons[0]);
+      it("should handle the delete button click correctly when the API call fails", async () => {
+        server.use(
+          rest.delete(
+            "http://localhost:8080/api/users/:id",
+            (_req, res, ctx) => {
+              return res(
+                ctx.status(500),
+                ctx.json({ message: "Server Error" })
+              );
+            }
+          )
+        );
+        window.confirm = jest.fn(() => true);
+        renderScreen();
 
-    await waitFor(() => {
-      const alert = screen.getByRole("alert");
-      expect(alert).toHaveTextContent("Server Error");
+        await simulateLogin(true);
+        await screen.findByRole("heading", { name: /User list/i });
+
+        await waitFor(() => {
+          expect(screen.getByText(UserData.email)).toBeInTheDocument();
+        });
+
+        const deleteButtons = screen.getAllByText("Delete");
+        fireEvent.click(deleteButtons[0]);
+
+        await waitFor(() => {
+          const alert = screen.getByRole("alert");
+          expect(alert).toHaveTextContent("Server Error");
+        });
+      });
     });
   });
 });
