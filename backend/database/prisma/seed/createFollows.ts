@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import { db } from "../prismaClient";
 
 export async function createFollows() {
-  const usersData = Array.from({ length: 7 }, (_, i) => {
+  const data = Array.from({ length: 7 }, (_, i) => {
     const userNumber = i + 3;
     return {
       email: `user${userNumber}@email.com`,
@@ -14,7 +14,7 @@ export async function createFollows() {
   });
 
   await db.user.createMany({
-    data: usersData,
+    data,
   });
 
   const users: User[] = await db.user.findMany();
