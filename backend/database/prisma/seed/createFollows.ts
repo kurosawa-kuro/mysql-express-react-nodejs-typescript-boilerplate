@@ -57,14 +57,5 @@ export async function createFollows() {
     })
   );
 
-  // try {
-  //   const res = await db.follow.create({
-  //     data: follow,
-  //   });
-  //   console.log("res", res);
-  // } catch (error) {
-  //   console.log("error", error);
-  // }
-
   return await db.follow.findMany();
 }
