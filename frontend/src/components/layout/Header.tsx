@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
       <div className="container mx-auto flex items-center justify-between ">
         <Link to="/" className="flex items-center space-x-2">
           <span className="text-xl font-semibold text-custom-blue-lightest">
-            TypeScriptShop
+            {userInfo && userInfo.isAdmin && <>Admin</>}TypeScriptShop
           </span>
         </Link>
         <div className="sm:hidden">
@@ -164,20 +164,6 @@ export const Header: React.FC = () => {
                       role="menuitem"
                     >
                       Users
-                    </Link>
-                    <Link
-                      to="/admin/products/"
-                      className="block px-4 py-2 text-sm text-custom-blue-lighter hover:bg-custom-blue-darkest"
-                      role="menuitem"
-                    >
-                      Products
-                    </Link>
-                    <Link
-                      to="/admin/orders/"
-                      className="block px-4 py-2 text-sm text-custom-blue-lighter hover:bg-custom-blue-darkest"
-                      role="menuitem"
-                    >
-                      Orders
                     </Link>
                   </div>
                 </div>
