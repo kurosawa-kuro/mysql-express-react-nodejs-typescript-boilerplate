@@ -2,16 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaEdit, FaCheck, FaTimes } from "react-icons/fa";
-// import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { FaEdit, FaCheck, FaTimes, FaTrash } from "react-icons/fa";
 import { Loader } from "../../components/common/Loader";
-// import { toast } from "react-toastify";
-import { readUsers } from "../../services/api";
-// import { deleteUser, readUsers } from "../../services/api";
+import { deleteUser, readUsers } from "../../services/api";
 import { useAuthStore } from "../../state/store";
 import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
 import { Message } from "../../components/common/Message";
+import { toast } from "react-toastify";
 
 export const UserListScreen: React.FC = () => {
   const [users, setUsers] = useState<UserInfo[]>([]);
@@ -37,19 +35,19 @@ export const UserListScreen: React.FC = () => {
     readUsersAndSet();
   }, []);
 
-  // const deleteHandler = async (id: number) => {
-  //   if (window.confirm("Are you sure")) {
-  //     try {
-  //       await deleteUser(id);
-  //       setUsers(users.filter((user) => user.id !== id));
-  //       toast.success("User deleted successfully");
-  //     } catch (err: unknown) {
-  //       if (err instanceof Error) {
-  //         toast.error(err.message);
-  //       }
-  //     }
-  //   }
-  // };
+  const deleteHandler = async (id: number) => {
+    if (window.confirm("Are you sure")) {
+      try {
+        await deleteUser(id);
+        setUsers(users.filter((user) => user.id !== id));
+        toast.success("User deleted successfully");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toast.error(err.message);
+        }
+      }
+    }
+  };
 
   return (
     <>
@@ -115,7 +113,7 @@ export const UserListScreen: React.FC = () => {
                       <FaEdit size={18} className="mr-1" />
                       Edit
                     </Link>
-                    {/* <button
+                    <button
                       className="inline-flex items-center rounded bg-custom-red-light px-2 py-1 text-white hover:bg-custom-red-dark"
                       onClick={() => {
                         user && user.id && deleteHandler(user.id);
@@ -123,7 +121,7 @@ export const UserListScreen: React.FC = () => {
                     >
                       <FaTrash size={18} className="mr-1" />
                       Delete
-                    </button> */}
+                    </button>
                   </td>
                 </>
               )}
