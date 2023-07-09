@@ -52,13 +52,13 @@ export const updateUserProfile = (
 ): Promise<UserInfo> =>
   performRequest(apiClient.put("/api/users/profile", user));
 
-// export const updateUser = (user: {
-//   id: number;
-//   name: string;
-//   email: string;
-//   isAdmin: boolean;
-// }): Promise<UserInfo> =>
-//   performRequest(apiClient.put(`/api/users/${user.id}`, user));
+export const updateUser = (user: {
+  id: number;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}): Promise<UserInfo> =>
+  performRequest(apiClient.put(`/api/users/${user.id}`, user));
 
 export const deleteUser = (id: number) =>
   performRequest(apiClient.delete(`/api/users/${id}`));
