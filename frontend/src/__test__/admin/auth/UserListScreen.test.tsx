@@ -89,6 +89,7 @@ describe("UserListScreen", () => {
       expect(alert).toHaveTextContent("Server Error");
     });
   });
+
   it("Handles delete button click correctly", async () => {
     window.confirm = jest.fn(() => true);
     renderScreen();
@@ -101,10 +102,8 @@ describe("UserListScreen", () => {
     });
 
     const deleteButtons = screen.getAllByText("Delete");
-    // Click the first delete button
     fireEvent.click(deleteButtons[0]);
 
-    // Assert the delete request has been made and the toast has been shown
     await waitFor(() => {
       expect(window.confirm).toHaveBeenCalled();
       expect(screen.getByText("User deleted successfully")).toBeInTheDocument();
