@@ -23,9 +23,7 @@ export const UserEditScreen: React.FC = () => {
     setLoading(true);
     try {
       const user: UserInfo = await readUserById(userId);
-      console.log({ user });
       if (user && user.name && user.email) {
-        console.log(user.name);
         setName(user.name);
         setEmail(user.email);
         setIsAdmin(user.isAdmin!);

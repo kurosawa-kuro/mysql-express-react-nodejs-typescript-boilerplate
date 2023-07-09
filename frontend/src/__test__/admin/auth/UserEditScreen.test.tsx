@@ -1,6 +1,6 @@
 // frontend\src\__test__\screen\user\UserListScreen.test.tsx
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
@@ -17,6 +17,16 @@ const server = setupServer(
         name: UserData.name,
         email: UserData.email,
         isAdmin: UserData.isAdmin,
+      })
+    );
+  }),
+  rest.put("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+    return res(
+      ctx.json({
+        id: 2,
+        name: UserData.name,
+        email: UserData.email,
+        isAdmin: true,
       })
     );
   })
@@ -58,7 +68,12 @@ describe("UserListScreen Component", () => {
 
       const checkbox = screen.getByRole("checkbox", { name: /is admin/i });
       expect(checkbox).not.toBeChecked();
-      screen.debug();
+
+      fireEvent.click(checkbox);
+      expect(checkbox).toBeChecked();
+
+      const button = screen.getByRole("button", { name: /Update/i });
+      fireEvent.click(button);
     });
   });
 });
