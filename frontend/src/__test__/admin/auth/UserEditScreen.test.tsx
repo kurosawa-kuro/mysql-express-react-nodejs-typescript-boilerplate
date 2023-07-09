@@ -13,7 +13,6 @@ let getHandlerCalled = false;
 
 const server = setupServer(
   rest.get("http://localhost:8080/api/users/2", (_req, res, ctx) => {
-    getHandlerCalled = true;
     return res(
       ctx.json({
         id: 2,
@@ -23,7 +22,8 @@ const server = setupServer(
       })
     );
   }),
-  rest.put("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+  rest.put("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
+    getHandlerCalled = true;
     return res(
       ctx.json({
         id: 2,
@@ -91,7 +91,10 @@ describe("UserEditScreen Component", () => {
       await simulateLogin(true);
 
       const button = screen.getByRole("button", { name: /Update/i });
+
       fireEvent.click(button);
+
+      await waitFor(() => {});
 
       expect(getHandlerCalled).toBe(true);
     });
