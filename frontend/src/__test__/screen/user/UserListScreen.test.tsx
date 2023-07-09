@@ -1,4 +1,4 @@
-// frontend\src\screens\product\HomeScreen.test.tsx
+// frontend\src\__test__\screen\user\UserListScreen.test.tsx
 
 import { render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
