@@ -4,8 +4,7 @@ import React, { useEffect, useState, FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Loader } from "../../../components/common/Loader";
 import { toast } from "react-toastify";
-import { readUserById, updateUser } from "../../../services/api"; // Import the api functions
-import { Message } from "../../../components/common/Message";
+import { readUserById, updateUser } from "../../../services/api";
 import { UserInfo } from "../../../../../backend/interfaces";
 
 export const UserEditScreen: React.FC = () => {
@@ -15,7 +14,7 @@ export const UserEditScreen: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  //   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -31,7 +30,6 @@ export const UserEditScreen: React.FC = () => {
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message);
-        setError(err.message);
       }
     } finally {
       setLoading(false);
@@ -71,7 +69,6 @@ export const UserEditScreen: React.FC = () => {
           Edit User
         </h1>
         {loading && <Loader />}
-        {error && <Message variant="danger">{error}</Message>}
         <form
           onSubmit={submitHandler}
           className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"

@@ -75,6 +75,48 @@ describe("UserListScreen Component", () => {
       const button = screen.getByRole("button", { name: /Update/i });
       fireEvent.click(button);
     });
+
+    it("should correctly render the UserListScreen", async () => {
+      renderScreen();
+
+      await simulateLogin(true);
+
+      await waitFor(() => {
+        expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
+      });
+
+      await screen.findByRole("heading", { name: /Edit User/i });
+
+      fireEvent.change(screen.getByLabelText("Name"), {
+        target: { value: "Name" },
+      });
+
+      fireEvent.change(screen.getByLabelText("Email Address"), {
+        target: { value: "email" },
+      });
+    });
+
+    it("Fail read  user should correctly render the UserListScreen", async () => {
+      server.use(
+        rest.get("http://localhost:8080/api/users/2", (_req, res, ctx) => {
+          return res(ctx.status(500), ctx.json({ message: "Server Error" }));
+        })
+      );
+      renderScreen();
+
+      await simulateLogin(true);
+
+      await waitFor(() => {
+        expect(screen.getByText("AdminTypeScriptShop")).toBeInTheDocument();
+      });
+
+      await screen.findByRole("heading", { name: /Edit User/i });
+
+      await waitFor(() => {
+        const alert = screen.getByRole("alert");
+        expect(alert).toHaveTextContent("Server Error");
+      });
+    });
     it("Fail should correctly render the UserListScreen", async () => {
       server.use(
         rest.put("http://localhost:8080/api/users/2", (_req, res, ctx) => {
