@@ -38,9 +38,6 @@ export const registerUser = (user: Prisma.UserCreateInput): Promise<UserInfo> =>
 export const loginUser = (userLoginData: UserLoginData): Promise<UserInfo> =>
   performRequest(apiClient.post("/api/users/login", userLoginData));
 
-// export const readUserProfile = (): Promise<UserInfo> =>
-//   performRequest(apiClient.get("/api/users/profile"));
-
 export const readUsers = (): Promise<UserInfo[]> =>
   performRequest(apiClient.get("/api/users"));
 
