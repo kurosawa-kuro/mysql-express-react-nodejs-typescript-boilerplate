@@ -68,3 +68,8 @@ export const readTop = (): Promise<string> =>
 
 export const uploadImage = async (imageData: FormData) =>
   performRequest(apiClient.post("/api/upload", imageData));
+
+// Post
+// createPost
+export const createPost = async (postData: any) =>
+  performRequest(apiClient.post("/api/posts", postData));

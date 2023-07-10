@@ -25,6 +25,7 @@ import { PrivateRoute } from "./components/routing/PrivateRoute";
 import { AdminRoute } from "./components/routing/AdminRoute";
 import { UserScreen } from "./screens/user/UserScreen.tsx";
 import { UserEditScreen } from "./screens/admin/user/UserEditScreen.tsx";
+import { PostNewScreen } from "./screens/post/PostNewScreen.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
         <Route path="/users" element={<UserListScreen />} />
         <Route path="/users/:id" element={<UserScreen />} />
         <Route path="/users/:id/edit" element={<UserEditScreen />} />
+        <Route path="/posts/new" element={<PostNewScreen />} />
       </Route>
 
       <Route path="" element={<AdminRoute />}>
