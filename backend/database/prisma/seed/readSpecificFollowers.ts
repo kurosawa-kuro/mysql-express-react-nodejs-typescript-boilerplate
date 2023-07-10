@@ -1,0 +1,19 @@
+import { db } from "../prismaClient";
+
+export async function readSpecificFollowers() {
+  // followerIdが3のユーザーがフォローしているユーザーを取得する
+  const follows = await db.follow.findMany({
+    where: {
+      followeeId: 4,
+    },
+    include: {
+      follower: true,
+    },
+  });
+
+  console.log({ follows });
+  // フォローしているユーザーだけのリストを作成する
+  const followedUsers = follows.map((follow) => follow.follower);
+
+  return followedUsers;
+}

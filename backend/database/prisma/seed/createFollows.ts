@@ -33,6 +33,66 @@ export async function createFollows() {
         },
       },
     },
+    {
+      follower: {
+        connect: {
+          id: users[1].id,
+        },
+      },
+      followee: {
+        connect: {
+          id: users[3].id,
+        },
+      },
+    },
+    {
+      follower: {
+        connect: {
+          id: users[1].id,
+        },
+      },
+      followee: {
+        connect: {
+          id: users[4].id,
+        },
+      },
+    },
+    {
+      follower: {
+        connect: {
+          id: users[2].id,
+        },
+      },
+      followee: {
+        connect: {
+          id: users[1].id,
+        },
+      },
+    },
+    {
+      follower: {
+        connect: {
+          id: users[2].id,
+        },
+      },
+      followee: {
+        connect: {
+          id: users[3].id,
+        },
+      },
+    },
+    {
+      follower: {
+        connect: {
+          id: users[3].id,
+        },
+      },
+      followee: {
+        connect: {
+          id: users[4].id,
+        },
+      },
+    },
   ];
   console.log("follows", follows);
 

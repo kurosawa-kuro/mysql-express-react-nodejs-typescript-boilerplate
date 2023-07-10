@@ -9,6 +9,8 @@ import { createPostTags } from "./createPostTags";
 import { readAllPostTags } from "./readAllPostTags";
 import { readSpecificPostTags } from "./readSpecificPostTags";
 import { readSpecificTagPosts } from "./readSpecificTagPosts";
+import { readSpecificFollowees } from "./readSpecificFollowees";
+import { readSpecificFollowers } from "./readSpecificFollowers";
 import { createFollows } from "./createFollows";
 
 async function main() {
@@ -52,6 +54,21 @@ async function main() {
     const specificTagPosts = await readSpecificTagPosts(tagEntities);
     console.log("main.js readSpecificTagPosts() specificTagPosts:");
     console.dir(specificTagPosts, { depth: null });
+
+    // 特定のUserからFolloweesを取得する
+    console.log("main.js readSpecificFollowees()");
+    const specificFollows = await readSpecificFollowees();
+    console.log(
+      "main.js readSpecificFollowees() specificFollows:",
+      specificFollows
+    );
+    // 特定のUserからFollowersを取得する
+    console.log("main.js readSpecificFollowers()");
+    const specificFollowers = await readSpecificFollowers();
+    console.log(
+      "main.js readSpecificFollowers() specificFollowers:",
+      specificFollowers
+    );
   } catch (error: any) {
     console.error("error.message", error.meta);
   }

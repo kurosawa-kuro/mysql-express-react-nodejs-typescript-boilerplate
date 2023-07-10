@@ -6,20 +6,23 @@ import { db } from "../prismaClient";
 import { AdminData, User2Data, UserData } from "../../../__test__/testData";
 
 export async function createUsers() {
-  const users: Prisma.UserCreateInput[] = [
+  const users = [
     {
+      id: 1,
       name: AdminData.name,
       email: AdminData.email,
       password: AdminData.password,
       isAdmin: AdminData.isAdmin,
     },
     {
+      id: 2,
       name: UserData.name,
       email: UserData.email,
       password: UserData.password,
       isAdmin: UserData.isAdmin,
     },
     {
+      id: 3,
       name: User2Data.name,
       email: User2Data.email,
       password: User2Data.password,
@@ -35,6 +38,7 @@ export async function createUsers() {
     users.map((user, index) => {
       return db.user.create({
         data: {
+          id: user.id,
           name: user.name,
           password: hashedPasswords[index],
           email: user.email,
