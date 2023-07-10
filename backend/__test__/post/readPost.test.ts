@@ -66,8 +66,6 @@ describe("Get /api/post", () => {
       .get("/api/posts/1")
       .set("Cookie", `jwt=${token}`);
 
-    console.log("response.body", response.body);
-
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("userId");

@@ -6,18 +6,8 @@ import asyncHandler from "express-async-handler";
 import { db } from "../../backend/database/prisma/prismaClient";
 
 // Internal Imports
-// import {
-//   createUserInDB,
-//   readUsersFromDB,
-//   readUserByEmailInDB,
-//   readUserByIdInDB,
-//   updateUserByIdInDB,
-//   deleteUserByIdInDB,
-//   comparePassword,
-// } from "../models/userModel";
-// import { UserRequest, UserInfo } from "../interfaces";
-import { Prisma } from "@prisma/client";
 import { UserRequest } from "../interfaces";
+import { Prisma } from "@prisma/client";
 
 // CREATE
 export const createPost = asyncHandler(
@@ -27,11 +17,12 @@ export const createPost = asyncHandler(
 
     if (user) {
       const id = user.id;
+      const data: Prisma.PostCreateInput = {
+        user: { connect: { id } },
+        description,
+      };
       const newPost = await db.post.create({
-        data: {
-          user: { connect: { id } },
-          description,
-        },
+        data,
       });
 
       res.status(201).json(newPost);
