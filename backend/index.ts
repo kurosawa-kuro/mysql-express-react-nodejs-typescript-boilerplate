@@ -13,6 +13,7 @@ import expressListEndpoints from "express-list-endpoints";
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
 import { router as uploadRoutes } from "./routes/uploadRoutes";
 import { router as userRoutes } from "./routes/userRoutes";
+import { router as postRoutes } from "./routes/postRoutes";
 
 // Load Environment Variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use(
 
 // Express Routes
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
 app.use("/api/upload", uploadRoutes);
 
 // File Upload Endpoint
