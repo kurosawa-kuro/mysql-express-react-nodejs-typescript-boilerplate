@@ -48,7 +48,6 @@ export const readPosts = asyncHandler(
 
 export const readPost = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    console.log("hit readPost");
     res.status(200).json(
       await db.post.findUnique({
         where: { id: Number(req.params.id) },
