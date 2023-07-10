@@ -9,10 +9,10 @@ import { createPostTags } from "./createPostTags";
 import { readAllPostTags } from "./readAllPostTags";
 import { readSpecificPostTags } from "./readSpecificPostTags";
 import { readSpecificTagPosts } from "./readSpecificTagPosts";
-import { readSpecificFollowees } from "./readSpecificFollowees";
-import { readSpecificFollowers } from "./readSpecificFollowers";
-import { createFollows } from "./createFollows";
-import { getUserFollowStatus } from "./checkFollowStatus";
+import { readUsersFollowedBySpecificUser } from "./readUsersFollowedBySpecificUser";
+import { readUsersFollowingSpecificUser } from "./readUsersFollowingSpecificUser";
+import { createUsersAndFollows } from "./createUsersAndFollows";
+import { readFollowStatusOfAllUsersForSpecificUser } from "./readFollowStatusOfAllUsersForSpecificUser";
 
 async function main() {
   try {
@@ -35,46 +35,48 @@ async function main() {
     const postTagEntities = await createPostTags(postEntities, tagEntities);
     console.log("main.js createPostTags() postTagEntities:", postTagEntities);
 
-    console.log("main.js createFollows()");
-    const followsEntities = await createFollows();
-    console.log("main.js createFollows() followsEntities:", followsEntities);
+    console.log("main.js createUsersAndFollows()");
+    const followsEntities = await createUsersAndFollows();
+    console.log(
+      "main.js createUsersAndFollows() followsEntities:",
+      followsEntities
+    );
 
     console.log("main.js readAllPostTags()");
     const allPostTags = await readAllPostTags();
     console.log("main.js readAllPostTags() allPostTags:");
     console.dir(allPostTags, { depth: null });
 
-    // 特定のPostからTagを取得する
     console.log("main.js readSpecificPostTags()");
     const specificPostTags = await readSpecificPostTags(postEntities);
     console.log("main.js readSpecificPostTags() specificPostTags:");
     console.dir(specificPostTags, { depth: null });
 
-    // Todo:特定のTagからPostを取得する
-    console.log("main.js readSpecificPostTags()");
+    console.log("main.js readSpecificTagPosts()");
     const specificTagPosts = await readSpecificTagPosts(tagEntities);
     console.log("main.js readSpecificTagPosts() specificTagPosts:");
     console.dir(specificTagPosts, { depth: null });
 
-    // 特定のUserからFolloweesを取得する
-    console.log("main.js readSpecificFollowees()");
-    const specificFollows = await readSpecificFollowees();
+    console.log("main.js readUsersFollowedBySpecificUser()");
+    const specificFollows = await readUsersFollowedBySpecificUser();
     console.log(
-      "main.js readSpecificFollowees() specificFollows:",
+      "main.js readUsersFollowedBySpecificUser() specificFollows:",
       specificFollows
     );
-    // 特定のUserからFollowersを取得する
-    console.log("main.js readSpecificFollowers()");
-    const specificFollowers = await readSpecificFollowers();
+
+    console.log("main.js readUsersFollowingSpecificUser()");
+    const specificFollowers = await readUsersFollowingSpecificUser();
     console.log(
-      "main.js readSpecificFollowers() specificFollowers:",
+      "main.js readUsersFollowingSpecificUser() specificFollowers:",
       specificFollowers
     );
 
-    // checkFollowStatus
-    console.log("main.js getUserFollowStatus()");
-    const followStatus = await getUserFollowStatus();
-    console.log("main.js getUserFollowStatus() followStatus:", followStatus);
+    console.log("main.js readFollowStatusOfAllUsersForSpecificUser()");
+    const followStatus = await readFollowStatusOfAllUsersForSpecificUser();
+    console.log(
+      "main.js readFollowStatusOfAllUsersForSpecificUser() followStatus:",
+      followStatus
+    );
   } catch (error: any) {
     console.error("error.message", error.meta);
   }

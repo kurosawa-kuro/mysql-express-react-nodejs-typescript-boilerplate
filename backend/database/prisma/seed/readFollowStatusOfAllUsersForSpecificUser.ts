@@ -1,5 +1,7 @@
 import { db } from "../prismaClient";
-export async function getUserFollowStatus(): Promise<any[]> {
+export async function readFollowStatusOfAllUsersForSpecificUser(): Promise<
+  any[]
+> {
   const targetId = 2;
 
   const users = await db.user.findMany();
