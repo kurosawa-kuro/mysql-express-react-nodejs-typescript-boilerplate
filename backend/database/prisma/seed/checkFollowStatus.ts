@@ -1,22 +1,21 @@
 import { db } from "../prismaClient";
 export async function getUserFollowStatus(): Promise<any[]> {
-  // get all users
+  const targetId = 2;
+
   const users = await db.user.findMany();
 
   const userFollowStatuses = await Promise.all(
     users.map(async (user) => {
-      // check if the user is following User2
       const following = await db.follow.findFirst({
         where: {
           followerId: user.id,
-          followeeId: 2,
+          followeeId: targetId,
         },
       });
 
-      // check if the user is followed by User2
       const followedBy = await db.follow.findFirst({
         where: {
-          followerId: 2,
+          followerId: targetId,
           followeeId: user.id,
         },
       });
