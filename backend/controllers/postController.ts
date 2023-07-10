@@ -42,12 +42,17 @@ export const createPost = asyncHandler(
 // READ
 export const readPosts = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    console.log("hit readPosts");
-
     res.status(200).json(await db.post.findMany());
   }
 );
 
 export const readPost = asyncHandler(
-  async (req: UserRequest, res: Response) => {}
+  async (req: UserRequest, res: Response) => {
+    console.log("hit readPost");
+    res.status(200).json(
+      await db.post.findUnique({
+        where: { id: Number(req.params.id) },
+      })
+    );
+  }
 );
