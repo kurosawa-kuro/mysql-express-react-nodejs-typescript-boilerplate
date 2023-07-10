@@ -9,7 +9,7 @@ import {
 } from "../testUtils";
 import { UserData } from "../testData";
 
-describe("Post /api/posts", () => {
+describe("POST /api/posts", () => {
   let agent: SuperAgentTest;
 
   beforeEach(async () => {
@@ -21,7 +21,7 @@ describe("Post /api/posts", () => {
     await clearDatabase();
   });
 
-  it("create a post", async () => {
+  it("should create a new post when provided with valid user and post details", async () => {
     await createUserInDB(UserData.email, UserData.password);
     const token = await loginUserAndGetToken(
       agent,
