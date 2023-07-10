@@ -12,6 +12,7 @@ import { readSpecificTagPosts } from "./readSpecificTagPosts";
 import { readSpecificFollowees } from "./readSpecificFollowees";
 import { readSpecificFollowers } from "./readSpecificFollowers";
 import { createFollows } from "./createFollows";
+import { getUserFollowStatus } from "./checkFollowStatus";
 
 async function main() {
   try {
@@ -69,6 +70,11 @@ async function main() {
       "main.js readSpecificFollowers() specificFollowers:",
       specificFollowers
     );
+
+    // checkFollowStatus
+    console.log("main.js getUserFollowStatus()");
+    const followStatus = await getUserFollowStatus();
+    console.log("main.js getUserFollowStatus() followStatus:", followStatus);
   } catch (error: any) {
     console.error("error.message", error.meta);
   }
