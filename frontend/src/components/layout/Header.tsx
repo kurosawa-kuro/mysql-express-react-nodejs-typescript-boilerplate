@@ -16,7 +16,7 @@ import { logoutUser } from "../../services/api";
 export const Header: React.FC = () => {
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isUserOpen, setIsUserOpen] = useState(false);
   const [adminIsOpen, setAdminIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const adminDropdownRef = useRef<HTMLDivElement | null>(null);
@@ -28,7 +28,7 @@ export const Header: React.FC = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false);
+        setIsUserOpen(false);
       }
       if (
         adminDropdownRef.current &&
@@ -51,17 +51,17 @@ export const Header: React.FC = () => {
           </span>
         </Link>
         <div className="sm:hidden">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FaTimes /> : <FaBars />}
+          <button onClick={() => setIsUserOpen(!isUserOpen)}>
+            {isUserOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
-        <div className={`space-x-8 ${isOpen ? "block" : "hidden"} sm:flex`}>
+        <div className={`space-x-8 ${isUserOpen ? "block" : "hidden"} sm:flex`}>
           {userInfo ? (
             <div className="relative inline-block text-left" ref={dropdownRef}>
               <div className="group">
                 <button
                   type="button"
-                  onClick={() => setIsOpen(!isOpen)}
+                  onClick={() => setIsUserOpen(!isUserOpen)}
                   className="flex items-center space-x-2 px-4 py-2 text-custom-blue-light hover:bg-custom-blue-lighter hover:text-custom-blue-extra-darkest"
                 >
                   <FaUser className="h-5 w-5 text-custom-blue-lightest group-hover:text-custom-blue-extra-darkest" />
@@ -71,7 +71,7 @@ export const Header: React.FC = () => {
                   >
                     {userInfo.name}
                   </span>
-                  {isOpen ? (
+                  {isUserOpen ? (
                     <FaChevronUp className="h-5 w-5 text-custom-blue-lightest group-hover:text-custom-blue-extra-darkest" />
                   ) : (
                     <FaChevronDown className="h-5 w-5 text-custom-blue-lightest group-hover:text-custom-blue-extra-darkest" />
@@ -79,7 +79,7 @@ export const Header: React.FC = () => {
                 </button>
               </div>
 
-              {isOpen && (
+              {isUserOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-custom-blue-darker shadow-lg ring-1 ring-custom-blue-darker">
                   <div
                     className="py-1"
