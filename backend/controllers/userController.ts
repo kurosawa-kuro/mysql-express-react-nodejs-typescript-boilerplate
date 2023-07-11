@@ -63,23 +63,20 @@ export const registerUser = asyncHandler(
 // createFollow
 export const createFollow = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    console.log("hit createFollow");
-    const { id } = req.params;
-    const user = req.user;
-    const followerId = Number(id);
+    const followerId = parseInt(req.params.id as string, 10);
+    const { user } = req;
 
-    if (user && user.id) {
+    if (user) {
       const followeeId = user.id;
-      const data: Prisma.FollowCreateInput = {
-        follower: {
-          connect: { id: followerId },
-        },
-        followee: {
-          connect: { id: followeeId },
-        },
-      };
       const newFollow = await db.follow.create({
-        data,
+        data: {
+          follower: {
+            connect: { id: followerId },
+          },
+          followee: {
+            connect: { id: followeeId },
+          },
+        },
       });
 
       res.status(201).json(newFollow);
