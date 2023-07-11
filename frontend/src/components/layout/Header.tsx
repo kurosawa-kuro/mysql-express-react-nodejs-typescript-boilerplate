@@ -116,11 +116,11 @@ export const Header: React.FC = () => {
                       )}
 
                       <Link
-                        to="/profile"
+                        to="/posts"
                         className="block px-4 py-2 text-sm text-custom-blue-lighter hover:bg-custom-blue-darkest"
                         role="menuitem"
                       >
-                        Profile
+                        Posts
                       </Link>
                       <button
                         onClick={async () => {

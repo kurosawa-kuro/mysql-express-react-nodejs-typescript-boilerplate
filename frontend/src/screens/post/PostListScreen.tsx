@@ -79,7 +79,7 @@ export const PostListScreen: React.FC = () => {
                 <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
               </td>
               <td className="whitespace-nowrap px-6 py-4">
-                {post.description}
+                <Link to={`/posts/${post.id}`}>{post.description}</Link>
               </td>
             </tr>
           ))}
