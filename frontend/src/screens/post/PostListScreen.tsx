@@ -2,17 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import { FaEdit, FaCheck, FaTimes, FaTrash } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import { Loader } from "../../components/common/Loader";
 import { readPosts } from "../../services/api";
 // import { useAuthStore } from "../../state/store";
 // import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
 import { Message } from "../../components/common/Message";
+import { useAuthStore } from "../../state/store";
 // import { toast } from "react-toastify";
 
 export const PostListScreen: React.FC = () => {
-  const url = window.location.href;
+  const location = useLocation();
   const [posts, setPosts] = useState([
     {
       id: 0,
@@ -29,12 +30,21 @@ export const PostListScreen: React.FC = () => {
   ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { userInfo } = useAuthStore();
 
   const readPostsAndSet = async () => {
     setLoading(true);
     try {
       const data = await readPosts();
-      setPosts(data);
+      if (location.pathname.includes("/my-posts")) {
+        const filteredData = data.filter(
+          (post: { user: { id: number | undefined } }) =>
+            post.user.id === userInfo!.id
+        );
+        setPosts(filteredData);
+      } else {
+        setPosts(data);
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -45,18 +55,13 @@ export const PostListScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    if (url.includes("my-posts")) {
-      console.log("my-posts");
-      readPostsAndSet();
-    } else {
-      readPostsAndSet();
-    }
-  }, []);
+    readPostsAndSet();
+  }, [location]);
 
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-        {url.includes("my-posts") ? "My Post list" : "Post list"}
+        {location.pathname.includes("/my-posts") ? "My Post list" : "Post list"}
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
@@ -81,7 +86,6 @@ export const PostListScreen: React.FC = () => {
                 {post.id}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                {/* Todo自分の投稿の場合はmy-postへリンク分岐 */}
                 <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
               </td>
               <td className="whitespace-nowrap px-6 py-4">

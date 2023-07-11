@@ -97,7 +97,7 @@ export const PostScreen: React.FC = () => {
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-        Post
+        {post.user.id === userInfo!.id ? "My Post" : "Post"}
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
