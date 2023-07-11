@@ -14,6 +14,7 @@ import {
   updateUserProfilePassword,
   logoutUser,
   deleteUserAdminOnly,
+  createFollow,
 } from "../controllers/userController";
 import { admin, protect } from "../middleware/authMiddleware";
 
@@ -35,5 +36,8 @@ router
   .get(protect, readUserById)
   .put(protect, admin, updateUserByAdminOnly)
   .delete(protect, admin, deleteUserAdminOnly);
+
+// /api/users/follow/:id createFollow
+router.route("/follow/:id").post(protect, createFollow);
 
 router.route("/").get(protect, readUsers);

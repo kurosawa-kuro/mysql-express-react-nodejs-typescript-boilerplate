@@ -17,6 +17,7 @@ import {
 } from "../models/userModel";
 import { UserRequest, UserInfo } from "../interfaces";
 import { Prisma } from "@prisma/client";
+import { db } from "../database/prisma/prismaClient";
 
 const _sanitizeUser = (user: any): UserInfo => {
   const { password, ...UserBase } = user;
@@ -55,6 +56,33 @@ export const registerUser = asyncHandler(
     if (createdUser) {
       generateToken(res, createdUser.id);
       res.status(201).json(_sanitizeUser(createdUser));
+    }
+  }
+);
+
+// createFollow
+export const createFollow = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    console.log("hit createFollow");
+    const { id } = req.params;
+    const user = req.user;
+    const followerId = Number(id);
+
+    if (user && user.id) {
+      const followeeId = user.id;
+      const data: Prisma.FollowCreateInput = {
+        follower: {
+          connect: { id: followerId },
+        },
+        followee: {
+          connect: { id: followeeId },
+        },
+      };
+      const newFollow = await db.follow.create({
+        data,
+      });
+
+      res.status(201).json(newFollow);
     }
   }
 );

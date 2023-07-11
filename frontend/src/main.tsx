@@ -1,7 +1,7 @@
 // frontend\src\main.tsx
 
 // External Imports
-import React from "react";
+// import React from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -26,6 +26,8 @@ import { AdminRoute } from "./components/routing/AdminRoute";
 import { UserScreen } from "./screens/user/UserScreen.tsx";
 import { UserEditScreen } from "./screens/admin/user/UserEditScreen.tsx";
 import { PostNewScreen } from "./screens/post/PostNewScreen.tsx";
+import { PostListScreen } from "./screens/post/PostListScreen.tsx";
+import { PostScreen } from "./screens/post/PostScreen.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +42,9 @@ const router = createBrowserRouter(
         <Route path="/users" element={<UserListScreen />} />
         <Route path="/users/:id" element={<UserScreen />} />
         <Route path="/users/:id/edit" element={<UserEditScreen />} />
+        <Route path="/posts/:id" element={<PostScreen />} />
+        <Route path="/posts/" element={<PostListScreen />} />
+
         <Route path="/posts/new" element={<PostNewScreen />} />
       </Route>
 
@@ -52,7 +57,7 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  // <React.StrictMode>
+  <RouterProvider router={router} />
+  // </React.StrictMode>
 );

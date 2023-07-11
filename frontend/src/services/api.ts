@@ -73,3 +73,13 @@ export const uploadImage = async (imageData: FormData) =>
 // createPost
 export const createPost = async (postData: any) =>
   performRequest(apiClient.post("/api/posts", postData));
+
+// readPosts
+export const readPosts = async () =>
+  performRequest(apiClient.get("/api/posts"));
+
+export const readPost = async (id: number) =>
+  performRequest(apiClient.get(`/api/posts/${id}`));
+
+export const createFollow = async (id: number) =>
+  performRequest(apiClient.post(`/api/users/follow/${id}`));

@@ -66,8 +66,6 @@ describe("Get /api/posts", () => {
       .get("/api/posts")
       .set("Cookie", `jwt=${token}`);
 
-    console.log("response.body", response.body);
-
     expect(response.status).toBe(200);
     // response.bodyが配列であることを確認
     expect(Array.isArray(response.body)).toBeTruthy();
