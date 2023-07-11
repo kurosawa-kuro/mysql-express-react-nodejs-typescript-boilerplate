@@ -210,3 +210,32 @@ export const deleteUserAdminOnly = asyncHandler(
     }
   }
 );
+
+export const deleteFollow = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const followerId = parseInt(req.params.id as string, 10);
+    const { user } = req;
+
+    if (user) {
+      const followeeId = user.id;
+
+      const follow = await db.follow.findFirst({
+        where: {
+          AND: [{ followerId }, { followeeId }],
+        },
+      });
+
+      if (follow) {
+        await db.follow.delete({
+          where: {
+            id: follow.id,
+          },
+        });
+      } else {
+        throw new Error("Follow record not found");
+      }
+
+      res.status(201).json({ message: "Follow deleted" });
+    }
+  }
+);

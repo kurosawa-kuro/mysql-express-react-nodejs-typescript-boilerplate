@@ -15,6 +15,7 @@ import {
   logoutUser,
   deleteUserAdminOnly,
   createFollow,
+  deleteFollow,
 } from "../controllers/userController";
 import { admin, protect } from "../middleware/authMiddleware";
 
@@ -39,5 +40,6 @@ router
 
 // /api/users/follow/:id createFollow
 router.route("/follow/:id").post(protect, createFollow);
+router.route("/follow/:id").delete(protect, deleteFollow);
 
 router.route("/").get(protect, readUsers);

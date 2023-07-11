@@ -33,7 +33,6 @@ export const createPost = asyncHandler(
 // READ
 export const readPosts = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    console.log("check");
     const posts = await db.post.findMany({
       include: {
         user: {
@@ -42,34 +41,6 @@ export const readPosts = asyncHandler(
       },
     });
 
-    // const posts = await db.post.findMany({
-    //   include: {
-    //     user: {
-    //       include: {
-    //         followedBy: {
-    //           select: {
-    //             id: true,
-    //             follower: {
-    //               select: {
-    //                 name: true,
-    //                 email: true,
-    //               },
-    //             },
-    //             followee: {
-    //               select: {
-    //                 name: true,
-    //                 email: true,
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
-
-    // console.log("posts", posts);
-    console.dir(posts, { depth: null });
     res.status(200).json(posts);
   }
 );
@@ -89,8 +60,6 @@ export const readMyPosts = asyncHandler(
 
 export const readPost = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    console.log("readPost");
-    console.log("req.params.id", req.params.id);
     const result = await db.post.findUnique({
       where: { id: Number(req.params.id) },
       include: {
@@ -119,8 +88,6 @@ export const readPost = asyncHandler(
         },
       },
     });
-    // console.log({ result });
-    console.dir(result, { depth: null });
     if (result) {
       const isfollowed = result.user.followedBy.map((followee) => {
         if (followee.followee.id === req.user!.id) {
@@ -146,7 +113,6 @@ export const readPost = asyncHandler(
         isfollowed: isfollowed.some((followee) => followee === true),
       };
 
-      console.dir(response, { depth: null });
       res.status(200).json(response);
     }
   }

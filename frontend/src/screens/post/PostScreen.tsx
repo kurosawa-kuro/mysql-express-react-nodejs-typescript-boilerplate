@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 // import { FaEdit, FaCheck, FaTimes, FaTrash } from "react-icons/fa";
 import { Loader } from "../../components/common/Loader";
-import { createFollow, readPost } from "../../services/api";
+import { createFollow, readPost, deleteFollow } from "../../services/api";
 // import { useAuthStore } from "../../state/store";
 // import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
@@ -46,12 +46,31 @@ export const PostScreen: React.FC = () => {
     }
   };
 
-  const handleFollow = async (id: number) => {
+  const handleCreateFollow = async (id: number) => {
     setLoading(true);
     try {
       if (id) {
         console.log({ id });
         const debug = await createFollow(Number(id));
+        console.log({ debug });
+        const data = await readPost(Number(id));
+        console.log({ data });
+        setPost(data);
+        setLoading(false);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    }
+  };
+
+  const handleDeleteFollow = async (id: number) => {
+    setLoading(true);
+    try {
+      if (id) {
+        console.log({ id });
+        const debug = await deleteFollow(Number(id));
         console.log({ debug });
         const data = await readPost(Number(id));
         console.log({ data });
@@ -107,14 +126,14 @@ export const PostScreen: React.FC = () => {
               {post.isfollowed ? (
                 <button
                   className="btn btn-primary"
-                  onClick={() => handleFollow(post.user.id)}
+                  onClick={() => handleDeleteFollow(post.user.id)}
                 >
                   Unfollow
                 </button>
               ) : (
                 <button
                   className="btn btn-primary"
-                  onClick={() => handleFollow(post.user.id)}
+                  onClick={() => handleCreateFollow(post.user.id)}
                 >
                   Follow
                 </button>

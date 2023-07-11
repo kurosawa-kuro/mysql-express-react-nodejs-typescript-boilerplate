@@ -83,3 +83,7 @@ export const readPost = async (id: number) =>
 
 export const createFollow = async (id: number) =>
   performRequest(apiClient.post(`/api/users/follow/${id}`));
+
+// deleteFollow
+export const deleteFollow = async (id: number) =>
+  performRequest(apiClient.delete(`/api/users/follow/${id}`));
