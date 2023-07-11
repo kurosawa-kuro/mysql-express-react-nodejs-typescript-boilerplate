@@ -12,6 +12,7 @@ import { Message } from "../../components/common/Message";
 // import { toast } from "react-toastify";
 
 export const PostListScreen: React.FC = () => {
+  const url = window.location.href;
   const [posts, setPosts] = useState([
     {
       id: 0,
@@ -44,13 +45,18 @@ export const PostListScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    readPostsAndSet();
+    if (url.includes("my-posts")) {
+      console.log("my-posts");
+      readPostsAndSet();
+    } else {
+      readPostsAndSet();
+    }
   }, []);
-  // return <>{posts[0].description}</>;
+
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-        Post list
+        {url.includes("my-posts") ? "My Post list" : "Post list"}
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}

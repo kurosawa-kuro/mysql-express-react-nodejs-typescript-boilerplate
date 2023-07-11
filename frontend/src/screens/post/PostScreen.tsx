@@ -5,13 +5,15 @@ import { Link, useParams } from "react-router-dom";
 // import { FaEdit, FaCheck, FaTimes, FaTrash } from "react-icons/fa";
 import { Loader } from "../../components/common/Loader";
 import { createFollow, readPost, deleteFollow } from "../../services/api";
-// import { useAuthStore } from "../../state/store";
+import { useAuthStore } from "../../state/store";
 // import { UserAuth, UserInfo } from "../../../../backend/interfaces";
 
 import { Message } from "../../components/common/Message";
 // import { toast } from "react-toastify";
 
 export const PostScreen: React.FC = () => {
+  const { userInfo } = useAuthStore();
+
   const { id } = useParams();
   const [post, setPost] = useState({
     id: 0,
@@ -69,11 +71,8 @@ export const PostScreen: React.FC = () => {
     setLoading(true);
     try {
       if (id) {
-        console.log({ id });
-        const debug = await deleteFollow(Number(id));
-        console.log({ debug });
+        await deleteFollow(Number(id));
         const data = await readPost(Number(id));
-        console.log({ data });
         setPost(data);
         setLoading(false);
       }
@@ -85,6 +84,13 @@ export const PostScreen: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("userInfo", userInfo);
+    if (userInfo) {
+      console.log("userInfo.id", userInfo.id);
+      if (post.user.id === userInfo.id) {
+        console.log("my post");
+      }
+    }
     readPostsAndSet();
   }, []);
 
@@ -107,9 +113,11 @@ export const PostScreen: React.FC = () => {
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
               Post
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-              Status
-            </th>
+            {userInfo && post.user.id !== userInfo.id && (
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
+                Status
+              </th>
+            )}
           </tr>
         </thead>
         <tbody className="divide-y divide-custom-blue-light ">
@@ -122,23 +130,26 @@ export const PostScreen: React.FC = () => {
               <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
             </td>
             <td className="whitespace-nowrap px-6 py-4">{post.description}</td>
-            <td className="whitespace-nowrap px-6 py-4">
-              {post.isfollowed ? (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleDeleteFollow(post.user.id)}
-                >
-                  Unfollow
-                </button>
-              ) : (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleCreateFollow(post.user.id)}
-                >
-                  Follow
-                </button>
-              )}
-            </td>
+
+            {userInfo && post.user.id !== userInfo.id && (
+              <td className="whitespace-nowrap px-6 py-4">
+                {post.isfollowed ? (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleDeleteFollow(post.user.id)}
+                  >
+                    Unfollow
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleCreateFollow(post.user.id)}
+                  >
+                    Follow
+                  </button>
+                )}
+              </td>
+            )}
           </tr>
         </tbody>
       </table>

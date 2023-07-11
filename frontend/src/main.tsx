@@ -44,8 +44,8 @@ const router = createBrowserRouter(
         <Route path="/users/:id/edit" element={<UserEditScreen />} />
         <Route path="/posts/:id" element={<PostScreen />} />
         <Route path="/posts/" element={<PostListScreen />} />
-
         <Route path="/posts/new" element={<PostNewScreen />} />
+        <Route path="/posts/my-posts" element={<PostListScreen />} />
       </Route>
 
       <Route path="" element={<AdminRoute />}>
