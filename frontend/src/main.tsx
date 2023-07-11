@@ -37,18 +37,18 @@ const router = createBrowserRouter(
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/login" element={<LoginScreen />} />
 
-      <Route path="" element={<PrivateRoute />}>
+      <Route path="/" element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/users" element={<UserListScreen />} />
-        <Route path="/users/:id" element={<UserScreen />} />
         <Route path="/users/:id/edit" element={<UserEditScreen />} />
-        <Route path="/posts/:id" element={<PostScreen />} />
-        <Route path="/posts/" element={<PostListScreen />} />
+        <Route path="/users/:id" element={<UserScreen />} />
         <Route path="/posts/new" element={<PostNewScreen />} />
         <Route path="/posts/my-posts" element={<PostListScreen />} />
+        <Route path="/posts/:id" element={<PostScreen />} />
+        <Route path="/posts/" element={<PostListScreen />} />
       </Route>
 
-      <Route path="" element={<AdminRoute />}>
+      <Route path="/" element={<AdminRoute />}>
         <Route path="/admin/users" element={<UserListScreen />} />
         <Route path="/admin/users/:id/edit" element={<UserEditScreen />} />
       </Route>

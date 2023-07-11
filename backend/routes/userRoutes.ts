@@ -21,25 +21,33 @@ import { admin, protect } from "../middleware/authMiddleware";
 
 export const router = express.Router();
 
-// User Registration, Login, and Logout Routes
+// Route to register a new user
 router.post("/register", registerUser);
+
+// Route to log in an existing user
 router.post("/login", loginUser);
+
+// Route to log out a user
 router.post("/logout", logoutUser);
 
-// User Profile Routes (Get and Update)
+// Route to update a user's profile
 router.route("/profile").put(protect, updateUserProfile);
 
+// Route to update a user's password
 router.route("/profile/password").put(protect, updateUserProfilePassword);
 
-// User Management and Users List Routes (Admin Access Only)
+// Route to get a list of users (Admin access only)
+router.route("/").get(protect, readUsers);
+
+// Route to get, update, and delete a user's data (Admin access only)
 router
   .route("/:id")
   .get(protect, readUserById)
   .put(protect, admin, updateUserByAdminOnly)
   .delete(protect, admin, deleteUserAdminOnly);
 
-// /api/users/follow/:id createFollow
-router.route("/follow/:id").post(protect, createFollow);
-router.route("/follow/:id").delete(protect, deleteFollow);
-
-router.route("/").get(protect, readUsers);
+// Route to follow/unfollow a user
+router
+  .route("/follow/:id")
+  .post(protect, createFollow)
+  .delete(protect, deleteFollow);
