@@ -133,21 +133,20 @@ export const PostScreen: React.FC = () => {
 
             {userInfo && post.user.id !== userInfo.id && (
               <td className="whitespace-nowrap px-6 py-4">
-                {post.isfollowed ? (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleDeleteFollow(post.user.id)}
-                  >
-                    Unfollow
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleCreateFollow(post.user.id)}
-                  >
-                    Follow
-                  </button>
-                )}
+                <button
+                  className={`rounded px-4 py-2 font-bold text-white ${
+                    post.isfollowed
+                      ? "bg-red-500 hover:bg-red-700"
+                      : "bg-blue-500 hover:bg-blue-700"
+                  }`}
+                  onClick={() =>
+                    post.isfollowed
+                      ? handleDeleteFollow(post.user.id)
+                      : handleCreateFollow(post.user.id)
+                  }
+                >
+                  {post.isfollowed ? "Unfollow" : "Follow"}
+                </button>
               </td>
             )}
           </tr>

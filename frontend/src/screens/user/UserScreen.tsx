@@ -102,7 +102,11 @@ export const UserScreen: React.FC = () => {
               <div className="whitespace-nowrap px-6 py-4">
                 Status :{" "}
                 <button
-                  className="btn btn-primary"
+                  className={`rounded px-4 py-2 font-bold text-white ${
+                    user.isFollowed
+                      ? "bg-red-500 hover:bg-red-700"
+                      : "bg-blue-500 hover:bg-blue-700"
+                  }`}
                   onClick={() =>
                     user.isFollowed
                       ? handleDeleteFollow(user.id!)
