@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader } from "../../components/common/Loader";
-import { readUserById } from "../../services/api";
+import { createFollow, deleteFollow, readUserById } from "../../services/api";
 import { UserInfo } from "../../../../backend/interfaces";
 
 import { Message } from "../../components/common/Message";
+import { useAuthStore } from "../../state/store";
 
 export const UserScreen: React.FC = () => {
+  const { userInfo } = useAuthStore();
   const { id } = useParams();
   const [user, setUser] = useState<UserInfo>({});
   const [loading, setLoading] = useState(false);
@@ -28,6 +30,38 @@ export const UserScreen: React.FC = () => {
     }
   };
 
+  const handleCreateFollow = async (id: number) => {
+    setLoading(true);
+    try {
+      if (id) {
+        await createFollow(Number(id));
+        const data = await readUserById(Number(id));
+        setUser(data);
+        setLoading(false);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    }
+  };
+
+  const handleDeleteFollow = async (id: number) => {
+    setLoading(true);
+    try {
+      if (id) {
+        await deleteFollow(Number(id));
+        const data = await readUserById(Number(id));
+        setUser(data);
+        setLoading(false);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    }
+  };
+
   useEffect(() => {
     readUserByIdAndSet();
   }, []);
@@ -35,7 +69,7 @@ export const UserScreen: React.FC = () => {
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-        User
+        {userInfo?.id === user.id ? "My Page" : "User"}
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
@@ -62,6 +96,24 @@ export const UserScreen: React.FC = () => {
               </a>
             </div>
           </li>
+
+          {userInfo?.id !== user.id && user.id && (
+            <li>
+              <div className="whitespace-nowrap px-6 py-4">
+                Status :{" "}
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    user.isFollowed
+                      ? handleDeleteFollow(user.id!)
+                      : handleCreateFollow(user.id!)
+                  }
+                >
+                  {user.isFollowed ? "Unfollow" : "Follow"}
+                </button>
+              </div>
+            </li>
+          )}
         </ul>
       </div>
     </>

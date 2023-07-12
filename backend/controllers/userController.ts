@@ -21,6 +21,7 @@ import { db } from "../database/prisma/prismaClient";
 
 const _sanitizeUser = (user: any): UserInfo => {
   const { password, ...UserBase } = user;
+  // console.log(UserBase);
   return UserBase;
 };
 
@@ -110,7 +111,9 @@ export const readUsers = asyncHandler(
 export const readUserById = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
-    const user = await readUserByIdInDB(id);
+    const reqUserId = req.user!.id;
+    const user = await readUserByIdInDB(id, reqUserId!);
+    console.log("readUserByIdInDB user", user);
 
     if (user) {
       res.json(_sanitizeUser(user));
@@ -120,13 +123,12 @@ export const readUserById = asyncHandler(
     }
   }
 );
-
 // UPDATE
 export const updateUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {
     if (req.user && req.user.id) {
       const id = req.user.id;
-      const user = await readUserByIdInDB(id);
+      const user = await readUserByIdInDB(id, id);
 
       if (user) {
         let avatarPath = _sanitizeAvatarPath(req.body.avatarPath);
@@ -150,7 +152,7 @@ export const updateUserProfilePassword = asyncHandler(
 
     if (req.user && req.user.id) {
       const id = req.user.id;
-      const user = await readUserByIdInDB(id);
+      const user = await readUserByIdInDB(id, id);
 
       if (user) {
         const updatedUser = await updateUserByIdInDB(id, {
@@ -165,7 +167,7 @@ export const updateUserProfilePassword = asyncHandler(
 export const updateUserByAdminOnly = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
-    const user = await readUserByIdInDB(id);
+    const user = await readUserByIdInDB(id, id);
 
     if (user) {
       const updatedUser = await updateUserByIdInDB(id, {
@@ -194,7 +196,7 @@ export const logoutUser = (req: UserRequest, res: Response) => {
 export const deleteUserAdminOnly = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
-    const user = await readUserByIdInDB(id);
+    const user = await readUserByIdInDB(id, id);
 
     if (user) {
       if (user.isAdmin) {

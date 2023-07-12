@@ -45,19 +45,6 @@ export const readPosts = asyncHandler(
   }
 );
 
-export const readMyPosts = asyncHandler(
-  async (req: UserRequest, res: Response) => {
-    const posts = await db.post.findMany({
-      include: {
-        user: {
-          select: { id: true, name: true, email: true },
-        },
-      },
-    });
-    res.status(200).json(posts);
-  }
-);
-
 export const readPost = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const result = await db.post.findUnique({
@@ -68,13 +55,6 @@ export const readPost = asyncHandler(
             followedBy: {
               select: {
                 id: true,
-                // follower: {
-                //   select: {
-                //     id: true,
-                //     name: true,
-                //     email: true,
-                //   },
-                // },
                 followee: {
                   select: {
                     id: true,

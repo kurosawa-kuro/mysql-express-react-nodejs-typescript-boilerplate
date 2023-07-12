@@ -16,8 +16,34 @@ export const readUsersFromDB = async () => {
   return await db.user.findMany();
 };
 
-export const readUserByIdInDB = async (id: number) => {
-  return await db.user.findUnique({ where: { id } });
+export const readUserByIdInDB = async (id: number, loggedInUserId: number) => {
+  const user = await db.user.findUnique({
+    where: { id },
+    include: {
+      followedBy: {
+        select: {
+          id: true,
+          followee: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (user) {
+    const isFollowed = user.followedBy.some(
+      (followee) => followee.followee.id === loggedInUserId
+    );
+
+    return { ...user, isFollowed };
+  }
+
+  return null;
 };
 
 export const updateUserByIdInDB = async (id: number, data: any) => {
