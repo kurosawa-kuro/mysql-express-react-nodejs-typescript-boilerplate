@@ -32,6 +32,9 @@ export const readUserByIdInDB = async (id: number, loggedInUserId: number) => {
           },
         },
       },
+      _count: {
+        select: { followedBy: true, following: true },
+      },
     },
   });
 
@@ -40,7 +43,10 @@ export const readUserByIdInDB = async (id: number, loggedInUserId: number) => {
       (followee) => followee.followee.id === loggedInUserId
     );
 
-    return { ...user, isFollowed };
+    const followerCount = user._count?.followedBy ?? 0;
+    const followeeCount = user._count?.following ?? 0;
+
+    return { ...user, isFollowed, followerCount, followeeCount };
   }
 
   return null;

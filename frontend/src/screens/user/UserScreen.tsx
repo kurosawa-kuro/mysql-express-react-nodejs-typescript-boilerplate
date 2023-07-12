@@ -20,6 +20,7 @@ export const UserScreen: React.FC = () => {
     setLoading(true);
     try {
       const data = await readUserById(Number(id));
+      console.log({ data });
       setUser(data);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -118,6 +119,21 @@ export const UserScreen: React.FC = () => {
               </div>
             </li>
           )}
+
+          <div className="flex">
+            <li>
+              <div className="whitespace-nowrap px-6 py-4">
+                {user.followeeCount} フォロー中
+              </div>
+            </li>
+            <li>
+              <div className="whitespace-nowrap px-6 py-4">
+                {user.followerCount} フォロワー
+              </div>
+            </li>
+          </div>
+
+          {/* Post list */}
         </ul>
       </div>
     </>

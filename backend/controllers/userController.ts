@@ -123,6 +123,7 @@ export const readUserById = asyncHandler(
     }
   }
 );
+
 // UPDATE
 export const updateUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {

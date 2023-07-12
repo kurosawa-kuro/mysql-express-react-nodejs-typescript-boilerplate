@@ -15,6 +15,8 @@ export interface UserInfo extends Partial<UserWithoutPassWord> {
   confirmPassword?: string;
   token?: string;
   isFollowed?: boolean;
+  followeeCount?: number;
+  followerCount?: number;
 }
 
 export interface UserAuth {
