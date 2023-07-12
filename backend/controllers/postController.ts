@@ -69,7 +69,7 @@ export const readPost = asyncHandler(
       },
     });
     if (result) {
-      const isfollowed = result.user.followedBy.map((followee) => {
+      const isFollowed = result.user.followedBy.map((followee) => {
         if (followee.followee.id === req.user!.id) {
           return true;
         } else {
@@ -90,7 +90,7 @@ export const readPost = asyncHandler(
           createdAt: result.user.createdAt,
           updatedAt: result.user.updatedAt,
         },
-        isfollowed: isfollowed.some((followee) => followee === true),
+        isFollowed: isFollowed.some((followee) => followee === true),
       };
 
       res.status(200).json(response);

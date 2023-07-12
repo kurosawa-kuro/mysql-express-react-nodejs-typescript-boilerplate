@@ -24,7 +24,7 @@ export const PostScreen: React.FC = () => {
       email: "",
     },
     description: "",
-    isfollowed: false,
+    isFollowed: false,
     createdAt: "",
     updatedAt: "",
   });
@@ -135,17 +135,17 @@ export const PostScreen: React.FC = () => {
               <td className="whitespace-nowrap px-6 py-4">
                 <button
                   className={`rounded px-4 py-2 font-bold text-white ${
-                    post.isfollowed
+                    post.isFollowed
                       ? "bg-red-500 hover:bg-red-700"
                       : "bg-blue-500 hover:bg-blue-700"
                   }`}
                   onClick={() =>
-                    post.isfollowed
+                    post.isFollowed
                       ? handleDeleteFollow(post.user.id)
                       : handleCreateFollow(post.user.id)
                   }
                 >
-                  {post.isfollowed ? "Unfollow" : "Follow"}
+                  {post.isFollowed ? "Unfollow" : "Follow"}
                 </button>
               </td>
             )}
