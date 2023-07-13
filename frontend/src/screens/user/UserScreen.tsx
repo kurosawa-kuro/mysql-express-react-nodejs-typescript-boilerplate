@@ -154,42 +154,31 @@ export const UserScreen: React.FC = () => {
           <thead className="bg-custom-blue-lightest">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-                NAME
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
                 Post
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-custom-blue-light ">
-            {userPost.posts?.map(
-              (
-                post: {
-                  id: number;
-                  user: {
-                    id: any;
-                    name: number;
-                  };
-                  description: string;
-                },
-                index: React.Key
-              ) => (
-                <tr key={index}>
-                  <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                    {post.id}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                    <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <Link to={`/posts/${post.id}`}>{post.description}</Link>
-                  </td>
-                </tr>
-              )
-            )}
+            {userPost.posts &&
+              userPost.posts?.map(
+                (
+                  post: {
+                    id: number;
+                    user: {
+                      id: number;
+                      name: number;
+                    };
+                    description: string;
+                  },
+                  index: React.Key
+                ) => (
+                  <tr key={index}>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <Link to={`/posts/${post.id}`}>{post.description}</Link>
+                    </td>
+                  </tr>
+                )
+              )}
           </tbody>
         </table>
       </div>
