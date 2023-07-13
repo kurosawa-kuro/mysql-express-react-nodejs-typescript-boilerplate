@@ -124,6 +124,25 @@ export const readUserById = asyncHandler(
   }
 );
 
+export const readUserPosts = asyncHandler(
+  async (req: UserRequest, res: Response) => {
+    const id = Number(req.params.id);
+
+    const posts = await db.post.findMany({
+      where: {
+        userId: id,
+      },
+      include: {
+        user: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+    });
+
+    res.status(200).json(posts);
+  }
+);
+
 // UPDATE
 export const updateUserProfile = asyncHandler(
   async (req: UserRequest, res: Response) => {

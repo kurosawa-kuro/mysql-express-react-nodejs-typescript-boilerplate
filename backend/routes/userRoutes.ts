@@ -8,6 +8,7 @@ import {
   registerUser,
   readUserById,
   readUsers,
+  readUserPosts,
   loginUser,
   updateUserByAdminOnly,
   updateUserProfile,
@@ -45,6 +46,8 @@ router
   .get(protect, readUserById)
   .put(protect, admin, updateUserByAdminOnly)
   .delete(protect, admin, deleteUserAdminOnly);
+
+router.route("/:id/posts").get(protect, readUserPosts);
 
 // Route to follow/unfollow a user
 router

@@ -1,9 +1,14 @@
 // frontend\src\screens\user\UserScreen.tsx
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Loader } from "../../components/common/Loader";
-import { createFollow, deleteFollow, readUserById } from "../../services/api";
+import {
+  createFollow,
+  deleteFollow,
+  readUserPosts,
+  readUserById,
+} from "../../services/api";
 import { UserInfo } from "../../../../backend/interfaces";
 
 import { Message } from "../../components/common/Message";
@@ -13,6 +18,23 @@ export const UserScreen: React.FC = () => {
   const { userInfo } = useAuthStore();
   const { id } = useParams();
   const [user, setUser] = useState<UserInfo>({});
+  const [posts, setPosts] = useState<
+    [
+      {
+        id: number;
+        user: { id: number; name: string };
+        description: string;
+        imagePath: string;
+      }
+    ]
+  >([
+    {
+      id: 0,
+      user: { id: 0, name: "" },
+      description: "",
+      imagePath: "",
+    },
+  ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,6 +44,10 @@ export const UserScreen: React.FC = () => {
       const data = await readUserById(Number(id));
       console.log({ data });
       setUser(data);
+
+      const data2 = await readUserPosts(Number(id));
+      console.log({ data2 });
+      setPosts(data2);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -67,6 +93,7 @@ export const UserScreen: React.FC = () => {
     readUserByIdAndSet();
   }, []);
 
+  // return <>{JSON.stringify(posts)}</>;
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
@@ -132,9 +159,38 @@ export const UserScreen: React.FC = () => {
               </div>
             </li>
           </div>
-
-          {/* Post list */}
         </ul>
+
+        <table className="min-w-full divide-y divide-custom-blue-dark">
+          <thead className="bg-custom-blue-lightest">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
+                ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
+                NAME
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
+                Post
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-custom-blue-light ">
+            {posts.map((post, index) => (
+              <tr key={index}>
+                <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
+                  {post.id}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
+                  <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
+                </td>
+                <td className="whitespace-nowrap px-6 py-4">
+                  <Link to={`/posts/${post.id}`}>{post.description}</Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );

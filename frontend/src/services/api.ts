@@ -44,6 +44,9 @@ export const readUsers = (): Promise<UserInfo[]> =>
 export const readUserById = (userId: number): Promise<UserInfo> =>
   performRequest(apiClient.get(`/api/users/${userId}`));
 
+export const readUserPosts = (userId: number) =>
+  performRequest(apiClient.get(`/api/users/${userId}/posts`));
+
 export const updateUserProfile = (
   user: Prisma.UserUpdateInput
 ): Promise<UserInfo> =>
