@@ -68,7 +68,7 @@ describe("Get /api/post", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
-    expect(response.body).toHaveProperty("userId");
+    expect(response.body).toHaveProperty("user.id");
     expect(response.body).toHaveProperty("description");
     // expect(response.body.description).toEqual("post_description1");
   });
