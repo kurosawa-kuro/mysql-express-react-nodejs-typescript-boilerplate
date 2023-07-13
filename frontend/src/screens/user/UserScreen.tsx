@@ -31,7 +31,7 @@ export const UserScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const readUserByIdAndSet = async () => {
+  const readUserPostsAndSet = async () => {
     setLoading(true);
     try {
       const data = await readUserPosts(Number(id));
@@ -80,7 +80,7 @@ export const UserScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    readUserByIdAndSet();
+    readUserPostsAndSet();
   }, []);
 
   return (

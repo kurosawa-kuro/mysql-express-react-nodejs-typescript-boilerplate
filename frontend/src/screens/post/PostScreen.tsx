@@ -101,7 +101,7 @@ export const PostScreen: React.FC = () => {
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
-      <div className="mx-auto w-full text-center ">
+      <div className="mx-auto w-full text-center">
         <div className="flex items-center justify-center space-x-4">
           <div>
             Name:
@@ -118,8 +118,8 @@ export const PostScreen: React.FC = () => {
               <button
                 className={`ml-2 rounded px-4 py-2 font-bold text-white ${
                   post.isFollowed
-                    ? "bg-red-500 hover:bg-red-700"
-                    : "bg-blue-500 hover:bg-blue-700"
+                    ? "bg-custom-red-light hover:bg-custom-red-dark"
+                    : "bg-custom-blue-dark  hover:bg-custom-blue-darkest"
                 }`}
                 onClick={() =>
                   post.isFollowed
@@ -132,7 +132,9 @@ export const PostScreen: React.FC = () => {
             )}
           </div>
         </div>
-        <div>Description:{post.description}</div>
+        <div className="text-custom-blue-extra-darkest">
+          Description:{post.description}
+        </div>
       </div>
     </>
   );
