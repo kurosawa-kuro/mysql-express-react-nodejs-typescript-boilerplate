@@ -14,6 +14,16 @@ export type UserRegisterData = Prisma.UserCreateInput & {
 export interface UserInfo extends Partial<UserWithoutPassWord> {
   confirmPassword?: string;
   token?: string;
+  posts?: {
+    id: number;
+    description: string;
+    imagePath: string | null;
+    user: {
+      id: number;
+      name: string;
+      avatarPath: string | null;
+    };
+  }[];
   isFollowed?: boolean;
   followeeCount?: number;
   followerCount?: number;

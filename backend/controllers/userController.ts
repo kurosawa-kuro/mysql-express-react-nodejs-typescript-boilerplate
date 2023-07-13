@@ -113,7 +113,6 @@ export const readUserById = asyncHandler(
     const id = Number(req.params.id);
     const reqUserId = req.user!.id;
     const user = await readUserByIdInDB(id, reqUserId!);
-    console.log("readUserByIdInDB user", user);
 
     if (user) {
       res.json(_sanitizeUser(user));
@@ -126,11 +125,12 @@ export const readUserById = asyncHandler(
 
 export const readUserPosts = asyncHandler(
   async (req: UserRequest, res: Response) => {
-    const id = Number(req.params.id);
+    const paramId = Number(req.params.id);
+    const loggedInUserId = req.user?.id;
 
     const user = await db.user.findUnique({
       where: {
-        id: id,
+        id: paramId,
       },
       include: {
         posts: {
@@ -144,13 +144,38 @@ export const readUserPosts = asyncHandler(
             },
           },
         },
+        followedBy: {
+          select: {
+            id: true,
+            followee: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: { followedBy: true, following: true },
+        },
       },
     });
 
-    console.dir(user, { depth: null });
-
     if (user) {
-      res.status(200).json(user.posts);
+      const isFollowed = user.followedBy.some(
+        (followee) => followee.followee.id === loggedInUserId
+      );
+
+      const followerCount = user._count?.followedBy ?? 0;
+      const followeeCount = user._count?.following ?? 0;
+
+      const userData = { ...user, isFollowed, followerCount, followeeCount };
+
+      res.status(200).json({
+        user: userData,
+        posts: user.posts,
+      });
     }
   }
 );

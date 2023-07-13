@@ -3,13 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Loader } from "../../components/common/Loader";
-import {
-  createFollow,
-  deleteFollow,
-  readUserPosts,
-  readUserById,
-} from "../../services/api";
-import { UserInfo } from "../../../../backend/interfaces";
+import { createFollow, deleteFollow, readUserPosts } from "../../services/api";
 
 import { Message } from "../../components/common/Message";
 import { useAuthStore } from "../../state/store";
@@ -17,37 +11,31 @@ import { useAuthStore } from "../../state/store";
 export const UserScreen: React.FC = () => {
   const { userInfo } = useAuthStore();
   const { id } = useParams();
-  const [user, setUser] = useState<UserInfo>({});
-  const [posts, setPosts] = useState<
-    [
-      {
-        id: number;
-        user: { id: number; name: string };
-        description: string;
-        imagePath: string;
-      }
-    ]
-  >([
-    {
-      id: 0,
-      user: { id: 0, name: "" },
-      description: "",
-      imagePath: "",
-    },
-  ]);
+  const [userPost, setUserPost] = useState<any>({});
+  //   [
+  //     {
+  //       id: number;
+  //       user: { id: number; name: string };
+  //       description: string;
+  //       imagePath: string;
+  //     }
+  //   ]
+  // >([
+  //   {
+  //     id: 0,
+  //     user: { id: 0, name: "" },
+  //     description: "",
+  //     imagePath: "",
+  //   },
+  // ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const readUserByIdAndSet = async () => {
     setLoading(true);
     try {
-      const data = await readUserById(Number(id));
-      console.log({ data });
-      setUser(data);
-
-      const data2 = await readUserPosts(Number(id));
-      console.log({ data2 });
-      setPosts(data2);
+      const data = await readUserPosts(Number(id));
+      setUserPost(data);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -62,8 +50,8 @@ export const UserScreen: React.FC = () => {
     try {
       if (id) {
         await createFollow(Number(id));
-        const data = await readUserById(Number(id));
-        setUser(data);
+        const data = await readUserPosts(Number(id));
+        setUserPost(data);
         setLoading(false);
       }
     } catch (err: unknown) {
@@ -74,12 +62,14 @@ export const UserScreen: React.FC = () => {
   };
 
   const handleDeleteFollow = async (id: number) => {
+    console.log("hit delete follow");
+    console.log("id", id);
     setLoading(true);
     try {
       if (id) {
         await deleteFollow(Number(id));
-        const data = await readUserById(Number(id));
-        setUser(data);
+        const data = await readUserPosts(Number(id));
+        setUserPost(data);
         setLoading(false);
       }
     } catch (err: unknown) {
@@ -93,11 +83,10 @@ export const UserScreen: React.FC = () => {
     readUserByIdAndSet();
   }, []);
 
-  // return <>{JSON.stringify(posts)}</>;
   return (
     <>
       <h1 className="mb-2 mt-2 text-center  text-3xl font-bold text-custom-blue-dark">
-        {userInfo?.id === user.id ? "My Page" : "User"}
+        {userInfo?.id === userPost.id ? "My Page" : "User"}
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
@@ -105,43 +94,43 @@ export const UserScreen: React.FC = () => {
         <ul className="divide-y divide-custom-blue-light ">
           <li>
             <div className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-              ID : {user.id}
+              ID : {userPost.user?.id}
             </div>
           </li>
           <li>
             <div className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-              Name : {user.name}
+              Name : {userPost.user?.name}
             </div>
           </li>
 
           <li>
             <div className="whitespace-nowrap px-6 py-4">
               <a
-                href={`mailto:${user.email}`}
+                href={`mailto:${userPost.email}`}
                 className="text-custom-blue-dark hover:text-custom-blue-darker"
               >
-                Email : {user.email}
+                Email : {userPost.user?.name}
               </a>
             </div>
           </li>
 
-          {userInfo?.id !== user.id && user.id && (
+          {userInfo?.id !== userPost.user?.id && userPost.user?.id && (
             <li>
               <div className="whitespace-nowrap px-6 py-4">
                 Status :{" "}
                 <button
                   className={`rounded px-4 py-2 font-bold text-white ${
-                    user.isFollowed
+                    userPost.user?.isFollowed
                       ? "bg-red-500 hover:bg-red-700"
                       : "bg-blue-500 hover:bg-blue-700"
                   }`}
                   onClick={() =>
-                    user.isFollowed
-                      ? handleDeleteFollow(user.id!)
-                      : handleCreateFollow(user.id!)
+                    userPost.user?.isFollowed
+                      ? handleDeleteFollow(userPost.user?.id!)
+                      : handleCreateFollow(userPost.user?.id!)
                   }
                 >
-                  {user.isFollowed ? "Unfollow" : "Follow"}
+                  {userPost.user?.isFollowed ? "Unfollow" : "Follow"}
                 </button>
               </div>
             </li>
@@ -150,12 +139,12 @@ export const UserScreen: React.FC = () => {
           <div className="flex">
             <li>
               <div className="whitespace-nowrap px-6 py-4">
-                {user.followeeCount} フォロー中
+                {userPost.user?.followeeCount} フォロー中
               </div>
             </li>
             <li>
               <div className="whitespace-nowrap px-6 py-4">
-                {user.followerCount} フォロワー
+                {userPost.user?.followerCount} フォロワー
               </div>
             </li>
           </div>
@@ -176,19 +165,64 @@ export const UserScreen: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-custom-blue-light ">
-            {posts.map((post, index) => (
-              <tr key={index}>
-                <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                  {post.id}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-                  <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  <Link to={`/posts/${post.id}`}>{post.description}</Link>
-                </td>
-              </tr>
-            ))}
+            {userPost.posts?.map(
+              (
+                post: {
+                  id:
+                    | string
+                    | number
+                    | boolean
+                    | React.ReactElement<
+                        any,
+                        string | React.JSXElementConstructor<any>
+                      >
+                    | React.ReactFragment
+                    | React.ReactPortal
+                    | null
+                    | undefined;
+                  user: {
+                    id: any;
+                    name:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | React.ReactFragment
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                  };
+                  description:
+                    | string
+                    | number
+                    | boolean
+                    | React.ReactElement<
+                        any,
+                        string | React.JSXElementConstructor<any>
+                      >
+                    | React.ReactFragment
+                    | React.ReactPortal
+                    | null
+                    | undefined;
+                },
+                index: React.Key | null | undefined
+              ) => (
+                <tr key={index}>
+                  <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
+                    {post.id}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
+                    <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <Link to={`/posts/${post.id}`}>{post.description}</Link>
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
