@@ -60,9 +60,16 @@ describe("Database user operations", () => {
       },
     });
 
-    const retrievedUser = await readUserByIdInDB(user.id);
+    const retrievedUser = await readUserByIdInDB(user.id, user.id);
 
-    expect(retrievedUser).toEqual(user);
+    expect(retrievedUser).toEqual({
+      ...user,
+      followedBy: expect.any(Array),
+      _count: expect.any(Object),
+      followeeCount: expect.any(Number),
+      followerCount: expect.any(Number),
+      isFollowed: expect.any(Boolean),
+    });
   });
 
   it("should update a user by ID in the database", async () => {
