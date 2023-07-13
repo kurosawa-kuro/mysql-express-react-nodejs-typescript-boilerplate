@@ -101,57 +101,39 @@ export const PostScreen: React.FC = () => {
       </h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
-      <table className="min-w-full divide-y divide-custom-blue-dark">
-        <thead className="bg-custom-blue-lightest">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-              ID
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-              NAME
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-              Post
-            </th>
+      <div className="mx-auto w-full text-center ">
+        <div className="flex items-center justify-center space-x-4">
+          <div>
+            Name:
+            <Link
+              to={`/users/${post.user.id}`}
+              className="font-bold text-custom-blue-dark"
+            >
+              {post.user.name}
+            </Link>
+          </div>
+          <div>
+            Status:
             {userInfo && post.user.id !== userInfo.id && (
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-custom-blue-dark">
-                Status
-              </th>
+              <button
+                className={`ml-2 rounded px-4 py-2 font-bold text-white ${
+                  post.isFollowed
+                    ? "bg-red-500 hover:bg-red-700"
+                    : "bg-blue-500 hover:bg-blue-700"
+                }`}
+                onClick={() =>
+                  post.isFollowed
+                    ? handleDeleteFollow(post.user.id)
+                    : handleCreateFollow(post.user.id)
+                }
+              >
+                {post.isFollowed ? "Unfollow" : "Follow"}
+              </button>
             )}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-custom-blue-light ">
-          <tr>
-            <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-              {post.id}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
-              {/* Todo自分の投稿の場合はmy-postへリンク分岐 */}
-              <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
-            </td>
-            <td className="whitespace-nowrap px-6 py-4">{post.description}</td>
-
-            {userInfo && post.user.id !== userInfo.id && (
-              <td className="whitespace-nowrap px-6 py-4">
-                <button
-                  className={`rounded px-4 py-2 font-bold text-white ${
-                    post.isFollowed
-                      ? "bg-red-500 hover:bg-red-700"
-                      : "bg-blue-500 hover:bg-blue-700"
-                  }`}
-                  onClick={() =>
-                    post.isFollowed
-                      ? handleDeleteFollow(post.user.id)
-                      : handleCreateFollow(post.user.id)
-                  }
-                >
-                  {post.isFollowed ? "Unfollow" : "Follow"}
-                </button>
-              </td>
-            )}
-          </tr>
-        </tbody>
-      </table>
+          </div>
+        </div>
+        <div>Description:{post.description}</div>
+      </div>
     </>
   );
 };
