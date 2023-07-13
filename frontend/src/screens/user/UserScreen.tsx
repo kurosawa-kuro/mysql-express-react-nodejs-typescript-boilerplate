@@ -168,47 +168,14 @@ export const UserScreen: React.FC = () => {
             {userPost.posts?.map(
               (
                 post: {
-                  id:
-                    | string
-                    | number
-                    | boolean
-                    | React.ReactElement<
-                        any,
-                        string | React.JSXElementConstructor<any>
-                      >
-                    | React.ReactFragment
-                    | React.ReactPortal
-                    | null
-                    | undefined;
+                  id: number;
                   user: {
                     id: any;
-                    name:
-                      | string
-                      | number
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | React.ReactFragment
-                      | React.ReactPortal
-                      | null
-                      | undefined;
+                    name: number;
                   };
-                  description:
-                    | string
-                    | number
-                    | boolean
-                    | React.ReactElement<
-                        any,
-                        string | React.JSXElementConstructor<any>
-                      >
-                    | React.ReactFragment
-                    | React.ReactPortal
-                    | null
-                    | undefined;
+                  description: string;
                 },
-                index: React.Key | null | undefined
+                index: React.Key
               ) => (
                 <tr key={index}>
                   <td className="whitespace-nowrap px-6 py-4 text-custom-blue-darkest">
