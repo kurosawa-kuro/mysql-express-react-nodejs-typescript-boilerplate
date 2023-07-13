@@ -128,18 +128,30 @@ export const readUserPosts = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
 
-    const posts = await db.post.findMany({
+    const user = await db.user.findUnique({
       where: {
-        userId: id,
+        id: id,
       },
       include: {
-        user: {
-          select: { id: true, name: true, email: true },
+        posts: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatarPath: true,
+              },
+            },
+          },
         },
       },
     });
 
-    res.status(200).json(posts);
+    console.dir(user, { depth: null });
+
+    if (user) {
+      res.status(200).json(user.posts);
+    }
   }
 );
 
