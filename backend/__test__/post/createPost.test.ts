@@ -8,6 +8,7 @@ import {
   loginUserAndGetToken,
 } from "../testUtils";
 import { UserData } from "../testData";
+import { createPostInDB } from "../../models/postModel";
 
 describe("POST /api/posts", () => {
   let agent: SuperAgentTest;
@@ -45,5 +46,14 @@ describe("POST /api/posts", () => {
     expect(response.body.description).toEqual(
       "description description description"
     );
+  });
+
+  it("should throw an error when trying to create a post with non-existing user", async () => {
+    const nonExistingUserId = 9999;
+    const description = "description for non-existing user's post";
+
+    await expect(
+      createPostInDB(nonExistingUserId, description)
+    ).rejects.toThrow("User does not exist");
   });
 });
