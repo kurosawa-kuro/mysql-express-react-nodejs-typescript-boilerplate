@@ -38,11 +38,11 @@ describe("Database user operations", () => {
     await db.$disconnect();
   });
 
-  it("should connect to the database", async () => {
+  it("establishes a connection to the database", async () => {
     await expect(db.$connect()).resolves.toBe(undefined);
   });
 
-  it("should read all users from the database", async () => {
+  it("retrieves all users from the database", async () => {
     const users = await readUsersFromDB();
 
     expect(users.length).toBe(2);
@@ -50,7 +50,7 @@ describe("Database user operations", () => {
     expect(users[1]).toHaveProperty("name", AdminData.name);
   });
 
-  it("should read a user by ID from the database", async () => {
+  it("retrieves a user by a specified ID from the database", async () => {
     const user: User = await db.user.create({
       data: {
         name: "jane",
@@ -72,7 +72,7 @@ describe("Database user operations", () => {
     });
   });
 
-  it("should update a user by ID in the database", async () => {
+  it("updates a user's information by a specified ID in the database", async () => {
     const user: User = await db.user.create({
       data: {
         name: "jack",
@@ -89,7 +89,7 @@ describe("Database user operations", () => {
     expect(updatedUser.name).toBe("updatedJack");
   });
 
-  it("should delete a user by ID from the database", async () => {
+  it("removes a user by a specified ID from the database", async () => {
     const user: User = await db.user.create({
       data: {
         name: "jill",
@@ -105,7 +105,7 @@ describe("Database user operations", () => {
     expect(retrievedUser).toBeNull();
   });
 
-  it("should correctly identify if a user is following another user", async () => {
+  it("correctly identifies if a user is following another user and returns the correct follow status", async () => {
     const userA: User = await db.user.create({
       data: {
         name: "User A",
