@@ -11,6 +11,7 @@ import { AdminData, UserData } from "./testData";
  */
 export const clearDatabase = async (): Promise<void> => {
   await db.$executeRaw`SET FOREIGN_KEY_CHECKS=0;`;
+  await db.$executeRaw`TRUNCATE TABLE follow;`;
   await db.$executeRaw`TRUNCATE TABLE tags_on_posts;`;
   await db.$executeRaw`TRUNCATE TABLE post;`;
   await db.$executeRaw`TRUNCATE TABLE tag;`;

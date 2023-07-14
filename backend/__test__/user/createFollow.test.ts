@@ -24,7 +24,7 @@ describe("POST /api/users/follow/:id", () => {
   it("creates a follow", async () => {
     const followee = await createUserInDB(UserData.email, UserData.password);
     const follower = await createUserInDB("follower@test.com", "password");
-    console.log({ followee, follower });
+
     const token = await loginUserAndGetToken(
       agent,
       "follower@test.com",
@@ -36,8 +36,6 @@ describe("POST /api/users/follow/:id", () => {
     const response = await agent
       .post(`/api/users/follow/${followee.id}`)
       .set("Cookie", `jwt=${token}`);
-
-    console.log("response.body", response.body);
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");

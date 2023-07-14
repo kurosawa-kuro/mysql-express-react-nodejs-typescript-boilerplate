@@ -17,7 +17,7 @@ export const createPost = asyncHandler(
     const description = req.body.description;
 
     if (user) {
-      const newPost = await createPostInDB(user, description);
+      const newPost = await createPostInDB(user.id!, description);
 
       res.status(201).json(newPost);
     }
