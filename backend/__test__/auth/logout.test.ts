@@ -31,11 +31,11 @@ describe("POST /api/auth/logout", () => {
 
     expect(token).toBeTruthy();
 
-    const logoutResponse = await agent.post("/api/auth/logout");
+    const response = await agent.post("/api/auth/logout");
 
-    expect(logoutResponse.status).toBe(200);
+    expect(response.status).toBe(200);
 
-    expect(logoutResponse.headers["set-cookie"]).toEqual(
+    expect(response.headers["set-cookie"]).toEqual(
       expect.arrayContaining([expect.stringMatching(/^jwt=;/)])
     );
   });

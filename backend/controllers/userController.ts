@@ -194,14 +194,6 @@ export const updateUserByAdminOnly = asyncHandler(
 );
 
 // DELETE
-export const logoutUser = (req: UserRequest, res: Response) => {
-  res.cookie("jwt", "", {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-  res.status(200).json({ message: "Logged out successfully" });
-};
-
 export const deleteUserAdminOnly = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const id = Number(req.params.id);
