@@ -21,7 +21,6 @@ import { db } from "../database/prisma/prismaClient";
 
 const _sanitizeUser = (user: any): UserInfo => {
   const { password, ...UserBase } = user;
-  // console.log(UserBase);
   return UserBase;
 };
 
@@ -61,7 +60,6 @@ export const registerUser = asyncHandler(
   }
 );
 
-// createFollow
 export const createFollow = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const followerId = parseInt(req.params.id as string, 10);

@@ -57,7 +57,15 @@ export const updateUserByIdInDB = async (id: number, data: any) => {
 };
 
 export const deleteUserByIdInDB = async (id: number) => {
-  return await db.user.delete({ where: { id } });
+  await db.follow.deleteMany({
+    where: {
+      OR: [{ followerId: id }, { followeeId: id }],
+    },
+  });
+
+  return await db.user.delete({
+    where: { id },
+  });
 };
 
 export const comparePassword = async (
