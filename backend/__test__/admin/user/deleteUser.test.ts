@@ -39,8 +39,6 @@ describe("User management endpoints", () => {
       .delete(`/api/users/${user.id}`)
       .set("Cookie", `jwt=${adminToken}`);
 
-    console.log("response.body", response.body);
-
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "User removed" });
   });

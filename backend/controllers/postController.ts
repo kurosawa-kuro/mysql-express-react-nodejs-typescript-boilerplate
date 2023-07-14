@@ -8,6 +8,7 @@ import { db } from "../../backend/database/prisma/prismaClient";
 // Internal Imports
 import { UserRequest } from "../interfaces";
 import { Prisma } from "@prisma/client";
+import { createPostInDB } from "../models/postModel";
 
 // CREATE
 export const createPost = asyncHandler(
@@ -16,14 +17,7 @@ export const createPost = asyncHandler(
     const description = req.body.description;
 
     if (user) {
-      const id = user.id;
-      const data: Prisma.PostCreateInput = {
-        user: { connect: { id } },
-        description,
-      };
-      const newPost = await db.post.create({
-        data,
-      });
+      const newPost = await createPostInDB(user, description);
 
       res.status(201).json(newPost);
     }
