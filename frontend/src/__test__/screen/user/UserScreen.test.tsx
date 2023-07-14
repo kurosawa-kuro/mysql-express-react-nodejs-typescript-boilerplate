@@ -9,11 +9,11 @@ import { UserData } from "../../../../../backend/__test__/testData";
 import { App } from "../../../App";
 import { simulateLogin } from "../../testUtils";
 
-const server = setupServer(
-  rest.get("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
-    return res(ctx.json(UserData));
-  })
-);
+const server =
+  setupServer();
+  // rest.get("http://localhost:8080/api/users/:id", (_req, res, ctx) => {
+  //   return res(ctx.json(UserData));
+  // })
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());

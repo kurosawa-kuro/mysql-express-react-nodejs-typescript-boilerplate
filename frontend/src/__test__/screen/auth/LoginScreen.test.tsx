@@ -62,49 +62,38 @@ describe("Successful login", () => {
     it("toggles the logout menu visibility on user name click", async () => {
       renderScreen();
       await fillForm(UserData.email, UserData.password);
-
       await waitFor(() => {
         expect(screen.getByRole("alert")).toBeInTheDocument();
       });
-
       expect(
         await screen.findByText("Successfully logged in")
       ).toBeInTheDocument();
-
       await waitFor(async () => {
         expect(screen.getByTestId("user-info-name")).toHaveTextContent(
           UserData.name
         );
       });
-
       fireEvent.click(screen.getByText(UserData.name));
       expect(screen.getByRole("menuitem", { name: "Logout" })).toBeVisible();
-
       fireEvent.mouseDown(document.body);
       expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
     });
-
     it("redirects the user to the login page after successful logout", async () => {
       renderScreen();
       await fillForm(UserData.email, UserData.password);
-
       await waitFor(() => {
         expect(screen.getByRole("alert")).toBeInTheDocument();
       });
-
       expect(
         await screen.findByText("Successfully logged in")
       ).toBeInTheDocument();
-
       await waitFor(async () => {
         expect(screen.getByTestId("user-info-name")).toHaveTextContent(
           UserData.name
         );
       });
-
       fireEvent.click(screen.getByText(UserData.name));
       fireEvent.click(await screen.findByText(`Logout`));
-
       await screen.findByRole("heading", { name: /Log in/i });
     });
   });
@@ -116,7 +105,7 @@ describe("Error handling during login", () => {
       renderScreen();
 
       server.use(
-        rest.post("http://localhost:8080/api/users/login", (_req, res, ctx) => {
+        rest.post("http://localhost:8080/api/auth/login", (_req, res, ctx) => {
           return res(
             ctx.status(401),
             ctx.json({ message: "Invalid email or password" })
@@ -141,12 +130,9 @@ describe("Error handling during login", () => {
       renderScreen();
 
       server.use(
-        rest.post(
-          "http://localhost:8080/api/users/login",
-          (_req, res, _ctx) => {
-            return res.networkError("Failed to connect");
-          }
-        )
+        rest.post("http://localhost:8080/api/auth/login", (_req, res, _ctx) => {
+          return res.networkError("Failed to connect");
+        })
       );
 
       await fillForm(UserData.email, UserData.password);
@@ -154,6 +140,8 @@ describe("Error handling during login", () => {
       await waitFor(() => {
         expect(screen.getByRole("alert")).toBeInTheDocument();
       });
+
+      screen.debug();
 
       expect(
         await screen.findByText(

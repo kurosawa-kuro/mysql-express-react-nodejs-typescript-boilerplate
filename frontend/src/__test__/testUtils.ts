@@ -20,10 +20,10 @@ function authenticate(email: string, password: string, user: typeof UserData) {
 
 export function createServer() {
   return setupServer(
-    rest.post(`${API_BASE_URL}/users/register`, async (_req, res, ctx) => {
+    rest.post(`${API_BASE_URL}/auth/register`, async (_req, res, ctx) => {
       return res(ctx.json({ id: 1, ...UserData }));
     }),
-    rest.post(`${API_BASE_URL}/users/login`, async (req, res, ctx) => {
+    rest.post(`${API_BASE_URL}/auth/login`, async (req, res, ctx) => {
       const requestBody = JSON.parse(await req.text()) as any;
       if (authenticate(requestBody.email, requestBody.password, AdminData)) {
         return res(ctx.json({ id: 1, ...AdminData }));
@@ -33,7 +33,7 @@ export function createServer() {
         return res(ctx.json({ id: 1, ...UserData }));
       }
     }),
-    rest.post(`${API_BASE_URL}/users/logout`, (_req, res, ctx) => {
+    rest.post(`${API_BASE_URL}/auth/logout`, (_req, res, ctx) => {
       return res(ctx.json({ message: "Logged out successfully" }));
     })
   );

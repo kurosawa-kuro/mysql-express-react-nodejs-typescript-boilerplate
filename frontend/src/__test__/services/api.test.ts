@@ -19,7 +19,7 @@ const user = {
 };
 
 const server = setupServer(
-  rest.post(`${API_BASE_URL}/users/login`, (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/auth/login`, (req, res, ctx) => {
     const requestBody = req.body as ReqBody;
     if (
       requestBody.email === user.email &&
@@ -33,7 +33,7 @@ const server = setupServer(
       );
     }
   }),
-  rest.post(`${API_BASE_URL}/users/register`, (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/auth/register`, (req, res, ctx) => {
     const requestBody = req.body as ReqBody;
     if (
       requestBody.email === user.email &&

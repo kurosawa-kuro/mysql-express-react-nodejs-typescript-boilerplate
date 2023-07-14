@@ -95,7 +95,7 @@ describe("Registration Screen", () => {
 
     server.use(
       rest.post(
-        "http://localhost:8080/api/users/register",
+        "http://localhost:8080/api/auth/register",
         (_req, res, _ctx) => {
           return res.networkError("Failed to connect");
         }
