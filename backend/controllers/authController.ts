@@ -8,24 +8,15 @@ import asyncHandler from "express-async-handler";
 import { generateToken, hashPassword } from "../utils";
 import {
   createUserInDB,
-  readUsersFromDB,
   readUserByEmailInDB,
-  readUserByIdInDB,
-  updateUserByIdInDB,
-  deleteUserByIdInDB,
   comparePassword,
 } from "../models/userModel";
 import { UserRequest, UserInfo } from "../interfaces";
 import { Prisma } from "@prisma/client";
-import { db } from "../database/prisma/prismaClient";
 
 const _sanitizeUser = (user: any): UserInfo => {
   const { password, ...UserBase } = user;
   return UserBase;
-};
-
-const _sanitizeAvatarPath = (path: string) => {
-  return path ? path.replace(/\\/g, "/").replace("/frontend/public", "") : "";
 };
 
 // CREATE

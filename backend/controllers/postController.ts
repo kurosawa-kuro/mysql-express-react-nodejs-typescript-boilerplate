@@ -7,7 +7,6 @@ import { db } from "../../backend/database/prisma/prismaClient";
 
 // Internal Imports
 import { UserRequest } from "../interfaces";
-import { Prisma } from "@prisma/client";
 import { createPostInDB } from "../models/postModel";
 
 // CREATE
@@ -70,6 +69,7 @@ export const readPost = asyncHandler(
           return false;
         }
       });
+
       const response = {
         id: result.id,
         description: result.description,
