@@ -72,4 +72,53 @@ describe("Get /api/post", () => {
     expect(response.body).toHaveProperty("description");
     // expect(response.body.description).toEqual("post_description1");
   });
+
+  it("should indicate if the logged in user is following the post's user", async () => {
+    // Create a new user who will be the follower
+    const follower = await createUserInDB("follower@test.com", "password");
+
+    // Create posts by user1
+    const users = await db.user.findMany();
+    const user1 = users[0];
+    const postsData = [
+      {
+        imagePath: "image_url1",
+        description: "post_description1",
+        user: { connect: { id: user1.id } },
+      },
+    ];
+
+    await Promise.all(
+      postsData.map((postData) =>
+        db.post.create({
+          data: postData,
+        })
+      )
+    );
+
+    // Create a follow relationship between follower and user1
+    await db.follow.create({
+      data: {
+        followerId: follower.id,
+        followeeId: user1.id,
+      },
+    });
+
+    // Log in as follower
+    const token = await loginUserAndGetToken(
+      agent,
+      "follower@test.com",
+      "password"
+    );
+
+    expect(token).toBeTruthy();
+
+    const response = await agent
+      .get("/api/posts/1")
+      .set("Cookie", `jwt=${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("isFollowed");
+    expect(response.body.isFollowed).toBe(true);
+  });
 });

@@ -49,4 +49,37 @@ describe("GET /api/users/:id/posts", () => {
 
     expect(response.status).toBe(401);
   });
+
+  it("indicates if the logged in user is following", async () => {
+    const user = await createUserInDB(UserData.email, UserData.password);
+    const follower = await createUserInDB("follower@test.com", "password");
+
+    await db.follow.create({
+      data: {
+        followerId: user.id,
+        followeeId: follower.id,
+      },
+    });
+
+    const token = await loginUserAndGetToken(
+      agent,
+      "follower@test.com",
+      "password"
+    );
+
+    await createPostInDB(Number(user.id), "Test Post");
+
+    const response = await agent
+      .get(`/api/users/${user.id}/posts`)
+      .set("Cookie", `jwt=${token}`);
+
+    expect(response.status).toBe(200);
+
+    expect(response.body.user.isFollowed).toBe(true);
+
+    expect(response.body.user.followerCount).toBe(1);
+    expect(response.body.user.followeeCount).toBe(0);
+
+    expect(response.body.posts[0].description).toEqual("Test Post");
+  });
 });
