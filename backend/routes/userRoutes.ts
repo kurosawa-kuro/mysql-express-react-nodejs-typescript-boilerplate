@@ -5,15 +5,12 @@ import express from "express";
 
 // Internal Imports
 import {
-  registerUser,
   readUserById,
   readUsers,
   readUserPosts,
-  loginUser,
   updateUserByAdminOnly,
   updateUserProfile,
   updateUserProfilePassword,
-  logoutUser,
   deleteUserAdminOnly,
   createFollow,
   deleteFollow,
@@ -21,15 +18,6 @@ import {
 import { admin, protect } from "../middleware/authMiddleware";
 
 export const router = express.Router();
-
-// Route to register a new user
-router.post("/register", registerUser);
-
-// Route to log in an existing user
-router.post("/login", loginUser);
-
-// Route to log out a user
-router.post("/logout", logoutUser);
 
 // Route to update a user's profile
 router.route("/profile").put(protect, updateUserProfile);

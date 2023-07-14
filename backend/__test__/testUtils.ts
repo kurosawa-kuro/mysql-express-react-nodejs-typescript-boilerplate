@@ -63,7 +63,7 @@ export const loginUserAndGetToken = async (
   password: string
 ): Promise<string> => {
   const response = await agent
-    .post("/api/users/login")
+    .post("/api/auth/login")
     .send({ email, password });
 
   if (response.status !== 200) {

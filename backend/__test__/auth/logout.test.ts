@@ -9,7 +9,7 @@ import {
 } from "../testUtils";
 import { UserData } from "../testData";
 
-describe("POST /api/users/logout", () => {
+describe("POST /api/auth/logout", () => {
   let agent: SuperAgentTest;
 
   beforeEach(async () => {
@@ -31,7 +31,7 @@ describe("POST /api/users/logout", () => {
 
     expect(token).toBeTruthy();
 
-    const logoutResponse = await agent.post("/api/users/logout");
+    const logoutResponse = await agent.post("/api/auth/logout");
 
     expect(logoutResponse.status).toBe(200);
 

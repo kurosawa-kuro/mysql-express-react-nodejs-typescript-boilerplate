@@ -29,37 +29,6 @@ const _sanitizeAvatarPath = (path: string) => {
 };
 
 // CREATE
-export const registerUser = asyncHandler(
-  async (req: UserRequest, res: Response) => {
-    const { name, email, password } = req.body;
-
-    if (!password || !name || !email) {
-      res.status(400);
-      throw new Error("Invalid user data");
-    }
-
-    const userExists = await readUserByEmailInDB(email);
-
-    if (userExists) {
-      res.status(400);
-      throw new Error("User already exists");
-    }
-
-    const hashedPassword = await hashPassword(password);
-    const user: Prisma.UserCreateInput = {
-      name,
-      email,
-      password: hashedPassword,
-    };
-    const createdUser = await createUserInDB(user);
-
-    if (createdUser) {
-      generateToken(res, createdUser.id);
-      res.status(201).json(_sanitizeUser(createdUser));
-    }
-  }
-);
-
 export const createFollow = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const followerId = parseInt(req.params.id as string, 10);
@@ -84,21 +53,6 @@ export const createFollow = asyncHandler(
 );
 
 // READ
-export const loginUser = asyncHandler(
-  async (req: UserRequest, res: Response) => {
-    const { email, password } = req.body;
-    const user = await readUserByEmailInDB(email);
-
-    if (user && (await comparePassword(password, user.password))) {
-      generateToken(res, user.id);
-      res.json(_sanitizeUser(user));
-    } else {
-      res.status(401);
-      throw new Error("Invalid email or password");
-    }
-  }
-);
-
 export const readUsers = asyncHandler(
   async (req: UserRequest, res: Response) => {
     const users = await readUsersFromDB();

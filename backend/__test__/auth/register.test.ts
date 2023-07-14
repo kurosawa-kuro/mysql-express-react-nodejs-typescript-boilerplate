@@ -5,7 +5,7 @@ import { app } from "../../index";
 import { clearDatabase, createUserInDB } from "../testUtils";
 import { UserData } from "../testData";
 
-describe("POST /api/users/register", () => {
+describe("POST /api/auth/register", () => {
   let agent: SuperAgentTest;
 
   beforeEach(async () => {
@@ -18,7 +18,7 @@ describe("POST /api/users/register", () => {
   });
 
   it("registers a new user", async () => {
-    const registerResponse = await agent.post("/api/users/register").send({
+    const registerResponse = await agent.post("/api/auth/register").send({
       name: UserData.name,
       email: UserData.email,
       password: UserData.password,
@@ -32,7 +32,7 @@ describe("POST /api/users/register", () => {
   it("rejects registration with existing email", async () => {
     await createUserInDB(UserData.email, UserData.password);
 
-    const registerResponse = await agent.post("/api/users/register").send({
+    const registerResponse = await agent.post("/api/auth/register").send({
       name: UserData.name,
       email: UserData.email,
       password: UserData.password,
@@ -43,7 +43,7 @@ describe("POST /api/users/register", () => {
 
   it("rejects registration with invalid user data", async () => {
     const registerResponse = await agent
-      .post("/api/users/register")
+      .post("/api/auth/register")
       .send({ name: UserData.name, email: UserData.email });
 
     expect(registerResponse.status).toBe(400);

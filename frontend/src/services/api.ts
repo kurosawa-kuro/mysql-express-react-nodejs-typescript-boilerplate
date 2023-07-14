@@ -33,10 +33,10 @@ const performRequest = async (request: Promise<AxiosResponse<any>>) => {
 
 // User related APIs
 export const registerUser = (user: Prisma.UserCreateInput): Promise<UserInfo> =>
-  performRequest(apiClient.post("/api/users/register", user));
+  performRequest(apiClient.post("/api/auth/register", user));
 
 export const loginUser = (userLoginData: UserLoginData): Promise<UserInfo> =>
-  performRequest(apiClient.post("/api/users/login", userLoginData));
+  performRequest(apiClient.post("/api/auth/login", userLoginData));
 
 export const readUsers = (): Promise<UserInfo[]> =>
   performRequest(apiClient.get("/api/users"));
@@ -64,7 +64,7 @@ export const deleteUser = (id: number) =>
   performRequest(apiClient.delete(`/api/users/${id}`));
 
 export const logoutUser = () =>
-  performRequest(apiClient.post("/api/users/logout"));
+  performRequest(apiClient.post("/api/auth/logout"));
 
 export const readTop = (): Promise<string> =>
   performRequest(apiClient.get(`/api/`));

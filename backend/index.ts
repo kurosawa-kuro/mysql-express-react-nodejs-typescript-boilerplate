@@ -11,9 +11,10 @@ import expressListEndpoints from "express-list-endpoints";
 
 // Internal Imports
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
-import { router as uploadRoutes } from "./routes/uploadRoutes";
+import { router as authRoutes } from "./routes/authRoutes";
 import { router as userRoutes } from "./routes/userRoutes";
 import { router as postRoutes } from "./routes/postRoutes";
+import { router as uploadRoutes } from "./routes/uploadRoutes";
 
 // Load Environment Variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use(
 );
 
 // Express Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/upload", uploadRoutes);
