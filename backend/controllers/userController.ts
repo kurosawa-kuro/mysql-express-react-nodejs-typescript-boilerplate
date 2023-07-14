@@ -234,8 +234,6 @@ export const deleteFollow = asyncHandler(
             id: follow.id,
           },
         });
-      } else {
-        throw new Error("Follow record not found");
       }
 
       res.status(201).json({ message: "Follow deleted" });
