@@ -24,7 +24,7 @@ describe("GET /api/users/:id/posts", () => {
     await clearDatabase();
   });
 
-  it("reads a user's posts", async () => {
+  it("should return the posts of a specified user when a valid user id is provided", async () => {
     const user = await createUserInDB(UserData.email, UserData.password);
 
     const token = await loginUserAndGetToken(
@@ -43,14 +43,14 @@ describe("GET /api/users/:id/posts", () => {
     expect(response.body.posts[0].description).toEqual("Test Post");
   });
 
-  it("rejects unauthenticated access", async () => {
+  it("should return a 401 status code when the request is made by an unauthenticated user", async () => {
     const user = await createUserInDB(UserData.email, UserData.password);
     const response = await agent.get(`/api/users/${user.id}/posts`);
 
     expect(response.status).toBe(401);
   });
 
-  it("indicates if the logged in user is following", async () => {
+  it("should indicate if the currently authenticated user is following the user specified by the id", async () => {
     const user = await createUserInDB(UserData.email, UserData.password);
     const follower = await createUserInDB("follower@test.com", "password");
 

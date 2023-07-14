@@ -22,7 +22,7 @@ describe("Get /api/post", () => {
     await clearDatabase();
   });
 
-  it("should retrieve a specific post when requested with a valid user and post id", async () => {
+  it("should fetch a specified post given a valid user and post id", async () => {
     await createUserInDB("UserData.email", UserData.password);
     const users = await db.user.findMany();
 
@@ -73,11 +73,9 @@ describe("Get /api/post", () => {
     // expect(response.body.description).toEqual("post_description1");
   });
 
-  it("should indicate if the logged in user is following the post's user", async () => {
-    // Create a new user who will be the follower
+  it("should check if the logged-in user is following the user of the fetched post", async () => {
     const follower = await createUserInDB("follower@test.com", "password");
 
-    // Create posts by user1
     const users = await db.user.findMany();
     const user1 = users[0];
     const postsData = [
@@ -96,7 +94,6 @@ describe("Get /api/post", () => {
       )
     );
 
-    // Create a follow relationship between follower and user1
     await db.follow.create({
       data: {
         followerId: follower.id,
@@ -104,7 +101,6 @@ describe("Get /api/post", () => {
       },
     });
 
-    // Log in as follower
     const token = await loginUserAndGetToken(
       agent,
       "follower@test.com",
@@ -113,6 +109,7 @@ describe("Get /api/post", () => {
 
     expect(token).toBeTruthy();
 
+    // Get the post as the follower
     const response = await agent
       .get("/api/posts/1")
       .set("Cookie", `jwt=${token}`);
