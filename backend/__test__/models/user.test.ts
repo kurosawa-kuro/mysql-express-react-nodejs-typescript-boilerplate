@@ -104,4 +104,42 @@ describe("Database user operations", () => {
     const retrievedUser = await db.user.findUnique({ where: { id: user.id } });
     expect(retrievedUser).toBeNull();
   });
+
+  it("should correctly identify if a user is following another user", async () => {
+    const userA: User = await db.user.create({
+      data: {
+        name: "User A",
+        email: "usera@email.com",
+        password: await hashPassword("123456"),
+        isAdmin: false,
+      },
+    });
+
+    const userB: User = await db.user.create({
+      data: {
+        name: "User B",
+        email: "userb@email.com",
+        password: await hashPassword("123456"),
+        isAdmin: false,
+      },
+    });
+
+    // userA follows userB
+    await db.follow.create({
+      data: {
+        followerId: userB.id,
+        followeeId: userA.id,
+      },
+    });
+
+    // Check if userA is following userB
+    const retrievedUserB = await readUserByIdInDB(userB.id, userA.id);
+
+    expect(retrievedUserB?.isFollowed).toBe(true);
+
+    // Check if userB is following userA
+    const retrievedUserA = await readUserByIdInDB(userA.id, userB.id);
+
+    expect(retrievedUserA?.isFollowed).toBe(false);
+  });
 });
