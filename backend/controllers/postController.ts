@@ -65,8 +65,6 @@ export const readPost = asyncHandler(
       const isFollowed = result.user.followedBy.map((followee) => {
         if (followee.followee.id === req.user!.id) {
           return true;
-        } else {
-          return false;
         }
       });
 

@@ -1,4 +1,4 @@
-// backend\__test__\user\updateUserProfile.test.ts
+// backend\__test__\post\readPost.test.ts
 
 import request, { SuperAgentTest } from "supertest";
 import { app } from "../../index";
@@ -117,5 +117,34 @@ describe("Get /api/post", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("isFollowed");
     expect(response.body.isFollowed).toBe(true);
+  });
+
+  it("should check if the logged-in user is not following the user of the fetched post", async () => {
+    await createUserInDB("follower@test.com", "password");
+    const followee = await createUserInDB("followee@test.com", "password");
+
+    const post = await db.post.create({
+      data: {
+        imagePath: "image_url1",
+        description: "post_description1",
+        user: { connect: { id: followee.id } },
+      },
+    });
+
+    const token = await loginUserAndGetToken(
+      agent,
+      "follower@test.com",
+      "password"
+    );
+
+    expect(token).toBeTruthy();
+
+    const response = await agent
+      .get(`/api/posts/${post.id}`)
+      .set("Cookie", `jwt=${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("isFollowed");
+    expect(response.body.isFollowed).toBe(false);
   });
 });
