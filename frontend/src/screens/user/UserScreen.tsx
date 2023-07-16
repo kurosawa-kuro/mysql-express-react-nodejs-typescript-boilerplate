@@ -35,6 +35,7 @@ export const UserScreen: React.FC = () => {
     setLoading(true);
     try {
       const data = await readUserPosts(Number(id));
+
       setUserPost(data);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -106,10 +107,10 @@ export const UserScreen: React.FC = () => {
           <li>
             <div className="whitespace-nowrap px-6 py-4">
               <a
-                href={`mailto:${userPost.email}`}
+                href={`mailto:${userPost.user?.email}`}
                 className="text-custom-blue-dark hover:text-custom-blue-darker"
               >
-                Email : {userPost.user?.name}
+                Email : {userPost.user?.email}
               </a>
             </div>
           </li>
