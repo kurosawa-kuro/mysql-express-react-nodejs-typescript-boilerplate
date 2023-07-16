@@ -146,7 +146,14 @@ describe("UserScreen", () => {
     await waitFor(() => {
       expect(screen.getByText(`Name : ${UserData.name}`)).toBeInTheDocument();
       expect(screen.getByText(`Email : ${UserData.email}`)).toBeInTheDocument();
+
+      expect(screen.getByText(`4 フォロー中`)).toBeInTheDocument();
+      expect(screen.getByText(`3 フォロワー`)).toBeInTheDocument();
+
+      expect(screen.getByText(`post_description2`)).toBeInTheDocument();
+      expect(screen.getByText(`post_description1`)).toBeInTheDocument();
     });
+    screen.debug();
   });
   it("Shows error message when API call fails", async () => {
     server.use(
