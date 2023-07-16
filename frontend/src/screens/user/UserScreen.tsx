@@ -51,6 +51,7 @@ export const UserScreen: React.FC = () => {
     try {
       if (id) {
         await createFollow(Number(id));
+
         const data = await readUserPosts(Number(id));
         setUserPost(data);
         setLoading(false);
@@ -63,8 +64,6 @@ export const UserScreen: React.FC = () => {
   };
 
   const handleDeleteFollow = async (id: number) => {
-    console.log("hit delete follow");
-    console.log("id", id);
     setLoading(true);
     try {
       if (id) {
