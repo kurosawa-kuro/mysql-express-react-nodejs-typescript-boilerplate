@@ -78,6 +78,7 @@ describe("Successful login", () => {
       fireEvent.mouseDown(document.body);
       expect(screen.queryByRole("menuitem", { name: "Logout" })).toBeNull();
     });
+    // Todo Service button
     it("redirects the user to the login page after successful logout", async () => {
       renderScreen();
       await fillForm(UserData.email, UserData.password);
