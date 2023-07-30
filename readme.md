@@ -69,7 +69,3 @@ C:\Users\kuros\local_dev\full-stack-basic\shopping\mysql-express-react-nodejs-ty
 C:\Users\kuros\local_dev\full-stack-basic\shopping\mysql-express-react-nodejs-typescript-shopping> npm run test
 C:\Users\kuros\local_dev\full-stack-basic\shopping\mysql-express-react-nodejs-typescript-shopping> npm run test:client
 ```
-
-```:powershell
-npx create-next-app@13.4.1 frontend
-```
